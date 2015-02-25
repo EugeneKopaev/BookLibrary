@@ -2,9 +2,10 @@ package org.booklibrary.app.persistence.entity;
 
 import com.google.common.base.Objects;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 @Entity
 @Table(name = "AUTHORS")
@@ -15,6 +16,9 @@ public class Author extends AbstractBaseEntity{
 
     @Column(name = "LAST_NAME", nullable = false)
     private String lastName;
+
+    @ManyToMany(mappedBy = "authors")
+    private List<Book> books = new ArrayList<>();
 
     public Author() {
     }
@@ -33,6 +37,14 @@ public class Author extends AbstractBaseEntity{
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
+    }
+
+    public List<Book> getBooks() {
+        return Collections.unmodifiableList(this.books);
+    }
+
+    public void addBooks(Book book) {
+        this.books.add(book);
     }
 
     @Override

@@ -2,14 +2,11 @@ package org.booklibrary.app.persistence.entity;
 
 import com.google.common.base.Objects;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Lob;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Table(name = "REVIEWS")
-public class Review extends AbstractBaseEntity{
+public class Review extends AbstractBaseEntity {
 
     @Column(name = "COMMENTER_NAME", nullable = false)
     private String commenterName;
@@ -20,6 +17,10 @@ public class Review extends AbstractBaseEntity{
 
     @Column(name = "RATING")
     private int rating;
+
+    @ManyToOne
+    @JoinColumn(name = "BOOK_ID")
+    private Book book;
 
     public Review() {
     }
@@ -46,6 +47,14 @@ public class Review extends AbstractBaseEntity{
 
     public void setRating(int rating) {
         this.rating = rating;
+    }
+
+    public Book getBook() {
+        return book;
+    }
+
+    public void setBook(Book book) {
+        this.book = book;
     }
 
     @Override
