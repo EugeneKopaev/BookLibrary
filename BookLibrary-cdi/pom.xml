@@ -86,6 +86,20 @@
             <scope>provided</scope>
         </dependency>
 
+        <!-- Import the JPA API, we use provided scope as the API is included in JBoss WildFly -->
+        <dependency>
+            <groupId>org.hibernate.javax.persistence</groupId>
+            <artifactId>hibernate-jpa-2.1-api</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- Import the JTA API, we use provided scope as the API is included in JBoss WildFly -->
+        <dependency>
+            <groupId>org.jboss.spec.javax.transaction</groupId>
+            <artifactId>jboss-transaction-api_1.2_spec</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
         <!-- Import the JSF API, we use provided scope as the API is included in JBoss WildFly -->
         <dependency>
             <groupId>org.jboss.spec.javax.faces</groupId>
@@ -93,11 +107,32 @@
             <scope>provided</scope>
         </dependency>
 
-        <!-- Import the EJB 3.1 API, we use provided scope as the API is included in JBoss WildFly -->
+        <!-- Import the EJB API, we use provided scope as the API is included in JBoss WildFly -->
         <dependency>
             <groupId>org.jboss.spec.javax.ejb</groupId>
             <artifactId>jboss-ejb-api_3.2_spec</artifactId>
             <scope>provided</scope>
+        </dependency>
+
+        <!-- Import the Servlet API, we use provided scope as the API is included in JBoss WildFly -->
+        <dependency>
+            <groupId>org.jboss.spec.javax.servlet</groupId>
+            <artifactId>jboss-servlet-api_3.1_spec</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- Import Bean Validation API, we use provided scope as the API is included in JBoss WildFly -->
+        <dependency>
+            <groupId>javax.validation</groupId>
+            <artifactId>validation-api</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- Import Google Guava -->
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>17.0</version>
         </dependency>
 
     </dependencies>

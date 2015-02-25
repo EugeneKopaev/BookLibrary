@@ -1,24 +1,32 @@
 package org.booklibrary.app.persistence.entity;
 
 
+import com.google.common.base.Objects;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
 
 @MappedSuperclass
-public abstract class AbstractBaseEntity implements Serializable{
+public abstract class AbstractBaseEntity implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false, unique = true)
+    @Column(name = "ID", nullable = false, unique = true)
     private Long id;
 
-    @Column(name = "created",
+    @Column(name = "CREATED",
             insertable = false,
             nullable = false,
             columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
-    @Temporal(javax.persistence.TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     private Date created;
+
+    @Column(name = "CHANGED",
+            nullable = false,
+            columnDefinition = "TIMESTAMP ON UPDATE CURRENT_TIMESTAMP")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date changed;
 
     public AbstractBaseEntity() {
     }
@@ -37,5 +45,38 @@ public abstract class AbstractBaseEntity implements Serializable{
 
     public void setCreated(Date created) {
         this.created = created;
+    }
+
+    public Date getChanged() {
+        return changed;
+    }
+
+    public void setChanged(Date changed) {
+        this.changed = changed;
+    }
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null) {
+            return false;
+        }
+
+        if (!(o instanceof AbstractBaseEntity)) {
+            return false;
+        }
+
+        final AbstractBaseEntity that = (AbstractBaseEntity) o;
+
+        return Objects.equal(this.id, that.id) &&
+                Objects.equal(this.created, that.created);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id, created);
     }
 }
