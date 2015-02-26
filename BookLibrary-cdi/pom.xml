@@ -135,6 +135,14 @@
             <version>17.0</version>
         </dependency>
 
+        <!-- Import Apache Commons Codec -->
+        <dependency>
+            <groupId>commons-codec</groupId>
+            <artifactId>commons-codec</artifactId>
+            <version>1.9</version>
+        </dependency>
+
+
     </dependencies>
 
     <build>

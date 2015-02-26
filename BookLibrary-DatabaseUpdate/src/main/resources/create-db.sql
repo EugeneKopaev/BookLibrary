@@ -1,0 +1,1 @@
+CREATE DATABASE `book_library` /*!40100 DEFAULT CHARACTER SET latin1 */;

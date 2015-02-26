@@ -2,18 +2,21 @@ package org.booklibrary.app.persistence.entity;
 
 
 import com.google.common.base.Objects;
+import org.booklibrary.app.persistence.id.EntityIdentifier;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
 
+/**
+ * Parent for all entities encapsulated primary key, created and changed date
+ *
+ */
 @MappedSuperclass
 public abstract class AbstractBaseEntity implements Serializable {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ID", nullable = false, unique = true)
-    private Long id;
+    @EmbeddedId
+    private EntityIdentifier id = new EntityIdentifier();
 
     @Column(name = "CREATED",
             insertable = false,
@@ -31,11 +34,11 @@ public abstract class AbstractBaseEntity implements Serializable {
     public AbstractBaseEntity() {
     }
 
-    public Long getId() {
+    public EntityIdentifier getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(EntityIdentifier id) {
         this.id = id;
     }
 
@@ -43,18 +46,9 @@ public abstract class AbstractBaseEntity implements Serializable {
         return created;
     }
 
-    public void setCreated(Date created) {
-        this.created = created;
-    }
-
     public Date getChanged() {
         return changed;
     }
-
-    public void setChanged(Date changed) {
-        this.changed = changed;
-    }
-
 
     @Override
     public boolean equals(Object obj) {

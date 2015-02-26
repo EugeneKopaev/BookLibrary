@@ -18,7 +18,7 @@ public class Review extends AbstractBaseEntity {
     @Column(name = "RATING")
     private int rating;
 
-    @ManyToOne
+    @ManyToOne(optional = false)
     @JoinColumn(name = "BOOK_ID")
     private Book book;
 
