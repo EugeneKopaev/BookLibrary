@@ -47,12 +47,14 @@ public final class IdGenerator {
 	 * @return UUID
 	 */
 	private static UUID toUUID(byte[] byteArray) {
-		long msb = 0;
-		long lsb = 0;
-		for (int i = 0; i < 8; i++)
+		long msb = 0;                // Most Significant Bits
+		long lsb = 0;                // Least Significant Bits
+		for (int i = 0; i < 8; i++) {
 			msb = (msb << 8) | (byteArray[i] & 0xff);
-		for (int i = 8; i < 16; i++)
+		}
+		for (int i = 8; i < 16; i++) {
 			lsb = (lsb << 8) | (byteArray[i] & 0xff);
+		}
 		UUID result = new UUID(msb, lsb);
 		return result;
 	}
