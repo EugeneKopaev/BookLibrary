@@ -13,7 +13,7 @@ import java.util.Date;
  *
  */
 @MappedSuperclass
-public abstract class AbstractBaseEntity implements Serializable {
+public abstract class AbstractPersistentEntity implements Serializable {
 
     @EmbeddedId
     private EntityIdentifier id = new EntityIdentifier();
@@ -31,7 +31,7 @@ public abstract class AbstractBaseEntity implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     private Date changed;
 
-    public AbstractBaseEntity() {
+    public AbstractPersistentEntity() {
     }
 
     public EntityIdentifier getId() {
@@ -59,11 +59,11 @@ public abstract class AbstractBaseEntity implements Serializable {
             return false;
         }
 
-        if (!(obj instanceof AbstractBaseEntity)) {
+        if (!(obj instanceof AbstractPersistentEntity)) {
             return false;
         }
 
-        final AbstractBaseEntity that = (AbstractBaseEntity) obj;
+        final AbstractPersistentEntity that = (AbstractPersistentEntity) obj;
 
         return Objects.equal(this.id, that.id) &&
                 Objects.equal(this.created, that.created);

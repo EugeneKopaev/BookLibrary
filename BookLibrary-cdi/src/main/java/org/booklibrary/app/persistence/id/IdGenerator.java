@@ -41,7 +41,7 @@ public final class IdGenerator {
 
 
 	/**
-	 * Convert a UUID to a byte array.
+	 * Convert a byte array to a UUID.
 	 *
 	 * @param  byte[] array to convert
 	 * @return UUID

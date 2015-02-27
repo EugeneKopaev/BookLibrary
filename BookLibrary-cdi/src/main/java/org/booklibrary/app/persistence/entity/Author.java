@@ -9,7 +9,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "AUTHORS")
-public class Author extends AbstractBaseEntity{
+public class Author extends AbstractPersistentEntity {
 
     @Column(name = "FIRST_NAME", nullable = false)
     private String firstName;

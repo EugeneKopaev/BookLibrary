@@ -1,6 +1,7 @@
 package org.booklibrary.app.persistence.id;
 
 import com.google.common.base.Objects;
+import org.apache.commons.codec.DecoderException;
 import org.apache.commons.codec.binary.Hex;
 
 import javax.persistence.Column;
@@ -18,6 +19,11 @@ import java.util.Arrays;
 public class EntityIdentifier implements Serializable {
 
     /**
+     * The length of the eid array.
+     */
+    public static final int ID_LENGTH = 16;
+
+    /**
      * The unique entity id, set to a random UUID.
      */
     @Column(name = "ID",
@@ -27,6 +33,21 @@ public class EntityIdentifier implements Serializable {
 
     public EntityIdentifier() {
         this.id = IdGenerator.generateUUID();
+    }
+
+    public EntityIdentifier(String stringId) {
+        if (stringId.length() != (ID_LENGTH * 2)) {
+            String errMsg =
+                    String.format("The length %d of input String %s is incorrect", stringId.length(), stringId);
+            throw new IllegalArgumentException(errMsg);
+        }
+        try {
+            this.id = Hex.decodeHex(stringId.toCharArray());
+
+        } catch (DecoderException e) {
+            String errMsg = String.format("The input String %s is invalid as an entity Id", stringId);
+            throw new IllegalArgumentException(errMsg, e);
+        }
     }
 
     @Override
