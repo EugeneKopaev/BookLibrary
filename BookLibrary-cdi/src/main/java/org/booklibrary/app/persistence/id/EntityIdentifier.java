@@ -35,17 +35,17 @@ public class EntityIdentifier implements Serializable {
         this.id = IdGenerator.generateUUID();
     }
 
-    public EntityIdentifier(String stringId) {
-        if (stringId.length() != (ID_LENGTH * 2)) {
+    public EntityIdentifier(String uuid) {
+        if (uuid.length() != (ID_LENGTH * 2)) {
             String errMsg =
-                    String.format("The length %d of input String %s is incorrect", stringId.length(), stringId);
+                    String.format("The length %d of input String %s is incorrect", uuid.length(), uuid);
             throw new IllegalArgumentException(errMsg);
         }
         try {
-            this.id = Hex.decodeHex(stringId.toCharArray());
+            this.id = Hex.decodeHex(uuid.toCharArray());
 
         } catch (DecoderException e) {
-            String errMsg = String.format("The input String %s is invalid as an entity Id", stringId);
+            String errMsg = String.format("The input String %s is invalid", uuid);
             throw new IllegalArgumentException(errMsg, e);
         }
     }

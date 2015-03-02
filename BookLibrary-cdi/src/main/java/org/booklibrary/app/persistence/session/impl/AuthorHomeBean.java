@@ -1,8 +1,8 @@
-package org.booklibrary.app.persistence.repository.impl;
+package org.booklibrary.app.persistence.session.impl;
 
 import org.booklibrary.app.persistence.entity.Author;
 import org.booklibrary.app.persistence.id.EntityIdentifier;
-import org.booklibrary.app.persistence.repository.AuthorHome;
+import org.booklibrary.app.persistence.session.AuthorHome;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -12,7 +12,7 @@ import javax.persistence.PersistenceContext;
  * Author home implementation
  */
 @Stateless
-public class AuthorHomeBean extends AbstractCommonHome<Author, EntityIdentifier>
+public class AuthorHomeBean extends AbstractGenericEntityPersistence<Author, EntityIdentifier>
         implements AuthorHome {
 
     @PersistenceContext

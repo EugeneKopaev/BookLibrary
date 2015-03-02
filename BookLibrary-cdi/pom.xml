@@ -128,6 +128,14 @@
             <scope>provided</scope>
         </dependency>
 
+        <!-- Import hibernate validation API, we use provided scope-->
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-validator</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
+
         <!-- Import Google Guava -->
         <dependency>
             <groupId>com.google.guava</groupId>
@@ -140,6 +148,14 @@
             <groupId>commons-codec</groupId>
             <artifactId>commons-codec</artifactId>
             <version>1.9</version>
+        </dependency>
+
+        <!-- Import slf4j logging, we use provided scope -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>1.7.2</version>
+            <scope>provided</scope>
         </dependency>
 
 

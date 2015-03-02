@@ -1,8 +1,8 @@
-package org.booklibrary.app.persistence.repository.impl;
+package org.booklibrary.app.persistence.session.impl;
 
 import org.booklibrary.app.persistence.entity.Author;
 import org.booklibrary.app.persistence.id.EntityIdentifier;
-import org.booklibrary.app.persistence.repository.AuthorFacade;
+import org.booklibrary.app.persistence.session.AuthorFacade;
 
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
@@ -15,7 +15,7 @@ import javax.persistence.PersistenceContext;
  */
 @Stateless
 @TransactionAttribute(value = TransactionAttributeType.SUPPORTS)
-public class AuthorFacadeBean extends AbstractCommonFacade<Author, EntityIdentifier>
+public class AuthorFacadeBean extends AbstractGenericEntityPersistence<Author, EntityIdentifier>
         implements AuthorFacade {
 
     @PersistenceContext

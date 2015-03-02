@@ -6,7 +6,7 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "REVIEWS")
-public class Review extends AbstractPersistentEntity {
+public class Review extends AbstractBaseEntity {
 
     @Column(name = "COMMENTER_NAME", nullable = false)
     private String commenterName;
