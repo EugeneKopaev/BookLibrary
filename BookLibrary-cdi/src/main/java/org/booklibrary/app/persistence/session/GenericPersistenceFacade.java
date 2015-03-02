@@ -8,7 +8,7 @@ import java.util.List;
 
 /**
  * Generic interface for all entity facades interfaces.
- * k
+ * Facade interface provide read operations for entity.
  *
  * @param <T>  - entity
  * @param <PK> - primary key
@@ -20,6 +20,7 @@ public interface GenericPersistenceFacade<T extends AbstractBaseEntity, PK> {
      * Find object in the database by primary key.
      *
      * @param key
+     * @return T entity
      */
     T findByPk(PK key) throws PersistenceException;
 
@@ -27,6 +28,7 @@ public interface GenericPersistenceFacade<T extends AbstractBaseEntity, PK> {
      * Find object in the database by UUID.
      *
      * @param uuid
+     * @return T entity
      */
     T findByUuid(String uuid) throws PersistenceException;
 
@@ -34,6 +36,7 @@ public interface GenericPersistenceFacade<T extends AbstractBaseEntity, PK> {
      * Find all objects in the database.
      *
      * @param key
+     * @return List<T> list of entities
      */
     List<T> findAll();
 

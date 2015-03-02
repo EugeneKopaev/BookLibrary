@@ -14,7 +14,7 @@ public interface GenericPersistenceHome<T extends AbstractBaseEntity, PK> {
      * Persist object in the database.
      *
      * @param obj
-     * @return The created Entity
+     * @return Created Entity
      * @throws PersistenceException
      */
     T save(T obj) throws PersistenceException;
@@ -23,7 +23,7 @@ public interface GenericPersistenceHome<T extends AbstractBaseEntity, PK> {
      * Update entity in the database.
      *
      * @param obj
-     * @return The updated Entity
+     * @return Updated Entity
      * @throws PersistenceException
      */
     T update(T obj) throws PersistenceException;
