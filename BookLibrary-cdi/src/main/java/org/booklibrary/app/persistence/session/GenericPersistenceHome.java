@@ -58,7 +58,6 @@ public interface GenericPersistenceHome<T extends AbstractBaseEntity, PK> {
     /**
      * Removes all entities from database.
      *
-     * @return removed records count
      */
     void removeAll() throws PersistenceException;
 
