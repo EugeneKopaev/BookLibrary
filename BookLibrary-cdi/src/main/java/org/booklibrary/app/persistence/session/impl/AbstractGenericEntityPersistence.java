@@ -65,7 +65,10 @@ public abstract class AbstractGenericEntityPersistence<T extends AbstractBaseEnt
 
     @Override
     public List<T> findAll() {
-        return null;
+
+        LOG.debug("findAll invoked for entities [" + entityClass.getCanonicalName() + "]");
+        return getEntityManager().createQuery("FROM "
+                + entityClass.getName()).getResultList();
     }
 
     @Override
@@ -172,7 +175,7 @@ public abstract class AbstractGenericEntityPersistence<T extends AbstractBaseEnt
         }
 
         try {
-            LOG.debug("delete invoked for entity of type: [" +
+            LOG.debug("remove invoked for entity of type: [" +
                     entityClass.getCanonicalName() + "] with pk: [" + key + "]");
 
             Object existEntity = findByPk(key);
@@ -181,13 +184,13 @@ public abstract class AbstractGenericEntityPersistence<T extends AbstractBaseEnt
             entityManager.flush();
 
         } catch (Exception e) {
-            String errorMsg = "Failed to delete entity of type [" + entityClass.getCanonicalName() +
+            String errorMsg = "Failed to remove entity of type [" + entityClass.getCanonicalName() +
                     "] with pk [" + key + "]";
             LOG.error(errorMsg, e);
             throw new PersistenceException(errorMsg, e);
         }
 
-        LOG.debug("Delete complete for [" + entityClass.getCanonicalName() + "] with pk: [" + key + "]; took ["
+        LOG.debug("Remove complete for [" + entityClass.getCanonicalName() + "] with pk: [" + key + "]; took ["
                 + (System.currentTimeMillis() - startTime) + "ms]");
 
     }
@@ -206,17 +209,19 @@ public abstract class AbstractGenericEntityPersistence<T extends AbstractBaseEnt
     }
 
     @Override
-    public void removeAll() {
-//        try {
-//            if (LOG.isDebugEnabled()) {
-//                LOG.debug("delete invoked for entities of type: [" +
-//                        entityClass.getCanonicalName() + "]");
-//            }
-//            EntityManager entityManager = getEntityManager();
-//            String entityName = entityClass.getSimpleName();
-//            String deleteQuery = "DELETE FROM " + entityName;
-//            entityManager.createQuery(deleteQuery, entityClass);
-//        }
-
+    public void removeAll() throws PersistenceException {
+        try {
+            LOG.debug("removeAll invoked for entities of type: [" +
+                    entityClass.getCanonicalName() + "]");
+            EntityManager entityManager = getEntityManager();
+            String entityName = entityClass.getSimpleName();
+            String deleteQuery = "DELETE FROM " + entityName;
+            entityManager.createQuery(deleteQuery, entityClass);
+        } catch (Exception e) {
+            String errorMsg = "Failed to remove entities of type [" + entityClass.getCanonicalName() + "]";
+            LOG.error(errorMsg, e);
+            throw new PersistenceException(errorMsg, e);
+        }
+        LOG.debug("Remove all complete for [" + entityClass.getCanonicalName() + "]");
     }
 }

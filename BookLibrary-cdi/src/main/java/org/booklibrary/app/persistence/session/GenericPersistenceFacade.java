@@ -22,7 +22,7 @@ public interface GenericPersistenceFacade<T extends AbstractBaseEntity, PK> {
      * @param key
      * @return T entity
      */
-    T findByPk(PK key) throws PersistenceException;
+    T findByPk(PK key);
 
     /**
      * Find object in the database by UUID.
@@ -30,7 +30,7 @@ public interface GenericPersistenceFacade<T extends AbstractBaseEntity, PK> {
      * @param uuid
      * @return T entity
      */
-    T findByUuid(String uuid) throws PersistenceException;
+    T findByUuid(String uuid);
 
     /**
      * Find all objects in the database.
