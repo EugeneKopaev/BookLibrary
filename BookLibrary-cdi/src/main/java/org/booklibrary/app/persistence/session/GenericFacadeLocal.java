@@ -14,7 +14,7 @@ import java.util.List;
  * @param <PK> - primary key
  */
 @Local
-public interface GenericPersistenceFacade<T extends AbstractBaseEntity, PK> {
+public interface GenericFacadeLocal<T extends AbstractBaseEntity, PK> {
 
     /**
      * Find object in the database by primary key.

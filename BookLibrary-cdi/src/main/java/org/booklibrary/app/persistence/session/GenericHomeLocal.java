@@ -2,13 +2,15 @@ package org.booklibrary.app.persistence.session;
 
 import org.booklibrary.app.persistence.entity.AbstractBaseEntity;
 
+import javax.ejb.Local;
 import javax.persistence.PersistenceException;
 
 /**
  * Generic interface for all entity home interfaces.
  * Home interface provide write operations for entity.
  */
-public interface GenericPersistenceHome<T extends AbstractBaseEntity, PK> {
+@Local
+public interface GenericHomeLocal<T extends AbstractBaseEntity, PK> {
 
     /**
      * Persist object in the database.

@@ -6,5 +6,5 @@ import org.booklibrary.app.persistence.id.EntityIdentifier;
 import javax.ejb.Local;
 
 @Local
-public interface AuthorHome extends GenericPersistenceHome<Author, EntityIdentifier> {
+public interface AuthorHomeLocal extends GenericHomeLocal<Author, EntityIdentifier> {
 }

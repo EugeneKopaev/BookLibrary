@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<datasources>
+    <datasource jndi-name="java:/jdbc/booklibrary-test-ds"
+                pool-name="booklibrary-test-ds"
+                enabled="true"
+                use-java-context="true"
+                >
+        <security>
+            <user-name>root</user-name>
+            <password></password>
+        </security>
+        <connection-url>jdbc:mysql://127.0.0.1:3306/book_library_test</connection-url>
+        <driver>mysql-connector-java-5.1.34.jar_com.mysql.jdbc.Driver_5_1</driver>
+    </datasource>
+</datasources>

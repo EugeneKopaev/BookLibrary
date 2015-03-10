@@ -81,4 +81,8 @@ public class EntityIdentifier implements Serializable {
         return this.id;
     }
 
+    public static void main(String[] args) {
+        System.out.println(IdGenerator.generateUUID().toString());
+    }
+
 }

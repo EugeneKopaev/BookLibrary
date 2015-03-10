@@ -24,20 +24,38 @@
 
         <!-- JBoss dependency versions -->
 
-        <version.wildfly.maven.plugin>1.0.2.Final</version.wildfly.maven.plugin>
+        <!-- Define the version of the WildFly maven plugin-->
+        <version.wildfly.maven.plugin>1.1.0.Alpha1</version.wildfly.maven.plugin>
+        <!-- Define the version of the JBoss WildFly -->
+        <version.wildfly>8.2.0.Final</version.wildfly>
 
-        <!-- Define the version of the JBoss BOMs we want to import -->
-        <version.jboss.bom>8.2.1.Final</version.jboss.bom>
 
+        <!-- other dependency versions -->
+        <version.testng>6.8.8</version.testng>
+        <version.slf4j>1.7.2</version.slf4j>
+        <version.apache.commons.codec>1.9</version.apache.commons.codec>
+        <version.google.guava>17.0</version.google.guava>
 
         <!-- other plugin versions -->
         <version.compiler.plugin>3.1</version.compiler.plugin>
-        <version.surefire.plugin>2.10</version.surefire.plugin>
+        <version.surefire.plugin>2.17</version.surefire.plugin>
         <version.war.plugin>2.5</version.war.plugin>
+        <version.failsafe.plugin>2.17</version.failsafe.plugin>
+
 
         <!-- maven-compiler-plugin -->
         <maven.compiler.target>1.7</maven.compiler.target>
         <maven.compiler.source>1.7</maven.compiler.source>
+        <!-- mysql jdbc driver -->
+        <version.mysql.jdbc.driver>5.1.34</version.mysql.jdbc.driver>
+
+        <!-- Test dependency versions -->
+
+        <!-- Arquillian framework versions -->
+        <version.arquillian.bom>1.1.7.Final</version.arquillian.bom>
+        <version.arquillian.persistence>1.0.0.Alpha7</version.arquillian.persistence>
+        <!-- Define the version of the Shrinkwrap resolver -->
+        <version.shrinkwrap.resolver>2.0.0-alpha-5</version.shrinkwrap.resolver>
     </properties>
 
 
@@ -62,10 +80,29 @@
             <dependency>
                 <groupId>org.wildfly.bom</groupId>
                 <artifactId>jboss-javaee-7.0-with-hibernate</artifactId>
-                <version>${version.jboss.bom}</version>
+                <version>${version.wildfly}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
+
+            <!-- Arquaillian integration -->
+
+            <!-- Shrinkwrap resolver must be defined before arquillian-->
+            <dependency>
+                <groupId>org.jboss.shrinkwrap.resolver</groupId>
+                <artifactId>shrinkwrap-resolver-bom</artifactId>
+                <version>${version.shrinkwrap.resolver}</version>
+                <scope>import</scope>
+                <type>pom</type>
+            </dependency>
+            <dependency>
+                <groupId>org.jboss.arquillian</groupId>
+                <artifactId>arquillian-bom</artifactId>
+                <version>${version.arquillian.bom}</version>
+                <scope>import</scope>
+                <type>pom</type>
+            </dependency>
+
         </dependencies>
     </dependencyManagement>
 
@@ -140,30 +177,93 @@
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
-            <version>17.0</version>
+            <version>${version.google.guava}</version>
         </dependency>
 
         <!-- Import Apache Commons Codec -->
         <dependency>
             <groupId>commons-codec</groupId>
             <artifactId>commons-codec</artifactId>
-            <version>1.9</version>
+            <version>${version.apache.commons.codec}</version>
         </dependency>
 
         <!-- Import slf4j logging, we use provided scope -->
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
-            <version>1.7.2</version>
+            <version>${version.slf4j}</version>
             <scope>provided</scope>
         </dependency>
 
+        <!-- Testing dependency -->
+
+        <!-- Import Arquillian TestNG integration-->
+        <dependency>
+            <groupId>org.jboss.arquillian.testng</groupId>
+            <artifactId>arquillian-testng-container</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- Import Arquillian persistence extension dependency-->
+        <dependency>
+            <groupId>org.jboss.arquillian.extension</groupId>
+            <artifactId>arquillian-persistence-dbunit</artifactId>
+            <version>${version.arquillian.persistence}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.jboss.arquillian.extension</groupId>
+            <artifactId>arquillian-persistence-api</artifactId>
+            <version>${version.arquillian.persistence}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.jboss.arquillian.extension</groupId>
+            <artifactId>arquillian-persistence-core</artifactId>
+            <version>${version.arquillian.persistence}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- Import Arquillian managed container dependency -->
+        <dependency>
+            <groupId>org.jboss.arquillian.protocol</groupId>
+            <artifactId>arquillian-protocol-servlet</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.wildfly</groupId>
+            <artifactId>wildfly-arquillian-container-managed</artifactId>
+            <version>${version.wildfly}</version>
+        </dependency>
+
+        <!-- Import TestNG-->
+        <dependency>
+            <groupId>org.testng</groupId>
+            <artifactId>testng</artifactId>
+            <version>${version.testng}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- Shrinkwrap dependencies-->
+        <dependency>
+            <groupId>org.jboss.shrinkwrap.resolver</groupId>
+            <artifactId>shrinkwrap-resolver-impl-maven</artifactId>
+            <version>${version.shrinkwrap.resolver}</version>
+            <scope>test</scope>
+        </dependency>
 
     </dependencies>
 
     <build>
         <!-- Set the name of the deployment -->
         <finalName>${project.artifactId}</finalName>
+        <testResources>
+            <testResource>
+                <directory>src/test/resources</directory>
+                <filtering>true</filtering>
+            </testResource>
+        </testResources>
         <plugins>
             <!-- WildFly plugin to deploy the application -->
             <plugin>
@@ -190,9 +290,120 @@
             <plugin>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>${version.surefire.plugin}</version>
+                <configuration>
+                    <skipTests>true</skipTests>
+                </configuration>
             </plugin>
 
         </plugins>
     </build>
+
+    <profiles>
+        <profile>
+            <id>wildfly-managed-test</id>
+            <properties>
+                <cli.file.name>add-datasource.cli</cli.file.name>
+                <browser>chromium-browser</browser>
+                <serverProfile>standalone-full.xml</serverProfile>
+                <serverRoot>${project.build.directory}/wildfly-${version.wildfly}</serverRoot>
+                <version.mysql.jdbc.driver>5.1.34</version.mysql.jdbc.driver>
+            </properties>
+            <dependencies>
+                <dependency>
+                    <groupId>io.undertow</groupId>
+                    <artifactId>undertow-websockets-jsr</artifactId>
+                    <version>1.0.0.Beta25</version>
+                    <scope>test</scope>
+                </dependency>
+            </dependencies>
+
+            <build>
+                <testResources>
+                    <testResource>
+                        <directory>src/test/resources</directory>
+                        <filtering>true</filtering>
+                    </testResource>
+                </testResources>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-dependency-plugin</artifactId>
+                        <executions>
+                            <!-- Download WildFly dist and put it in target directory -->
+                            <execution>
+                                <id>unpack</id>
+                                <phase>process-test-classes</phase>
+                                <goals>
+                                    <goal>unpack</goal>
+                                </goals>
+                                <configuration>
+                                    <artifactItems>
+                                        <artifactItem>
+                                            <groupId>org.wildfly</groupId>
+                                            <artifactId>wildfly-dist</artifactId>
+                                            <version>${version.wildfly}</version>
+                                            <type>zip</type>
+                                            <overWrite>false</overWrite>
+                                            <outputDirectory>${project.build.directory}</outputDirectory>
+                                        </artifactItem>
+                                    </artifactItems>
+                                </configuration>
+                            </execution>
+
+                            <!-- Copy mysql jdbc driver in WildFly deployment-->
+                            <execution>
+                                <id>copy-db-driver</id>
+                                <phase>process-test-resources</phase>
+                                <goals>
+                                    <goal>copy</goal>
+                                </goals>
+                                <configuration>
+                                    <artifactItems>
+                                        <artifactItem>
+                                            <groupId>mysql</groupId>
+                                            <artifactId>mysql-connector-java</artifactId>
+                                            <version>${version.mysql.jdbc.driver}</version>
+                                            <outputDirectory>
+                                                ${project.build.directory}/wildfly-${version.wildfly}/standalone/deployments
+                                            </outputDirectory>
+                                        </artifactItem>
+                                    </artifactItems>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <!-- fails-safe-plugin should be used instead of surefire so that the container gets stopped even
+                            when the tests fail -->
+                    <plugin>
+                        <artifactId>maven-failsafe-plugin</artifactId>
+                        <version>${version.failsafe.plugin}</version>
+                        <configuration>
+                            <includes>
+                                <include>**/*Test.java</include>
+                            </includes>
+                            <environmentVariables>
+                                <JBOSS_HOME>${project.build.directory}/wildfly-${version.wildfly}</JBOSS_HOME>
+                                <MODULE_PATH>${project.build.directory}/wildfly-${version.wildfly}/modules</MODULE_PATH>
+                            </environmentVariables>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>integration-test</id>
+                                <goals>
+                                    <goal>integration-test</goal>
+                                </goals>
+                            </execution>
+                            <execution>
+                                <id>verify</id>
+                                <goals>
+                                    <goal>verify</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 
 </project>

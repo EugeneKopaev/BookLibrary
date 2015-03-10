@@ -9,6 +9,9 @@ import java.util.List;
 
 @Entity
 @Table(name = "AUTHORS")
+@NamedQueries({
+        @NamedQuery(name = "Author.findByFirstName", query = "SELECT a FROM Author a WHERE a.firstName = :firstName")
+})
 public class Author extends AbstractBaseEntity {
 
     @Column(name = "FIRST_NAME", nullable = false)
