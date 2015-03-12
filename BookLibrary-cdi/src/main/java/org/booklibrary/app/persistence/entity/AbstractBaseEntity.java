@@ -50,27 +50,4 @@ public abstract class AbstractBaseEntity implements Serializable {
         return changed;
     }
 
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
-            return false;
-        }
-
-        if (!(obj instanceof AbstractBaseEntity)) {
-            return false;
-        }
-
-        final AbstractBaseEntity that = (AbstractBaseEntity) obj;
-
-        return Objects.equal(this.id, that.id) &&
-                Objects.equal(this.created, that.created);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hashCode(id, created);
-    }
 }

@@ -8,7 +8,9 @@ import java.util.Collections;
 import java.util.List;
 
 @Entity
-@Table(name = "AUTHORS")
+@Table(name = "AUTHORS", uniqueConstraints = {
+        @UniqueConstraint(columnNames = {"FIRST_NAME", "LAST_NAME"})
+})
 @NamedQueries({
         @NamedQuery(name = "Author.findByFirstName", query = "SELECT a FROM Author a WHERE a.firstName = :firstName")
 })
@@ -58,9 +60,6 @@ public class Author extends AbstractBaseEntity {
         if (obj == null || getClass() != obj.getClass()) {
             return false;
         }
-        if (!super.equals(obj)) {
-            return false;
-        }
         final Author other = (Author) obj;
         return Objects.equal(this.firstName, other.firstName)
                 && Objects.equal(this.lastName, other.lastName);
@@ -68,6 +67,6 @@ public class Author extends AbstractBaseEntity {
 
     @Override
     public int hashCode() {
-        return 31 * super.hashCode() + Objects.hashCode(firstName, lastName);
+        return Objects.hashCode(firstName, lastName);
     }
 }

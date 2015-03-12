@@ -7,6 +7,7 @@ import org.booklibrary.app.persistence.session.AuthorFacadeLocal;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
+import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
@@ -18,7 +19,7 @@ import javax.persistence.PersistenceContext;
 public class AuthorFacade extends AbstractGenericEntityPersistence<Author, EntityIdentifier>
         implements AuthorFacadeLocal {
 
-    @PersistenceContext
+    @Inject
     private EntityManager entityManager;
 
     public AuthorFacade() {
@@ -29,5 +30,10 @@ public class AuthorFacade extends AbstractGenericEntityPersistence<Author, Entit
         return entityManager.createNamedQuery("Author.findByFirstName", Author.class)
                 .setParameter("firstName", firstName)
                 .getSingleResult();
+    }
+
+    @Override
+    public EntityManager getEntityManager() {
+        return this.entityManager;
     }
 }

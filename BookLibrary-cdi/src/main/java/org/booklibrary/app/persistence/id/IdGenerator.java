@@ -67,6 +67,9 @@ public final class IdGenerator {
 		String arr = Hex.encodeHexString(toByteArray(uuid));
 		boolean f = Base64.isBase64(arr);
 		String a = Base64.encodeBase64String(toByteArray(uuid));
+		String b = "b5STRXyYR8iObWoRO18IYQ==";
+		String c = "mzYVlWPTQu22SzrIxQmIeA==";
+
 		System.out.println(a);
 	}
 }

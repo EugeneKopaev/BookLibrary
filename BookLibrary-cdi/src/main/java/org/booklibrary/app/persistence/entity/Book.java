@@ -85,7 +85,7 @@ public class Book extends AbstractBaseEntity {
 
     @Override
     public int hashCode() {
-        return 31 * super.hashCode() + Objects.hashCode(name, isbn, publishYear, publisher);
+        return Objects.hashCode(name, isbn, publishYear, publisher);
     }
 
     @Override
@@ -94,9 +94,6 @@ public class Book extends AbstractBaseEntity {
             return true;
         }
         if (obj == null || getClass() != obj.getClass()) {
-            return false;
-        }
-        if (!super.equals(obj)) {
             return false;
         }
         final Book other = (Book) obj;

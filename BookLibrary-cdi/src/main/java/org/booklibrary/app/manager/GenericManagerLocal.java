@@ -1,5 +1,6 @@
 package org.booklibrary.app.manager;
 
+import org.booklibrary.app.manager.exceptions.EntityPersistenceException;
 import org.booklibrary.app.persistence.entity.AbstractBaseEntity;
 
 import javax.ejb.Local;
@@ -14,7 +15,7 @@ public interface GenericManagerLocal<T extends AbstractBaseEntity, PK> {
      * @param obj
      * @return Created Entity
      */
-    T save(T obj);
+    T save(T obj) throws EntityPersistenceException;
 
     /**
      * Update entity in the database.
@@ -22,26 +23,26 @@ public interface GenericManagerLocal<T extends AbstractBaseEntity, PK> {
      * @param obj
      * @return Updated Entity
      */
-    T update(T obj);
+    T update(T obj) throws EntityPersistenceException;
 
     /**
      * Delete the entity from the database by primary key.
      *
      * @param key
      */
-    void remove(PK key);
+    void remove(PK key) throws EntityPersistenceException;
 
     /**
      * Delete the entity from the database by string uuid.
      *
      * @param uuid
      */
-    void remove(String uuid);
+    void remove(String uuid) throws EntityPersistenceException;
 
     /**
      * Removes all entities from database.
      */
-    void removeAll();
+    void removeAll() throws EntityPersistenceException;
 
     /**
      * Find object in the database by primary key.

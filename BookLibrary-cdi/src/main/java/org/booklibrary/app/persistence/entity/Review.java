@@ -65,9 +65,6 @@ public class Review extends AbstractBaseEntity {
         if (obj == null || getClass() != obj.getClass()) {
             return false;
         }
-        if (!super.equals(obj)) {
-            return false;
-        }
         final Review other = (Review) obj;
         return Objects.equal(this.commenterName, other.commenterName)
                 && Objects.equal(this.comment, other.comment)
@@ -76,7 +73,7 @@ public class Review extends AbstractBaseEntity {
 
     @Override
     public int hashCode() {
-        return 31 * super.hashCode() + Objects.hashCode(commenterName, comment, rating);
+        return Objects.hashCode(commenterName, comment, rating);
     }
 
 }
