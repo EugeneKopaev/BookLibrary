@@ -11,6 +11,8 @@ import org.slf4j.LoggerFactory;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
+import javax.ejb.TransactionAttribute;
+import javax.ejb.TransactionAttributeType;
 import java.util.List;
 
 @Stateless
@@ -25,6 +27,7 @@ public class AuthorManager implements AuthorManagerLocal{
     private AuthorHomeLocal authorHome;
 
     @Override
+    @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
     public Author save(Author obj) throws EntityPersistenceException{
 
         Author entity;
@@ -40,13 +43,29 @@ public class AuthorManager implements AuthorManagerLocal{
     }
 
     @Override
-    public Author update(Author obj)throws EntityPersistenceException {
-        return null;
+    public Author update(Author obj) throws EntityPersistenceException {
+        Author updated;
+        try {
+            updated = authorHome.update(obj);
+        } catch (Exception e) {
+            String errorMsg = "Failed to update object: {}";
+            LOG.error(errorMsg, obj);
+            throw new EntityPersistenceException(errorMsg, e);
+        }
+        LOG.debug("Update entity: {}", updated);
+        return updated;
     }
 
     @Override
-    public void remove(EntityIdentifier key) throws EntityPersistenceException{
-
+    public void remove(EntityIdentifier key) throws EntityPersistenceException {
+        try {
+            authorHome.remove(key);
+        } catch (Exception e) {
+            String errorMsg = "Failed to remove object with pk: {}";
+            LOG.error(errorMsg, key);
+            throw new EntityPersistenceException(errorMsg, e);
+        }
+        LOG.debug("Remove entity with pk: {}", key);
     }
 
     @Override
@@ -66,11 +85,13 @@ public class AuthorManager implements AuthorManagerLocal{
 
     @Override
     public Author findByUuid(String uuid) {
-        return null;
+
+        return authorFacade.findByUuid(uuid);
     }
 
     @Override
     public List<Author> findAll() {
-        return null;
+
+        return authorFacade.findAll();
     }
 }

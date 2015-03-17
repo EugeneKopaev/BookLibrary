@@ -14,6 +14,7 @@ public interface GenericManagerLocal<T extends AbstractBaseEntity, PK> {
      *
      * @param obj
      * @return Created Entity
+     * @throws org.booklibrary.app.manager.exceptions.EntityPersistenceException
      */
     T save(T obj) throws EntityPersistenceException;
 
@@ -22,6 +23,7 @@ public interface GenericManagerLocal<T extends AbstractBaseEntity, PK> {
      *
      * @param obj
      * @return Updated Entity
+     *@throws org.booklibrary.app.manager.exceptions.EntityPersistenceException
      */
     T update(T obj) throws EntityPersistenceException;
 
@@ -29,6 +31,7 @@ public interface GenericManagerLocal<T extends AbstractBaseEntity, PK> {
      * Delete the entity from the database by primary key.
      *
      * @param key
+     * @throws org.booklibrary.app.manager.exceptions.EntityPersistenceException
      */
     void remove(PK key) throws EntityPersistenceException;
 
@@ -36,11 +39,14 @@ public interface GenericManagerLocal<T extends AbstractBaseEntity, PK> {
      * Delete the entity from the database by string uuid.
      *
      * @param uuid
+     * @throws org.booklibrary.app.manager.exceptions.EntityPersistenceException
      */
     void remove(String uuid) throws EntityPersistenceException;
 
     /**
      * Removes all entities from database.
+     *
+     * @throws org.booklibrary.app.manager.exceptions.EntityPersistenceException
      */
     void removeAll() throws EntityPersistenceException;
 

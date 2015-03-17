@@ -28,7 +28,8 @@
         <version.wildfly.maven.plugin>1.1.0.Alpha1</version.wildfly.maven.plugin>
         <!-- Define the version of the JBoss WildFly -->
         <version.wildfly>8.2.0.Final</version.wildfly>
-
+        <!-- Define RichFaces version -->
+        <version.richfaces>4.5.3.Final</version.richfaces>
 
         <!-- other dependency versions -->
         <version.testng>6.8.8</version.testng>
@@ -172,6 +173,20 @@
             <scope>provided</scope>
         </dependency>
 
+        <!-- Import the RichFaces library -->
+        <dependency>
+            <groupId>org.richfaces</groupId>
+            <artifactId>richfaces</artifactId>
+            <version>${version.richfaces}</version>
+        </dependency>
+
+        <!--&lt;!&ndash; Import the RichFaces push dependencies &ndash;&gt;-->
+        <!--<dependency>-->
+            <!--<groupId>org.richfaces</groupId>-->
+            <!--<artifactId>richfaces-push-depchain</artifactId>-->
+            <!--<type>pom</type>-->
+            <!--<version>${version.richfaces}</version>-->
+        <!--</dependency>-->
 
         <!-- Import Google Guava -->
         <dependency>

@@ -52,7 +52,7 @@ public class EntityIdentifier implements Serializable {
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(id);
+        return Arrays.hashCode(id);
     }
 
     @Override
@@ -63,7 +63,7 @@ public class EntityIdentifier implements Serializable {
         if (obj == null) {
             return false;
         }
-        if (!(obj instanceof EntityIdentifier)) {
+        if (obj.getClass() != getClass()) {
             return false;
         }
 

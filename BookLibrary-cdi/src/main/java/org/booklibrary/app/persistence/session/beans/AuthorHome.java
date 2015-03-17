@@ -3,6 +3,7 @@ package org.booklibrary.app.persistence.session.beans;
 import org.booklibrary.app.persistence.entity.Author;
 import org.booklibrary.app.persistence.id.EntityIdentifier;
 import org.booklibrary.app.persistence.session.AuthorHomeLocal;
+import org.slf4j.Logger;
 
 import javax.ejb.Stateless;
 import javax.enterprise.context.SessionScoped;
@@ -22,6 +23,9 @@ public class AuthorHome extends AbstractGenericEntityPersistence<Author, EntityI
     @Inject
     private EntityManager entityManager;
 
+    @Inject
+    private Logger logger;
+
     public AuthorHome() {
     }
 
@@ -30,4 +34,8 @@ public class AuthorHome extends AbstractGenericEntityPersistence<Author, EntityI
         return this.entityManager;
     }
 
+    @Override
+    public Logger getLogger() {
+        return this.logger;
+    }
 }

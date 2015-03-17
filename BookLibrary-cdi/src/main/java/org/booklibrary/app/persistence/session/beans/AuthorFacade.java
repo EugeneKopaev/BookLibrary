@@ -3,6 +3,7 @@ package org.booklibrary.app.persistence.session.beans;
 import org.booklibrary.app.persistence.entity.Author;
 import org.booklibrary.app.persistence.id.EntityIdentifier;
 import org.booklibrary.app.persistence.session.AuthorFacadeLocal;
+import org.slf4j.Logger;
 
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
@@ -22,6 +23,9 @@ public class AuthorFacade extends AbstractGenericEntityPersistence<Author, Entit
     @Inject
     private EntityManager entityManager;
 
+    @Inject
+    private Logger logger;
+
     public AuthorFacade() {
     }
 
@@ -35,5 +39,10 @@ public class AuthorFacade extends AbstractGenericEntityPersistence<Author, Entit
     @Override
     public EntityManager getEntityManager() {
         return this.entityManager;
+    }
+
+    @Override
+    public Logger getLogger() {
+        return this.logger;
     }
 }

@@ -7,6 +7,7 @@ import org.booklibrary.app.persistence.session.GenericHomeLocal;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import java.lang.reflect.ParameterizedType;
 import java.util.List;
@@ -17,11 +18,11 @@ import java.util.List;
 public abstract class AbstractGenericEntityPersistence<T extends AbstractBaseEntity, PK>
         implements GenericHomeLocal<T, PK>, GenericFacadeLocal<T, PK> {
 
-    private final transient Logger LOG = LoggerFactory.getLogger(getClass());
-
     private Class<T> entityClass;
 
     public abstract EntityManager getEntityManager();
+
+    public abstract Logger getLogger();
 
     public AbstractGenericEntityPersistence() {
         this.entityClass = (Class<T>) ((ParameterizedType)
@@ -33,11 +34,11 @@ public abstract class AbstractGenericEntityPersistence<T extends AbstractBaseEnt
 
         if (key == null) {
             String errorMsg = "null argument passed to find";
-            LOG.error(errorMsg);
+            getLogger().error(errorMsg);
             throw new IllegalArgumentException(errorMsg);
         }
 
-        LOG.debug("findByPk invoked for entity of type [" + entityClass.getCanonicalName() +
+        getLogger().debug("findByPk invoked for entity of type [" + entityClass.getCanonicalName() +
                 "] with pk [" + key + "]");
 
         return getEntityManager().find(entityClass, key);
@@ -47,7 +48,7 @@ public abstract class AbstractGenericEntityPersistence<T extends AbstractBaseEnt
     public T findByUuid(String uuid) {
         if (uuid == null) {
             String errorMsg = "null argument passed to find";
-            LOG.error(errorMsg);
+            getLogger().error(errorMsg);
             throw new IllegalArgumentException(errorMsg);
         }
         PK key = (PK) new EntityIdentifier(uuid);
@@ -57,7 +58,7 @@ public abstract class AbstractGenericEntityPersistence<T extends AbstractBaseEnt
     @Override
     public List<T> findAll() {
 
-        LOG.debug("findAll invoked for entities [" + entityClass.getCanonicalName() + "]");
+        getLogger().debug("findAll invoked for entities [" + entityClass.getCanonicalName() + "]");
         return getEntityManager().createQuery("FROM "
                 + entityClass.getName()).getResultList();
     }
@@ -65,7 +66,7 @@ public abstract class AbstractGenericEntityPersistence<T extends AbstractBaseEnt
     @Override
     public T save(T obj) throws Exception {
 
-        LOG.debug("persist invoked for object: {}", obj);
+        getLogger().debug("persist invoked for object: {}", obj);
         getEntityManager().persist(obj);
         return obj;
     }
@@ -73,21 +74,20 @@ public abstract class AbstractGenericEntityPersistence<T extends AbstractBaseEnt
     @Override
     public T update(T obj) throws Exception {
 
-        LOG.debug("update invoked for object {}", obj);
-        getEntityManager().merge(obj);
-        return obj;
+        getLogger().debug("update invoked for object {}", obj);
+        return getEntityManager().merge(obj);
     }
 
     @Override
     public void clear() {
-        LOG.debug("clear invoked");
+        getLogger().debug("clear invoked");
         getEntityManager().clear();
     }
 
     @Override
     public void remove(PK key) throws Exception {
 
-        LOG.debug("remove invoked for entity of type: [" +
+        getLogger().debug("remove invoked for entity of type: [" +
                 entityClass.getCanonicalName() + "] with pk: [" + key + "]");
 
         Object existEntity = getEntityManager().getReference(entityClass, key);
@@ -96,7 +96,7 @@ public abstract class AbstractGenericEntityPersistence<T extends AbstractBaseEnt
 
     @Override
     public void remove(String uuid) throws Exception {
-        LOG.debug("remove invoked for entity of type: [" +
+        getLogger().debug("remove invoked for entity of type: [" +
                 entityClass.getCanonicalName() + "] with uuid: [" + uuid + "]");
         PK key = (PK) new EntityIdentifier(uuid);
         remove(key);
@@ -105,7 +105,7 @@ public abstract class AbstractGenericEntityPersistence<T extends AbstractBaseEnt
 
     @Override
     public void removeAll() throws Exception {
-        LOG.debug("removeAll invoked for entities of type: {}",
+        getLogger().debug("removeAll invoked for entities of type: {}",
                 entityClass.getCanonicalName());
         String entityName = entityClass.getSimpleName();
         String deleteQuery = "DELETE FROM " + entityName;

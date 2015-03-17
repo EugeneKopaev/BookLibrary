@@ -50,4 +50,12 @@ public abstract class AbstractBaseEntity implements Serializable {
         return changed;
     }
 
+    @Override
+    public String toString() {
+        return "AbstractBaseEntity{" +
+                "id=" + id +
+                ", created=" + created +
+                ", changed=" + changed +
+                '}';
+    }
 }

@@ -70,6 +70,6 @@ public final class IdGenerator {
 		String b = "b5STRXyYR8iObWoRO18IYQ==";
 		String c = "mzYVlWPTQu22SzrIxQmIeA==";
 
-		System.out.println(a);
+		System.out.println(arr);
 	}
 }

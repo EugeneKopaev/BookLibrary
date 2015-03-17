@@ -69,4 +69,12 @@ public class Author extends AbstractBaseEntity {
     public int hashCode() {
         return Objects.hashCode(firstName, lastName);
     }
+
+    @Override
+    public String toString() {
+        return "Author{" +
+                "lastName='" + lastName + '\'' +
+                ", firstName='" + firstName + '\'' +
+                "} " + super.toString();
+    }
 }
