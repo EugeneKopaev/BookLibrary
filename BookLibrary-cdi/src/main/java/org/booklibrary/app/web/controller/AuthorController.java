@@ -1,56 +1,46 @@
 package org.booklibrary.app.web.controller;
 
 import org.booklibrary.app.manager.AuthorManagerLocal;
-import org.booklibrary.app.manager.exceptions.EntityPersistenceException;
+import org.booklibrary.app.manager.exceptions.EntityManagerException;
 import org.booklibrary.app.persistence.entity.Author;
-import org.booklibrary.app.persistence.id.EntityIdentifier;
+import org.slf4j.Logger;
 
-import javax.enterprise.event.Event;
-import javax.enterprise.inject.Model;
 import javax.enterprise.inject.Produces;
+import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
-import javax.persistence.EntityManager;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
-@Model
-public class AuthorController {
+@Named
+@ViewScoped
+public class AuthorController implements Serializable{
 
     @Inject
-    private EntityManager entityManager;
+    private Logger LOG;
 
     @Inject
     private AuthorManagerLocal authorManager;
 
-    @Inject
-    private Event<Author> authorEvent;
-
-    private Author managedAuthor = new Author();
-
-    private EntityIdentifier pk = new EntityIdentifier();
+    private Author managedAuthor = null;
+    private List<Author> authors = new ArrayList<>();
     private int page = 1;
 
     public void save() {
         if (managedAuthor != null) {
             try {
                 authorManager.save(managedAuthor);
-                authorEvent.fire(managedAuthor);
-            } catch (EntityPersistenceException e) {
+            } catch (EntityManagerException e) {
                 e.printStackTrace();
             }
         }
     }
 
-//    @Transactional(Transactional.TxType.REQUIRES_NEW)
     public void remove() {
         if (managedAuthor != null) {
-            EntityIdentifier id = managedAuthor.getId();
-            System.out.println("ID: " + id);
-            System.out.println(managedAuthor.toString());
-            System.out.println("UUID: " + pk);
             try {
-//                entityManager.remove(managedAuthor);
-                authorManager.remove(pk);
-                authorEvent.fire(managedAuthor);
+                authorManager.removeByPk(managedAuthor.getId());
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -60,10 +50,8 @@ public class AuthorController {
     public void update() {
         if (managedAuthor != null) {
             try {
-                System.out.println(managedAuthor.toString());
-                authorManager.save(managedAuthor);
-                authorEvent.fire(managedAuthor);
-            } catch (EntityPersistenceException e) {
+                authorManager.update(managedAuthor);
+            } catch (EntityManagerException e) {
                 e.printStackTrace();
             }
         }
@@ -73,6 +61,12 @@ public class AuthorController {
     @Named
     public Author getManagedAuthor() {
         return managedAuthor;
+    }
+
+    @Produces
+    @Named
+    public List<Author> getAuthors() {
+        return this.authors = authorManager.findAll();
     }
 
     public void setManagedAuthor(Author managedAuthor) {
@@ -87,11 +81,4 @@ public class AuthorController {
         this.page = page;
     }
 
-    public EntityIdentifier getPk() {
-        return pk;
-    }
-
-    public void setPk(String pk) {
-        this.pk = new EntityIdentifier(pk);
-    }
 }

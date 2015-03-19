@@ -12,5 +12,18 @@
              CREATED="2015-03-07 16:05:29"
              CHANGED="2015-03-07 16:05:29"
             />
+
+    <BOOKS ID="tP4yn0UISXOb+X97JaTyQA=="
+           NAME="Test book"
+           ISBN="197656567"
+           PUBLISH_YEAR="2015"
+           PUBLISHER="Publish house"
+           CREATED="2015-03-07 16:05:29"
+           CHANGED="2015-03-07 16:05:29"
+           />
+
+    <BOOKS_TO_AUTHORS BOOK_ID="tP4yn0UISXOb+X97JaTyQA=="
+                      AUTHOR_ID="mzYVlWPTQu22SzrIxQmIeA=="
+                      />
 </dataset>
 

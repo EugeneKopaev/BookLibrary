@@ -3,10 +3,11 @@ package org.booklibrary.app.persistence.entity;
 import com.google.common.base.Objects;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 @Entity
 @Table(name = "REVIEWS")
-public class Review extends AbstractBaseEntity {
+public class Review extends AbstractBaseEntity implements Serializable{
 
     @Column(name = "COMMENTER_NAME", nullable = false)
     private String commenterName;

@@ -3,13 +3,14 @@ package org.booklibrary.app.persistence.entity;
 import com.google.common.base.Objects;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 @Entity
 @Table(name = "BOOKS")
-public class Book extends AbstractBaseEntity {
+public class Book extends AbstractBaseEntity implements Serializable{
 
     @Column(name = "NAME", nullable = false)
     private String name;
@@ -23,7 +24,7 @@ public class Book extends AbstractBaseEntity {
     @Column(name = "PUBLISHER", nullable = false)
     private String publisher;
 
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.PERSIST)
     @JoinTable(name = "BOOKS_TO_AUTHORS",
             joinColumns = @JoinColumn(name = "BOOK_ID"),
             inverseJoinColumns = @JoinColumn(name = "AUTHOR_ID"))
