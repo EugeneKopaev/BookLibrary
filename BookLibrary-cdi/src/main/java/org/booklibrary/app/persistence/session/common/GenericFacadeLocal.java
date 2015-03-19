@@ -1,4 +1,4 @@
-package org.booklibrary.app.persistence.session;
+package org.booklibrary.app.persistence.session.common;
 
 import org.booklibrary.app.persistence.entity.AbstractBaseEntity;
 

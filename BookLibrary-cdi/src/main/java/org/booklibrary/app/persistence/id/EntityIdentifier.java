@@ -4,6 +4,7 @@ import com.google.common.base.Objects;
 import org.apache.commons.codec.DecoderException;
 import org.apache.commons.codec.binary.Hex;
 
+import javax.annotation.PostConstruct;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import java.io.Serializable;
@@ -29,10 +30,9 @@ public class EntityIdentifier implements Serializable {
     @Column(name = "ID",
             length = IdGenerator.NUM_UUID_BYTES,
             columnDefinition = "BINARY(16)")
-    private byte[] id;
+    private byte[] id = IdGenerator.generateUUID();
 
     public EntityIdentifier() {
-        this.id = IdGenerator.generateUUID();
     }
 
     public EntityIdentifier(String uuid) {

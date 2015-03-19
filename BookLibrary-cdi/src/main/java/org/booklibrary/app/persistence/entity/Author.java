@@ -3,6 +3,7 @@ package org.booklibrary.app.persistence.entity;
 import com.google.common.base.Objects;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -14,7 +15,8 @@ import java.util.List;
 @NamedQueries({
         @NamedQuery(name = "Author.findByFirstName", query = "SELECT a FROM Author a WHERE a.firstName = :firstName")
 })
-public class Author extends AbstractBaseEntity {
+public class Author extends AbstractBaseEntity
+                                implements Serializable {
 
     @Column(name = "FIRST_NAME", nullable = false)
     private String firstName;

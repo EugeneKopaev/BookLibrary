@@ -1,4 +1,4 @@
-package org.booklibrary.app.persistence.session;
+package org.booklibrary.app.persistence.session.common;
 
 import org.booklibrary.app.persistence.entity.AbstractBaseEntity;
 
@@ -40,19 +40,19 @@ public interface GenericHomeLocal<T extends AbstractBaseEntity, PK> {
      *
      * @param key
      */
-    void remove(PK key) throws Exception;
+    void removeByPk(PK key) throws Exception;
 
     /**
      * Delete the entity from the database by string uuid.
      *
      * @param uuid
      */
-    void remove(String uuid) throws Exception;
+    void removeByUuid(String uuid) throws Exception;
 
     /**
      * Removes all entities from database.
      *
      */
-    void removeAll() throws Exception;
+    int removeAll() throws Exception;
 
 }

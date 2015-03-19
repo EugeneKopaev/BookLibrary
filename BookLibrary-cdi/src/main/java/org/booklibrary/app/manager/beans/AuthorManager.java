@@ -1,24 +1,29 @@
 package org.booklibrary.app.manager.beans;
 
 import org.booklibrary.app.manager.AuthorManagerLocal;
-import org.booklibrary.app.manager.exceptions.EntityPersistenceException;
+import org.booklibrary.app.manager.exceptions.EntityManagerException;
 import org.booklibrary.app.persistence.entity.Author;
 import org.booklibrary.app.persistence.id.EntityIdentifier;
 import org.booklibrary.app.persistence.session.AuthorFacadeLocal;
 import org.booklibrary.app.persistence.session.AuthorHomeLocal;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-import javax.ejb.EJB;
-import javax.ejb.Stateless;
-import javax.ejb.TransactionAttribute;
-import javax.ejb.TransactionAttributeType;
+import javax.ejb.*;
+import javax.inject.Inject;
 import java.util.List;
 
+/**
+ * Author Manager implementation.
+ * This bean encapsulate business logic.
+ *
+ * @see org.booklibrary.app.manager.AuthorManagerLocal
+ */
 @Stateless
+@Local
 public class AuthorManager implements AuthorManagerLocal{
 
-    private final transient Logger LOG = LoggerFactory.getLogger(getClass());
+    @Inject
+    private Logger logger;
 
     @EJB
     private AuthorFacadeLocal authorFacade;
@@ -26,72 +31,73 @@ public class AuthorManager implements AuthorManagerLocal{
     @EJB
     private AuthorHomeLocal authorHome;
 
-    @Override
     @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
-    public Author save(Author obj) throws EntityPersistenceException{
-
+    public Author save(Author obj) throws EntityManagerException {
+        logger.debug("save invoked for object: {}", obj);
         Author entity;
         try {
             entity = authorHome.save(obj);
         } catch (Exception e) {
             String errorMsg = "Failed to persist object: {}";
-            LOG.error(errorMsg, obj);
-            throw new EntityPersistenceException(errorMsg, e);
+            logger.error(errorMsg, obj);
+            throw new EntityManagerException(errorMsg, e);
         }
-        LOG.debug("Persist entity: {}", entity);
+        logger.debug("Persist entity: {}", entity);
         return entity;
     }
 
-    @Override
-    public Author update(Author obj) throws EntityPersistenceException {
+    public Author update(Author obj) throws EntityManagerException {
+        logger.debug("update invoked for obj: {}", obj);
         Author updated;
         try {
             updated = authorHome.update(obj);
         } catch (Exception e) {
             String errorMsg = "Failed to update object: {}";
-            LOG.error(errorMsg, obj);
-            throw new EntityPersistenceException(errorMsg, e);
+            logger.error(errorMsg, obj);
+            throw new EntityManagerException(errorMsg, e);
         }
-        LOG.debug("Update entity: {}", updated);
+        logger.debug("Update entity: {}", updated);
         return updated;
     }
 
-    @Override
-    public void remove(EntityIdentifier key) throws EntityPersistenceException {
+    public void removeByPk(EntityIdentifier key) throws EntityManagerException {
+        logger.debug("Remove called for entity with key: {}", key);
         try {
-            authorHome.remove(key);
+            authorHome.removeByPk(key);
         } catch (Exception e) {
-            String errorMsg = "Failed to remove object with pk: {}";
-            LOG.error(errorMsg, key);
-            throw new EntityPersistenceException(errorMsg, e);
+            String errorMsg = "Failed to remove object with key: {}";
+            logger.error(errorMsg, key);
+            throw new EntityManagerException(errorMsg, e);
         }
-        LOG.debug("Remove entity with pk: {}", key);
     }
 
-    @Override
-    public void remove(String uuid) throws EntityPersistenceException{
-
+    public void removeByUuid(String uuid) throws EntityManagerException {
+        removeByPk(new EntityIdentifier(uuid));
     }
 
-    @Override
-    public void removeAll() throws EntityPersistenceException{
-
+    public void removeAll() throws EntityManagerException {
+        logger.debug("Remove all invoked");
+        try {
+            authorHome.removeAll();
+        } catch (Exception e) {
+            String errorMsg = "Failed to remove all objects ";
+            logger.error(errorMsg);
+            throw new EntityManagerException(errorMsg, e);
+        }
     }
 
-    @Override
     public Author findByPk(EntityIdentifier key) {
-        return null;
+        logger.debug("Find invoked for object with key: {}", key);
+        return authorFacade.findByPk(key);
     }
 
-    @Override
     public Author findByUuid(String uuid) {
-
+        logger.debug("Find invoked for object with key: {}", uuid);
         return authorFacade.findByUuid(uuid);
     }
 
-    @Override
     public List<Author> findAll() {
-
+        logger.debug("Find all called");
         return authorFacade.findAll();
     }
 }

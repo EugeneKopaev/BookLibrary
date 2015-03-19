@@ -1,7 +1,5 @@
 package org.booklibrary.app.persistence.entity;
 
-
-import com.google.common.base.Objects;
 import org.booklibrary.app.persistence.id.EntityIdentifier;
 
 import javax.persistence.*;
@@ -11,6 +9,7 @@ import java.util.Date;
 /**
  * Parent for all entities encapsulated primary key, created and changed date
  *
+ * @see org.booklibrary.app.persistence.id.EntityIdentifier
  */
 @MappedSuperclass
 public abstract class AbstractBaseEntity implements Serializable {
