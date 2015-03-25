@@ -30,6 +30,8 @@
         <version.wildfly>8.2.0.Final</version.wildfly>
         <!-- Define RichFaces version -->
         <version.richfaces>4.5.3.Final</version.richfaces>
+        <!-- Define RESTEasy version-->
+        <version.jboss.resteasy>3.0.10.Final</version.jboss.resteasy>
 
         <!-- other dependency versions -->
         <version.testng>6.8.8</version.testng>
@@ -85,6 +87,14 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
+
+            <!--<dependency>-->
+                <!--<groupId>org.wildfly.bom</groupId>-->
+                <!--<artifactId>jboss-javaee-7.0-with-resteasy</artifactId>-->
+                <!--<version>${version.wildfly}</version>-->
+                <!--<type>pom</type>-->
+                <!--<scope>import</scope>-->
+            <!--</dependency>-->
 
             <!-- Arquaillian integration -->
 
@@ -173,20 +183,59 @@
             <scope>provided</scope>
         </dependency>
 
+        <!-- Import the JAX-RS API, we use provided scope as the API is included in JBoss WildFly -->
+        <dependency>
+            <groupId>org.jboss.resteasy</groupId>
+            <artifactId>jaxrs-api</artifactId>
+            <version>${version.jboss.resteasy}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- Import RESTEasy -->
+        <dependency>
+            <groupId>org.jboss.resteasy</groupId>
+            <artifactId>resteasy-jaxrs</artifactId>
+            <version>${version.jboss.resteasy}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- Import RESTEasy links -->
+        <dependency>
+            <groupId>org.jboss.resteasy</groupId>
+            <artifactId>resteasy-links</artifactId>
+            <version>${version.jboss.resteasy}</version>
+        </dependency>
+
+        <!-- Import Jettison JSON provider-->
+        <dependency>
+            <groupId>org.jboss.resteasy</groupId>
+            <artifactId>resteasy-jettison-provider</artifactId>
+            <version>${version.jboss.resteasy}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- Import RESTEasy CDI support-->
+        <dependency>
+            <groupId>org.jboss.resteasy</groupId>
+            <artifactId>resteasy-cdi</artifactId>
+            <version>${version.jboss.resteasy}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- Import JAXB provider-->
+        <dependency>
+            <groupId>org.jboss.resteasy</groupId>
+            <artifactId>resteasy-jaxb-provider</artifactId>
+            <version>${version.jboss.resteasy}</version>
+            <scope>provided</scope>
+        </dependency>
+
         <!-- Import the RichFaces library -->
         <dependency>
             <groupId>org.richfaces</groupId>
             <artifactId>richfaces</artifactId>
             <version>${version.richfaces}</version>
         </dependency>
-
-        <!--&lt;!&ndash; Import the RichFaces push dependencies &ndash;&gt;-->
-        <!--<dependency>-->
-            <!--<groupId>org.richfaces</groupId>-->
-            <!--<artifactId>richfaces-push-depchain</artifactId>-->
-            <!--<type>pom</type>-->
-            <!--<version>${version.richfaces}</version>-->
-        <!--</dependency>-->
 
         <!-- Import Google Guava -->
         <dependency>
@@ -207,7 +256,7 @@
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
             <version>${version.slf4j}</version>
-            <!--<scope>provided</scope>-->
+            <scope>provided</scope>
         </dependency>
 
         <!-- Testing dependency -->
@@ -267,7 +316,6 @@
             <version>${version.shrinkwrap.resolver}</version>
             <scope>test</scope>
         </dependency>
-
     </dependencies>
 
     <build>

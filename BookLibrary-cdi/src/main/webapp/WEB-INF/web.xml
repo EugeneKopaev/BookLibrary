@@ -25,24 +25,9 @@
         <param-value>true</param-value>
     </context-param>
 
-    <!--&lt;!&ndash; Define Faces Servlet&ndash;&gt;-->
-    <!--<servlet>-->
-        <!--<servlet-name>Faces Servlet</servlet-name>-->
-        <!--<servlet-class>javax.faces.webapp.FacesServlet</servlet-class>-->
-        <!--<load-on-startup>1</load-on-startup>-->
-    <!--</servlet>-->
-    <!--<servlet-mapping>-->
-        <!--<servlet-name>Faces Servlet</servlet-name>-->
-        <!--<url-pattern>*.jsf</url-pattern>-->
-    <!--</servlet-mapping>-->
-    <!--<servlet-mapping>-->
-        <!--<servlet-name>Faces Servlet</servlet-name>-->
-        <!--<url-pattern>*.xhtml</url-pattern>-->
-    <!--</servlet-mapping>-->
-
     <!-- Define welcome page -->
     <welcome-file-list>
-        <welcome-file>index.jsf</welcome-file>
+        <welcome-file>index.html</welcome-file>
     </welcome-file-list>
 
 </web-app>

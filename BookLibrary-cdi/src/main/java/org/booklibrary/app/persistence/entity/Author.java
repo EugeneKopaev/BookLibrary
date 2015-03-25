@@ -3,6 +3,7 @@ package org.booklibrary.app.persistence.entity;
 import com.google.common.base.Objects;
 
 import javax.persistence.*;
+import javax.xml.bind.annotation.*;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;

@@ -3,6 +3,7 @@ package org.booklibrary.app.persistence.entity;
 import org.booklibrary.app.persistence.id.EntityIdentifier;
 
 import javax.persistence.*;
+import javax.xml.bind.annotation.*;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -12,6 +13,9 @@ import java.util.Date;
  * @see org.booklibrary.app.persistence.id.EntityIdentifier
  */
 @MappedSuperclass
+@XmlRootElement
+@XmlAccessorType(XmlAccessType.FIELD)
+@XmlType(name = "AbstractBaseEntity")
 public abstract class AbstractBaseEntity implements Serializable {
 
     @EmbeddedId
@@ -22,6 +26,7 @@ public abstract class AbstractBaseEntity implements Serializable {
             nullable = false,
             columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     @Temporal(TemporalType.TIMESTAMP)
+    @XmlElement
     private Date created;
 
     @Column(name = "CHANGED",
