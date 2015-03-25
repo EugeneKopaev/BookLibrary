@@ -1,6 +1,7 @@
 package org.booklibrary.app.persistence.session.common;
 
 import org.booklibrary.app.persistence.entity.AbstractBaseEntity;
+import org.booklibrary.app.persistence.entity.Author;
 import org.booklibrary.app.persistence.id.EntityIdentifier;
 import org.booklibrary.app.persistence.session.common.GenericFacadeLocal;
 import org.booklibrary.app.persistence.session.common.GenericHomeLocal;
@@ -8,6 +9,7 @@ import org.slf4j.Logger;
 
 import javax.persistence.EntityManager;
 import java.lang.reflect.ParameterizedType;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -64,6 +66,16 @@ public abstract class AbstractGenericEntityPersistence<T extends AbstractBaseEnt
         List<T> resultList = getEntityManager().createQuery("FROM "
                 + entityClass.getName()).getResultList();
         getLogger().debug("result list size: {}", resultList.size());
+        return resultList;
+    }
+
+    public List<T> findSegment(int start, int size) {
+        getLogger().debug("findSegment invoked for entities of type: {}", entityClass.getCanonicalName());
+        List<T> resultList = getEntityManager()
+                .createQuery("SELECT a FROM " +  entityClass.getName() + " a")
+                .setFirstResult(start)
+                .setMaxResults(size)
+                .getResultList();
         return resultList;
     }
 

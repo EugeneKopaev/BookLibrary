@@ -3,6 +3,7 @@ package org.booklibrary.app.persistence.entity;
 import org.booklibrary.app.persistence.id.EntityIdentifier;
 
 import javax.persistence.*;
+import javax.xml.bind.annotation.*;
 import java.io.Serializable;
 import java.util.Date;
 

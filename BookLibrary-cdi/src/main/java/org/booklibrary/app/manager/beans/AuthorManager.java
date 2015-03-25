@@ -9,6 +9,7 @@ import org.booklibrary.app.persistence.session.AuthorHomeLocal;
 import org.slf4j.Logger;
 
 import javax.ejb.*;
+import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import java.util.List;
 
@@ -98,6 +99,13 @@ public class AuthorManager implements AuthorManagerLocal{
 
     public List<Author> findAll() {
         logger.debug("Find all called");
-        return authorFacade.findAll();
+        List<Author> authors =  authorFacade.findAll();
+        return authors;
+    }
+
+    public List<Author> findSegment(int start, int size) {
+        logger.debug("Find segment called");
+        List<Author> authors = authorFacade.findSegment(start, size);
+        return authors;
     }
 }

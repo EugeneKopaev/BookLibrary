@@ -1,12 +1,11 @@
 package org.booklibrary.app.persistence.id;
 
-import com.google.common.base.Objects;
 import org.apache.commons.codec.DecoderException;
 import org.apache.commons.codec.binary.Hex;
 
-import javax.annotation.PostConstruct;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
+import javax.xml.bind.annotation.XmlInlineBinaryData;
 import java.io.Serializable;
 import java.util.Arrays;
 
@@ -30,6 +29,7 @@ public class EntityIdentifier implements Serializable {
     @Column(name = "ID",
             length = IdGenerator.NUM_UUID_BYTES,
             columnDefinition = "BINARY(16)")
+    @XmlInlineBinaryData
     private byte[] id = IdGenerator.generateUUID();
 
     public EntityIdentifier() {
@@ -79,10 +79,6 @@ public class EntityIdentifier implements Serializable {
 
     public byte[] getId() {
         return this.id;
-    }
-
-    public static void main(String[] args) {
-        System.out.println(IdGenerator.generateUUID().toString());
     }
 
 }

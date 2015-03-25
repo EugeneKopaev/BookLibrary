@@ -79,4 +79,13 @@ public interface GenericManagerLocal<T extends AbstractBaseEntity, PK> {
      * @return List
      */
     List<T> findAll();
+
+    /**
+     * Find segment of objects in the database.
+     *
+     * @param start first result
+     * @param size max size
+     * @return List<T> list of entities
+     */
+    List<T> findSegment(int start, int size);
 }

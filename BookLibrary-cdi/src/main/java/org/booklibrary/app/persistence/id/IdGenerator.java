@@ -1,8 +1,5 @@
 package org.booklibrary.app.persistence.id;
 
-import org.apache.commons.codec.binary.Base64;
-import org.apache.commons.codec.binary.Hex;
-
 import java.nio.ByteBuffer;
 import java.util.UUID;
 
@@ -49,7 +46,7 @@ public final class IdGenerator {
 	 * @param  byte[] array to convert
 	 * @return UUID
 	 */
-	private static UUID toUUID(byte[] byteArray) {
+	public static UUID toUUID(byte[] byteArray) {
 		long msb = 0;                // Most Significant Bits
 		long lsb = 0;                // Least Significant Bits
 		for (int i = 0; i < 8; i++) {
@@ -62,14 +59,4 @@ public final class IdGenerator {
 		return result;
 	}
 
-	public static void main(String[] args) {
-		UUID uuid = UUID.randomUUID();
-		String arr = Hex.encodeHexString(toByteArray(uuid));
-		boolean f = Base64.isBase64(arr);
-		String a = Base64.encodeBase64String(toByteArray(uuid));
-		String b = "b5STRXyYR8iObWoRO18IYQ==";
-		String c = "mzYVlWPTQu22SzrIxQmIeA==";
-
-		System.out.println(a);
-	}
 }

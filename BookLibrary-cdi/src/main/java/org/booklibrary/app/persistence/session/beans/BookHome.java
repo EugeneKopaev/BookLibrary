@@ -13,7 +13,7 @@ import javax.persistence.EntityManager;
 /**
  * Book Home Bean
  *
- * @see org.booklibrary.app.persistence.session.AuthorHomeLocal
+ * @see org.booklibrary.app.persistence.session.BookHomeLocal
  */
 
 @Stateless
