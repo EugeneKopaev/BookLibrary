@@ -35,9 +35,17 @@ public interface GenericFacadeLocal<T extends AbstractBaseEntity, PK> {
     /**
      * Find all objects in the database.
      *
-     * @param key
      * @return List<T> list of entities
      */
     List<T> findAll();
+
+    /**
+     * Find limited segment of objects.
+     *
+     * @param start first result
+     * @param size max size
+     * @return List<T> list of entities
+     */
+    List<T> findSegment(int start, int size);
 
 }

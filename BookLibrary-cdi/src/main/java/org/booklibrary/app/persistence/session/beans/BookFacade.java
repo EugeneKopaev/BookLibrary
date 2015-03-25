@@ -10,6 +10,11 @@ import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 
+/**
+ * Book Facade bean
+ *
+ * @see org.booklibrary.app.persistence.session.BookFacadeLocal
+ */
 @Stateless
 public class BookFacade extends AbstractGenericEntityPersistence<Book, EntityIdentifier>
         implements BookFacadeLocal{
