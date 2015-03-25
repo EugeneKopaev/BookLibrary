@@ -1,14 +1,11 @@
 package org.booklibrary.app.persistence.id;
 
-import com.google.common.base.Objects;
 import org.apache.commons.codec.DecoderException;
 import org.apache.commons.codec.binary.Hex;
-import org.booklibrary.app.persistence.entity.AbstractBaseEntity;
 
-import javax.annotation.PostConstruct;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
-import javax.xml.bind.annotation.*;
+import javax.xml.bind.annotation.XmlInlineBinaryData;
 import java.io.Serializable;
 import java.util.Arrays;
 
@@ -19,9 +16,6 @@ import java.util.Arrays;
  * annotation.
  */
 @Embeddable
-@XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "EntityIdentifier")
-@XmlSeeAlso(AbstractBaseEntity.class)
 public class EntityIdentifier implements Serializable {
 
     /**
