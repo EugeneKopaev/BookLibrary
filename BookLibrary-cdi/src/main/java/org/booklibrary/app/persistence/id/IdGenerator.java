@@ -1,8 +1,5 @@
 package org.booklibrary.app.persistence.id;
 
-import org.apache.commons.codec.binary.Base64;
-import org.apache.commons.codec.binary.Hex;
-
 import java.nio.ByteBuffer;
 import java.util.UUID;
 
