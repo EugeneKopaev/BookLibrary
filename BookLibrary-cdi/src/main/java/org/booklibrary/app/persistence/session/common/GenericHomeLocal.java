@@ -19,7 +19,7 @@ public interface GenericHomeLocal<T extends AbstractBaseEntity, PK> {
      * @return Created Entity
      * @throws PersistenceException
      */
-    T save(T obj) throws Exception;
+    T save(T obj);
 
     /**
      * Update entity in the database.
@@ -28,7 +28,7 @@ public interface GenericHomeLocal<T extends AbstractBaseEntity, PK> {
      * @return Updated Entity
      * @throws PersistenceException
      */
-    T update(T obj) throws Exception;
+    T update(T obj);
 
     /**
      * Clear the persistence context
@@ -40,19 +40,19 @@ public interface GenericHomeLocal<T extends AbstractBaseEntity, PK> {
      *
      * @param key
      */
-    void removeByPk(PK key) throws Exception;
+    void removeByPk(PK key);
 
     /**
      * Delete the entity from the database by string uuid.
      *
      * @param uuid
      */
-    void removeByUuid(String uuid) throws Exception;
+    void removeByUuid(String uuid);
 
     /**
      * Removes all entities from database.
      *
      */
-    int removeAll() throws Exception;
+    int removeAll();
 
 }

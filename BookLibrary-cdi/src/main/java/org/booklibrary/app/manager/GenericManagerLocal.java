@@ -1,6 +1,5 @@
 package org.booklibrary.app.manager;
 
-import org.booklibrary.app.manager.exceptions.EntityManagerException;
 import org.booklibrary.app.persistence.entity.AbstractBaseEntity;
 
 import javax.ejb.Local;
@@ -10,7 +9,7 @@ import java.util.List;
  * Generic interface for all managers interfaces.
  * Manager interface provide business logic operations
  *
- * @param <T> entity class
+ * @param <T>  entity class
  * @param <PK> primary key
  */
 @Local
@@ -21,26 +20,23 @@ public interface GenericManagerLocal<T extends AbstractBaseEntity, PK> {
      *
      * @param obj object to save
      * @return T created entity
-     * @throws org.booklibrary.app.manager.exceptions.EntityManagerException
      */
-    T save(T obj) throws EntityManagerException;
+    T save(T obj);
 
     /**
      * Update entity in the database.
      *
      * @param obj object to update
      * @return T updated entity
-     * @throws org.booklibrary.app.manager.exceptions.EntityManagerException
      */
-    T update(T obj) throws EntityManagerException;
+    T update(T obj);
 
     /**
      * Delete the entity from the database by primary key.
      *
      * @param key primary key
-     * @throws org.booklibrary.app.manager.exceptions.EntityManagerException
      */
-    void removeByPk(PK key) throws EntityManagerException;
+    void removeByPk(PK key);
 
     /**
      * Delete the entity from the database by string uuid.
@@ -48,14 +44,14 @@ public interface GenericManagerLocal<T extends AbstractBaseEntity, PK> {
      * @param uuid
      * @throws org.booklibrary.app.manager.exceptions.EntityManagerException
      */
-    void removeByUuid(String uuid) throws EntityManagerException;
+    void removeByUuid(String uuid);
 
     /**
      * Removes all entities from database.
      *
      * @throws org.booklibrary.app.manager.exceptions.EntityManagerException
      */
-    void removeAll() throws EntityManagerException;
+    void removeAll();
 
     /**
      * Find object in the database by primary key.
@@ -79,4 +75,13 @@ public interface GenericManagerLocal<T extends AbstractBaseEntity, PK> {
      * @return List
      */
     List<T> findAll();
+
+    /**
+     * Find segment of objects in the database.
+     *
+     * @param start index
+     * @param size  result list size
+     * @return List
+     */
+    List<T> findSegment(int start, int size);
 }

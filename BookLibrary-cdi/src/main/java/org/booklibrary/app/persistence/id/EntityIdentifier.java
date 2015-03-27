@@ -1,10 +1,8 @@
 package org.booklibrary.app.persistence.id;
 
-import com.google.common.base.Objects;
 import org.apache.commons.codec.DecoderException;
 import org.apache.commons.codec.binary.Hex;
 
-import javax.annotation.PostConstruct;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import java.io.Serializable;
@@ -79,10 +77,6 @@ public class EntityIdentifier implements Serializable {
 
     public byte[] getId() {
         return this.id;
-    }
-
-    public static void main(String[] args) {
-        System.out.println(IdGenerator.generateUUID().toString());
     }
 
 }

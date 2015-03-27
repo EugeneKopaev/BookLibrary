@@ -1,14 +1,16 @@
 package org.booklibrary.app.manager.beans;
 
 import org.booklibrary.app.manager.AuthorManagerLocal;
-import org.booklibrary.app.manager.exceptions.EntityManagerException;
 import org.booklibrary.app.persistence.entity.Author;
 import org.booklibrary.app.persistence.id.EntityIdentifier;
 import org.booklibrary.app.persistence.session.AuthorFacadeLocal;
 import org.booklibrary.app.persistence.session.AuthorHomeLocal;
 import org.slf4j.Logger;
 
-import javax.ejb.*;
+import javax.ejb.EJB;
+import javax.ejb.Stateless;
+import javax.ejb.TransactionAttribute;
+import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
 import java.util.List;
 
@@ -19,8 +21,7 @@ import java.util.List;
  * @see org.booklibrary.app.manager.AuthorManagerLocal
  */
 @Stateless
-@Local
-public class AuthorManager implements AuthorManagerLocal{
+public class AuthorManager implements AuthorManagerLocal {
 
     @Inject
     private Logger logger;
@@ -32,58 +33,30 @@ public class AuthorManager implements AuthorManagerLocal{
     private AuthorHomeLocal authorHome;
 
     @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
-    public Author save(Author obj) throws EntityManagerException {
+    public Author save(Author obj) {
         logger.debug("save invoked for object: {}", obj);
-        Author entity;
-        try {
-            entity = authorHome.save(obj);
-        } catch (Exception e) {
-            String errorMsg = "Failed to persist object: {}";
-            logger.error(errorMsg, obj);
-            throw new EntityManagerException(errorMsg, e);
-        }
-        logger.debug("Persist entity: {}", entity);
+        Author entity = authorHome.save(obj);
         return entity;
     }
 
-    public Author update(Author obj) throws EntityManagerException {
+    public Author update(Author obj) {
         logger.debug("update invoked for obj: {}", obj);
-        Author updated;
-        try {
-            updated = authorHome.update(obj);
-        } catch (Exception e) {
-            String errorMsg = "Failed to update object: {}";
-            logger.error(errorMsg, obj);
-            throw new EntityManagerException(errorMsg, e);
-        }
-        logger.debug("Update entity: {}", updated);
+        Author updated = authorHome.update(obj);
         return updated;
     }
 
-    public void removeByPk(EntityIdentifier key) throws EntityManagerException {
+    public void removeByPk(EntityIdentifier key) {
         logger.debug("Remove called for entity with key: {}", key);
-        try {
-            authorHome.removeByPk(key);
-        } catch (Exception e) {
-            String errorMsg = "Failed to remove object with key: {}";
-            logger.error(errorMsg, key);
-            throw new EntityManagerException(errorMsg, e);
-        }
+        authorHome.removeByPk(key);
     }
 
-    public void removeByUuid(String uuid) throws EntityManagerException {
+    public void removeByUuid(String uuid) {
         removeByPk(new EntityIdentifier(uuid));
     }
 
-    public void removeAll() throws EntityManagerException {
+    public void removeAll() {
         logger.debug("Remove all invoked");
-        try {
-            authorHome.removeAll();
-        } catch (Exception e) {
-            String errorMsg = "Failed to remove all objects ";
-            logger.error(errorMsg);
-            throw new EntityManagerException(errorMsg, e);
-        }
+        authorHome.removeAll();
     }
 
     public Author findByPk(EntityIdentifier key) {
@@ -98,6 +71,13 @@ public class AuthorManager implements AuthorManagerLocal{
 
     public List<Author> findAll() {
         logger.debug("Find all called");
-        return authorFacade.findAll();
+        List<Author> authors = authorFacade.findAll();
+        return authors;
+    }
+
+    public List<Author> findSegment(int start, int size) {
+        logger.debug("Find segment called");
+        List<Author> authors = authorFacade.findSegment(start, size);
+        return authors;
     }
 }

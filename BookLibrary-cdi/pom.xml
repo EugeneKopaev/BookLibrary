@@ -180,14 +180,6 @@
             <version>${version.richfaces}</version>
         </dependency>
 
-        <!--&lt;!&ndash; Import the RichFaces push dependencies &ndash;&gt;-->
-        <!--<dependency>-->
-            <!--<groupId>org.richfaces</groupId>-->
-            <!--<artifactId>richfaces-push-depchain</artifactId>-->
-            <!--<type>pom</type>-->
-            <!--<version>${version.richfaces}</version>-->
-        <!--</dependency>-->
-
         <!-- Import Google Guava -->
         <dependency>
             <groupId>com.google.guava</groupId>

@@ -1,7 +1,6 @@
 package org.booklibrary.app.web.controller;
 
 import org.booklibrary.app.manager.AuthorManagerLocal;
-import org.booklibrary.app.manager.exceptions.EntityManagerException;
 import org.booklibrary.app.persistence.entity.Author;
 import org.slf4j.Logger;
 
@@ -15,45 +14,32 @@ import java.util.List;
 
 @Named
 @ViewScoped
-public class AuthorController implements Serializable{
+public class AuthorController implements Serializable {
 
     @Inject
-    private Logger LOG;
+    private transient Logger logger;
 
     @Inject
     private AuthorManagerLocal authorManager;
 
     private Author managedAuthor = null;
-    private List<Author> authors = new ArrayList<>();
     private int page = 1;
 
     public void save() {
         if (managedAuthor != null) {
-            try {
-                authorManager.save(managedAuthor);
-            } catch (EntityManagerException e) {
-                e.printStackTrace();
-            }
+            authorManager.save(managedAuthor);
         }
     }
 
     public void remove() {
         if (managedAuthor != null) {
-            try {
-                authorManager.removeByPk(managedAuthor.getId());
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            authorManager.removeByPk(managedAuthor.getId());
         }
     }
 
     public void update() {
         if (managedAuthor != null) {
-            try {
-                authorManager.update(managedAuthor);
-            } catch (EntityManagerException e) {
-                e.printStackTrace();
-            }
+            authorManager.update(managedAuthor);
         }
     }
 
@@ -66,7 +52,7 @@ public class AuthorController implements Serializable{
     @Produces
     @Named
     public List<Author> getAuthors() {
-        return this.authors = authorManager.findAll();
+        return authorManager.findAll();
     }
 
     public void setManagedAuthor(Author managedAuthor) {
