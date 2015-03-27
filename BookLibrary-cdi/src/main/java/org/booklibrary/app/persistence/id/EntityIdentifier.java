@@ -1,6 +1,5 @@
 package org.booklibrary.app.persistence.id;
 
-import com.google.common.base.Objects;
 import org.apache.commons.codec.DecoderException;
 import org.apache.commons.codec.binary.Hex;
 
@@ -29,10 +28,9 @@ public class EntityIdentifier implements Serializable {
     @Column(name = "ID",
             length = IdGenerator.NUM_UUID_BYTES,
             columnDefinition = "BINARY(16)")
-    private byte[] id;
+    private byte[] id = IdGenerator.generateUUID();
 
     public EntityIdentifier() {
-        this.id = IdGenerator.generateUUID();
     }
 
     public EntityIdentifier(String uuid) {
@@ -79,10 +77,6 @@ public class EntityIdentifier implements Serializable {
 
     public byte[] getId() {
         return this.id;
-    }
-
-    public static void main(String[] args) {
-        System.out.println(IdGenerator.generateUUID().toString());
     }
 
 }

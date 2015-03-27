@@ -13,10 +13,34 @@
              CHANGED="2015-03-07 16:05:29"
             />
     <AUTHORS ID="0y8MMMJ9QI6C3XMVA2CM1w=="
-             FIRST_NAME="Test first name"
-             LAST_NAME="Test last name"
+             FIRST_NAME="Change first name"
+             LAST_NAME="Change last name"
              CREATED="2015-03-08 17:05:30"
              CHANGED="2015-03-08 17:05:30"
+            />
+    <AUTHORS ID="jvrSNREBTp+ANWbQkyHyTA=="
+             FIRST_NAME="Test new name"
+             LAST_NAME="Test new name"
+             CREATED="2015-03-09 17:05:30"
+             CHANGED="2015-03-09 17:05:30"
+            />
+    <AUTHORS ID="Xy2w9abrQ/CDlepOn5yEmA=="
+             FIRST_NAME="Test another name"
+             LAST_NAME="Test another name"
+             CREATED="2015-03-10 17:05:30"
+             CHANGED="2015-03-10 17:05:30"
+            />
+    <BOOKS ID="tP4yn0UISXOb+X97JaTyQA=="
+           NAME="Test book"
+           ISBN="197656567"
+           PUBLISH_YEAR="2015"
+           PUBLISHER="Publish house"
+           CREATED="2015-03-07 16:05:29"
+           CHANGED="2015-03-07 16:05:29"
+            />
+
+    <BOOKS_TO_AUTHORS BOOK_ID="tP4yn0UISXOb+X97JaTyQA=="
+                      AUTHOR_ID="mzYVlWPTQu22SzrIxQmIeA=="
             />
 </dataset>
 

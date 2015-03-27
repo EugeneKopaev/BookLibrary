@@ -1,9 +1,8 @@
-package org.booklibrary.app.persistence.session;
+package org.booklibrary.app.persistence.session.common;
 
 import org.booklibrary.app.persistence.entity.AbstractBaseEntity;
 
 import javax.ejb.Local;
-import javax.persistence.PersistenceException;
 import java.util.List;
 
 /**
@@ -11,10 +10,10 @@ import java.util.List;
  * Facade interface provide read operations for entity.
  *
  * @param <T>  - entity
- * @param <PK> - primary key
+ * @param <K> - primary key
  */
 @Local
-public interface GenericFacadeLocal<T extends AbstractBaseEntity, PK> {
+public interface GenericFacadeLocal<T extends AbstractBaseEntity, K> {
 
     /**
      * Find object in the database by primary key.
@@ -22,7 +21,7 @@ public interface GenericFacadeLocal<T extends AbstractBaseEntity, PK> {
      * @param key
      * @return T entity
      */
-    T findByPk(PK key);
+    T findByPk(K key);
 
     /**
      * Find object in the database by UUID.
@@ -35,9 +34,17 @@ public interface GenericFacadeLocal<T extends AbstractBaseEntity, PK> {
     /**
      * Find all objects in the database.
      *
-     * @param key
      * @return List<T> list of entities
      */
     List<T> findAll();
+
+    /**
+     * Find limited segment of objects.
+     *
+     * @param start first result
+     * @param size max size
+     * @return List<T> list of entities
+     */
+    List<T> findSegment(int start, int size);
 
 }
