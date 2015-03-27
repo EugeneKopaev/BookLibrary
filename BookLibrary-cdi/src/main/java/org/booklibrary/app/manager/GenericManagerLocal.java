@@ -10,7 +10,7 @@ import java.util.List;
  * Generic interface for all managers interfaces.
  * Manager interface provide business logic operations
  *
- * @param <T> entity class
+ * @param <T>  entity class
  * @param <PK> primary key
  */
 @Local
@@ -84,7 +84,7 @@ public interface GenericManagerLocal<T extends AbstractBaseEntity, PK> {
      * Find segment of objects in the database.
      *
      * @param start first result
-     * @param size max size
+     * @param size  max size
      * @return List<T> list of entities
      */
     List<T> findSegment(int start, int size);

@@ -23,6 +23,8 @@ import java.util.List;
 
 public class AuthorResourceImpl implements AuthorResource{
 
+    private static final String AUTHOR_NOT_FOUND_MESSAGE = "Can't find author with uuid: ";
+
     @Inject
     private AuthorManagerLocal authorManager;
 
@@ -30,7 +32,7 @@ public class AuthorResourceImpl implements AuthorResource{
     public Response getAuthor(String uuid) {
         Author author = authorManager.findByUuid(uuid);
         if (author == null) {
-            throw new ResourceNotFoundException("Can't find author with uuid: " + uuid);
+            throw new ResourceNotFoundException(AUTHOR_NOT_FOUND_MESSAGE + uuid);
         }
 
         AuthorDto dto = new AuthorDto(author);
@@ -59,7 +61,7 @@ public class AuthorResourceImpl implements AuthorResource{
                                      UriInfo uriInfo) {
         Author author = authorManager.findByUuid(uuid);
         if (author == null) {
-            throw new ResourceNotFoundException("Can't find author with uuid: " + uuid);
+            throw new ResourceNotFoundException(AUTHOR_NOT_FOUND_MESSAGE + uuid);
         }
         List<Book> books = author.getBooks();
         if (books == null) {
@@ -90,7 +92,7 @@ public class AuthorResourceImpl implements AuthorResource{
     public Response update(String id, AuthorDto dto) {
         Author author = authorManager.findByUuid(id);
         if (author == null) {
-            throw new ResourceNotFoundException("Can't find author with uuid: " + id);
+            throw new ResourceNotFoundException(AUTHOR_NOT_FOUND_MESSAGE + id);
         }
         author.setFirstName(dto.getFirstName());
         author.setLastName(dto.getLastName());

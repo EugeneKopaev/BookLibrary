@@ -6,7 +6,6 @@ import org.booklibrary.app.persistence.id.EntityIdentifier;
 import javax.ejb.Local;
 
 /**
- *
  * Book Manager Local interface
  *
  * @see org.booklibrary.app.manager.GenericManagerLocal

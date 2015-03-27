@@ -9,7 +9,6 @@ import org.booklibrary.app.persistence.session.AuthorHomeLocal;
 import org.slf4j.Logger;
 
 import javax.ejb.*;
-import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import java.util.List;
 
@@ -21,7 +20,7 @@ import java.util.List;
  */
 @Stateless
 @Local
-public class AuthorManager implements AuthorManagerLocal{
+public class AuthorManager implements AuthorManagerLocal {
 
     @Inject
     private Logger logger;
@@ -99,13 +98,11 @@ public class AuthorManager implements AuthorManagerLocal{
 
     public List<Author> findAll() {
         logger.debug("Find all called");
-        List<Author> authors =  authorFacade.findAll();
-        return authors;
+        return authorFacade.findAll();
     }
 
     public List<Author> findSegment(int start, int size) {
         logger.debug("Find segment called");
-        List<Author> authors = authorFacade.findSegment(start, size);
-        return authors;
+        return authorFacade.findSegment(start, size);
     }
 }
