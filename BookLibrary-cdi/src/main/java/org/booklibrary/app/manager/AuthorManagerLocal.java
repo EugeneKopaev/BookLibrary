@@ -3,7 +3,6 @@ package org.booklibrary.app.manager;
 import org.booklibrary.app.persistence.entity.Author;
 import org.booklibrary.app.persistence.id.EntityIdentifier;
 
-import javax.annotation.security.PermitAll;
 import javax.ejb.Local;
 
 /**
