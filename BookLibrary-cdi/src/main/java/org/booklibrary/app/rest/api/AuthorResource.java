@@ -39,7 +39,6 @@ public interface AuthorResource {
                                               @QueryParam("start") @DefaultValue("0") int start,
                                               @QueryParam("size") @DefaultValue("3") int size,
                                               @Context UriInfo uriInfo);
-
     @AddLinks
     @LinkResources({
             @LinkResource(AuthorDto.class),

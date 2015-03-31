@@ -15,7 +15,6 @@ import javax.persistence.EntityManager;
  *
  * @see org.booklibrary.app.persistence.session.BookHomeLocal
  */
-
 @Stateless
 public class BookHome extends AbstractGenericEntityPersistence<Book, EntityIdentifier>
         implements BookHomeLocal{

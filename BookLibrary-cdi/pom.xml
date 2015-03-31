@@ -211,7 +211,7 @@
             <groupId>org.jboss.resteasy</groupId>
             <artifactId>resteasy-jettison-provider</artifactId>
             <version>${version.jboss.resteasy}</version>
-            <scope>provided</scope>
+            <!--<scope>provided</scope>-->
         </dependency>
 
         <!-- Import RESTEasy CDI support-->
@@ -227,7 +227,7 @@
             <groupId>org.jboss.resteasy</groupId>
             <artifactId>resteasy-jaxb-provider</artifactId>
             <version>${version.jboss.resteasy}</version>
-            <scope>provided</scope>
+            <!--<scope>provided</scope>-->
         </dependency>
 
         <!-- Import the RichFaces library -->
@@ -316,6 +316,7 @@
             <version>${version.shrinkwrap.resolver}</version>
             <scope>test</scope>
         </dependency>
+
     </dependencies>
 
     <build>

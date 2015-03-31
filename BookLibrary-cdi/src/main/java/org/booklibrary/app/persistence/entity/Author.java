@@ -1,26 +1,37 @@
 package org.booklibrary.app.persistence.entity;
 
 import com.google.common.base.Objects;
+import org.booklibrary.app.manager.validation.annotation.AuthorConstraint;
 
 import javax.persistence.*;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+@AuthorConstraint
 @Entity
 @Table(name = "AUTHORS", uniqueConstraints = {
         @UniqueConstraint(columnNames = {"FIRST_NAME", "LAST_NAME"})
 })
 @NamedQueries({
-        @NamedQuery(name = "Author.findByFirstName", query = "SELECT a FROM Author a WHERE a.firstName = :firstName")
+        @NamedQuery(name = "Author.findByFirstName",
+                query = "SELECT a FROM Author a WHERE a.firstName = :firstName"),
+        @NamedQuery(name = "Author.findByFirstAndLastName",
+                query = "SELECT a FROM Author a WHERE a.firstName = :firstName AND a.lastName = :lastName")
 })
 public class Author extends AbstractBaseEntity
-                                implements Serializable {
+        implements Serializable {
 
+    private static final int MIN_NAME_SIZE = 3;
+    private static final int MAX_NAME_SIZE = 20;
+
+    @Size(min = MIN_NAME_SIZE, max = MAX_NAME_SIZE)
     @Column(name = "FIRST_NAME", nullable = false)
     private String firstName;
 
+    @Size(min = MIN_NAME_SIZE, max = MAX_NAME_SIZE)
     @Column(name = "LAST_NAME", nullable = false)
     private String lastName;
 

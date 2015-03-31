@@ -2,24 +2,26 @@ package org.booklibrary.app.rest.api.impl;
 
 
 import org.booklibrary.app.manager.AuthorManagerLocal;
-import org.booklibrary.app.manager.exceptions.EntityManagerException;
 import org.booklibrary.app.persistence.entity.Author;
 import org.booklibrary.app.persistence.entity.Book;
 import org.booklibrary.app.rest.api.AuthorResource;
 import org.booklibrary.app.rest.dto.AuthorDto;
 import org.booklibrary.app.rest.dto.AuthorDtoCollection;
 import org.booklibrary.app.rest.dto.BookDtoCollection;
+import org.booklibrary.app.rest.dto.adapters.MapAdapter;
 import org.booklibrary.app.rest.exceptions.ResourceNotFoundException;
+import org.booklibrary.app.rest.util.LinkProducer;
 
+import javax.ejb.EJBException;
 import javax.inject.Inject;
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
+import javax.validation.Validator;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Link;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
-import java.net.URI;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class AuthorResourceImpl implements AuthorResource{
 
@@ -27,6 +29,9 @@ public class AuthorResourceImpl implements AuthorResource{
 
     @Inject
     private AuthorManagerLocal authorManager;
+
+    @Inject
+    private Validator validator;
 
     @Override
     public Response getAuthor(String uuid) {
@@ -49,7 +54,7 @@ public class AuthorResourceImpl implements AuthorResource{
         }
 
         AuthorDtoCollection authorDtoCollection = new AuthorDtoCollection(authors);
-        Link[] pagingLinks = producePagingLinks(uriInfo, start, size, authors.size());
+        Link[] pagingLinks = LinkProducer.producePagingLinks(uriInfo, start, size, authors.size());
 
         return Response.ok(authorDtoCollection)
                 .links(pagingLinks).build();
@@ -69,23 +74,28 @@ public class AuthorResourceImpl implements AuthorResource{
         }
 
         BookDtoCollection bookDtoCollection = new BookDtoCollection(books);
-        Link[] pagingLinks = producePagingLinks(uriInfo, start, size, books.size());
+        Link[] pagingLinks = LinkProducer.producePagingLinks(uriInfo, start, size, books.size());
         return Response.ok(bookDtoCollection)
                 .links(pagingLinks).build();
     }
 
     @Override
-    public Response save(AuthorDto dto) {
-
+    public Response save(AuthorDto dto){
         Author author = dto.toEntity();
+
+        Response.ResponseBuilder builder;
         try {
+            validateAuthor(author);
             authorManager.save(author);
-        } catch (EntityManagerException e) {
-            throw new WebApplicationException("failed to save obj: " + dto);
+            builder = Response.status(Response.Status.CREATED).entity(new AuthorDto(author));
+        } catch (ConstraintViolationException e) {
+            // Handle bean validation issues
+            builder = createViolationResponse(e.getConstraintViolations());
+        } catch (Exception e) {
+            // Handle generic exceptions
+            builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
         }
-        return Response.ok(new AuthorDto(author))
-                .status(Response.Status.CREATED)
-                .build();
+        return builder.build();
     }
 
     @Override
@@ -94,22 +104,28 @@ public class AuthorResourceImpl implements AuthorResource{
         if (author == null) {
             throw new ResourceNotFoundException(AUTHOR_NOT_FOUND_MESSAGE + id);
         }
+        Response.ResponseBuilder builder;
         author.setFirstName(dto.getFirstName());
         author.setLastName(dto.getLastName());
         try {
-            authorManager.update(author);
-        } catch (EntityManagerException e) {
-            throw new WebApplicationException("failed to update obj with uuid: " + author.getId());
+            validateAuthor(author);
+            Author updated = authorManager.update(author);
+            builder = Response.ok(new AuthorDto(updated));
+        } catch (ConstraintViolationException e) {
+            // Handle bean validation issues
+            builder = createViolationResponse(e.getConstraintViolations());
+        } catch (Exception e) {
+            builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
         }
-        return Response.ok(new AuthorDto(author)).build();
+        return builder.build();
     }
 
     @Override
     public Response delete(String uuid) {
         try {
             authorManager.removeByUuid(uuid);
-        } catch (EntityManagerException e) {
-            throw new WebApplicationException("failed to delete obj with uuid: " + uuid);
+        } catch (EJBException e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
         }
         return Response.ok().build();
     }
@@ -117,47 +133,32 @@ public class AuthorResourceImpl implements AuthorResource{
     public Response deleteAll() {
         try {
             authorManager.removeAll();
-        } catch (EntityManagerException e) {
-            throw new WebApplicationException("failed to remove all");
+        } catch (EJBException e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
         }
         return Response.ok().build();
     }
 
-    private Link[] producePagingLinks(UriInfo uriInfo, int start, int pageSize, int resultSize) {
+    //TODO: // create util class for violation response
+    private Response.ResponseBuilder createViolationResponse(Set<ConstraintViolation<?>> violations){
 
-        UriBuilder builder = uriInfo.getAbsolutePathBuilder();
-        builder.queryParam("start", "{start}");
-        builder.queryParam("size", "{size}");
+        Map<String, String> responseObj = new HashMap<>();
+        MapAdapter adapter = new MapAdapter();
 
-        List<Link> links = new ArrayList<>();
-        // next link
-        // If the size returned is equal then assume there is a next
-        if (resultSize == pageSize) {
-            int next = start + pageSize;
-            URI nextUri = builder.clone().build(next, pageSize);
-            Link nextLink = Link.fromUri(nextUri)
-                    .rel("next")
-                    .type("application/xml, application/json")
-                    .build();
-            links.add(nextLink);
-        }
-        // previous link
-        if (start > 0) {
-            int previous = start - pageSize;
-            if (previous < 0) {
-                previous = 0;
-            }
-            URI previousUri = builder.clone().build(previous, pageSize);
-            Link previousLink = Link.fromUri(previousUri)
-                    .rel("previous")
-                    .type("application/xml, application/json")
-                    .build();
-            links.add(previousLink);
+        for (ConstraintViolation<?> violation : violations) {
+            responseObj.put(violation.getPropertyPath().toString(), violation.getMessage());
         }
 
-        Link[] linkArr = new Link[links.size()];
+        return Response.status(Response.Status.BAD_REQUEST)
+                .entity(adapter.marshal(responseObj));
+    }
 
-        links.toArray(linkArr);
-        return linkArr;
+    private void validateAuthor(Author author) throws ConstraintViolationException {
+        // Create a bean validator and check for issues.
+        Set<ConstraintViolation<Author>> violations = validator.validate(author);
+
+        if (!violations.isEmpty()) {
+            throw new ConstraintViolationException(new HashSet<ConstraintViolation<?>>(violations));
+        }
     }
 }

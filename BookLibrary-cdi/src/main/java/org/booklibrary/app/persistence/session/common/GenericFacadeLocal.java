@@ -1,9 +1,9 @@
 package org.booklibrary.app.persistence.session.common;
 
+import org.apache.commons.codec.DecoderException;
 import org.booklibrary.app.persistence.entity.AbstractBaseEntity;
 
 import javax.ejb.Local;
-import javax.persistence.PersistenceException;
 import java.util.List;
 
 /**
@@ -11,10 +11,10 @@ import java.util.List;
  * Facade interface provide read operations for entity.
  *
  * @param <T>  - entity
- * @param <PK> - primary key
+ * @param <K> - primary key
  */
 @Local
-public interface GenericFacadeLocal<T extends AbstractBaseEntity, PK> {
+public interface GenericFacadeLocal<T extends AbstractBaseEntity, K> {
 
     /**
      * Find object in the database by primary key.
@@ -22,7 +22,7 @@ public interface GenericFacadeLocal<T extends AbstractBaseEntity, PK> {
      * @param key
      * @return T entity
      */
-    T findByPk(PK key);
+    T findByPk(K key);
 
     /**
      * Find object in the database by UUID.
