@@ -11,15 +11,12 @@
         <properties>
             <property name="hibernate.dialect"
                       value="org.hibernate.dialect.MySQL5Dialect"/>
-            <property name="hibernate.hbm2ddl.auto" value="update"/>
+            <property name="hibernate.hbm2ddl.auto" value="create"/>
             <property name="hibernate.show_sql" value="true" />
             <property name="hibernate.format_sql" value="true" />
             <property name="hibernate.use_sql_comments" value="true" />
             <property name="hibernate.enable_lazy_load_no_trans" value="true" />
         </properties>
-
-
-
     </persistence-unit>
 
 </persistence>

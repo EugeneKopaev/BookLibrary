@@ -88,14 +88,6 @@
                 <scope>import</scope>
             </dependency>
 
-            <!--<dependency>-->
-                <!--<groupId>org.wildfly.bom</groupId>-->
-                <!--<artifactId>jboss-javaee-7.0-with-resteasy</artifactId>-->
-                <!--<version>${version.wildfly}</version>-->
-                <!--<type>pom</type>-->
-                <!--<scope>import</scope>-->
-            <!--</dependency>-->
-
             <!-- Arquaillian integration -->
 
             <!-- Shrinkwrap resolver must be defined before arquillian-->
@@ -230,7 +222,7 @@
             <!--<scope>provided</scope>-->
         </dependency>
 
-        <!-- Import the RichFaces library -->
+        <!-- Import the RichFaces org.booklibrary.app -->
         <dependency>
             <groupId>org.richfaces</groupId>
             <artifactId>richfaces</artifactId>

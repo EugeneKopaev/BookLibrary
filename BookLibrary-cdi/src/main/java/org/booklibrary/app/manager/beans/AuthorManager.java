@@ -1,5 +1,6 @@
 package org.booklibrary.app.manager.beans;
 
+import org.booklibrary.app.exceptions.DuplicateResourceException;
 import org.booklibrary.app.manager.AuthorManagerLocal;
 import org.booklibrary.app.persistence.entity.Author;
 import org.booklibrary.app.persistence.id.EntityIdentifier;
@@ -12,12 +13,7 @@ import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
-import javax.validation.ConstraintValidatorContext;
-import javax.validation.ConstraintViolation;
-import javax.validation.Valid;
-import javax.validation.Validator;
 import java.util.List;
-import java.util.Set;
 
 /**
  * Author Manager implementation.
@@ -31,19 +27,20 @@ public class AuthorManager implements AuthorManagerLocal {
     @Inject
     private Logger logger;
 
-    @Inject
-    private Validator validator;
-
     @EJB
     private AuthorFacadeLocal authorFacade;
 
     @EJB
     private AuthorHomeLocal authorHome;
 
-    @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
     public Author save(Author obj) {
-//        Set<ConstraintViolation<Author>> violations = validator.validate(obj);
+        throw new UnsupportedOperationException("use saveUnique method instead");
+    }
+
+    @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
+    public Author saveUnique(Author obj) throws DuplicateResourceException {
         logger.debug("save invoked for object: {}", obj);
+        validateAuthor(obj);
         Author entity = authorHome.save(obj);
         return entity;
     }
@@ -84,9 +81,26 @@ public class AuthorManager implements AuthorManagerLocal {
         return authors;
     }
 
-    public List<Author> findSegment(int start, int size) {
+    public List<Author> findRange(int start, int size) {
         logger.debug("Find segment called");
-        List<Author> authors = authorFacade.findSegment(start, size);
+        List<Author> authors = authorFacade.findRange(start, size);
         return authors;
+    }
+
+    public int countEntity() {
+        logger.debug("Count all authors");
+        int count = authorFacade.countEntity();
+        logger.debug("result: " + count);
+        return count;
+    }
+
+    private void validateAuthor(Author author) throws DuplicateResourceException {
+        if (checkAuthorAlreadyExists(author.getFirstName(), author.getLastName())) {
+            throw new DuplicateResourceException("Author already exist");
+        }
+    }
+    private boolean checkAuthorAlreadyExists(String firstName, String lastName) {
+        Author author = authorFacade.findByFirstAndLastName(firstName, lastName);
+        return author != null;
     }
 }

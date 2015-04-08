@@ -83,9 +83,17 @@ public class ReviewManager implements ReviewManagerLocal {
     }
 
     @Override
-    public List<Review> findSegment(int start, int size) {
+    public List<Review> findRange(int start, int size) {
         logger.debug("Find segment called");
-        List<Review> reviews = reviewFacade.findSegment(start, size);
+        List<Review> reviews = reviewFacade.findRange(start, size);
         return reviews;
+    }
+
+    @Override
+    public int countEntity() {
+        logger.debug("Count all reviews");
+        int count = reviewFacade.countEntity();
+        logger.debug("result: " + count);
+        return count;
     }
 }

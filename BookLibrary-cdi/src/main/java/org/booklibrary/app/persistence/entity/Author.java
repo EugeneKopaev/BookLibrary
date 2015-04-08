@@ -1,16 +1,13 @@
 package org.booklibrary.app.persistence.entity;
 
 import com.google.common.base.Objects;
-import org.booklibrary.app.manager.validation.annotation.AuthorConstraint;
 
 import javax.persistence.*;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
-@AuthorConstraint
 @Entity
 @Table(name = "AUTHORS", uniqueConstraints = {
         @UniqueConstraint(columnNames = {"FIRST_NAME", "LAST_NAME"})
@@ -58,7 +55,7 @@ public class Author extends AbstractBaseEntity
     }
 
     public List<Book> getBooks() {
-        return Collections.unmodifiableList(this.books);
+        return this.books;
     }
 
     public void addBooks(Book book) {

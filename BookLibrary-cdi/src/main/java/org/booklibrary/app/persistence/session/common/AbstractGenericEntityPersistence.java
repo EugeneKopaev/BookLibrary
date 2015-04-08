@@ -5,6 +5,9 @@ import org.booklibrary.app.persistence.id.EntityIdentifier;
 import org.slf4j.Logger;
 
 import javax.persistence.EntityManager;
+import javax.persistence.Query;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 import java.lang.reflect.ParameterizedType;
 import java.util.List;
 
@@ -66,14 +69,22 @@ public abstract class AbstractGenericEntityPersistence<T extends AbstractBaseEnt
         return resultList;
     }
 
-    public List<T> findSegment(int start, int size) {
-        getLogger().debug("findSegment invoked for entities of type: {}", entityClass.getCanonicalName());
+    public List<T> findRange(int start, int size) {
+        getLogger().debug("findRange invoked for entities of type: {}", entityClass.getCanonicalName());
         List<T> resultList = getEntityManager()
                 .createQuery("SELECT a FROM " + entityClass.getName() + " a")
                 .setFirstResult(start)
                 .setMaxResults(size)
                 .getResultList();
         return resultList;
+    }
+
+    public int countEntity() {
+        CriteriaQuery cq = getEntityManager().getCriteriaBuilder().createQuery();
+        Root<T> rt = cq.from(entityClass);
+        cq.select(getEntityManager().getCriteriaBuilder().count(rt));
+        Query q = getEntityManager().createQuery(cq);
+        return ((Long) q.getSingleResult()).intValue();
     }
 
     @Override
@@ -98,11 +109,11 @@ public abstract class AbstractGenericEntityPersistence<T extends AbstractBaseEnt
     @Override
     public void removeByPk(K key) {
         if (key == null) {
-            String errorMsg = "null argument passed to remove";
+            String errorMsg = "null argument passed to removeSelected";
             getLogger().error(errorMsg);
             throw new IllegalArgumentException(errorMsg);
         }
-        getLogger().debug("remove invoked for entity of type: [" +
+        getLogger().debug("removeSelected invoked for entity of type: [" +
                 entityClass.getCanonicalName() + "] with key: [" + key + "]");
         Object existEntity = getEntityManager().getReference(entityClass, key);
         getEntityManager().remove(existEntity);
@@ -112,7 +123,7 @@ public abstract class AbstractGenericEntityPersistence<T extends AbstractBaseEnt
     @Override
     public void removeByUuid(String uuid) {
         if (uuid == null) {
-            String errorMsg = "null argument passed to remove";
+            String errorMsg = "null argument passed to removeSelected";
             getLogger().error(errorMsg);
             throw new IllegalArgumentException(errorMsg);
         }

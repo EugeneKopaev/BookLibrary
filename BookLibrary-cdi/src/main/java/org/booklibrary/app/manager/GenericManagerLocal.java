@@ -3,6 +3,7 @@ package org.booklibrary.app.manager;
 import org.booklibrary.app.persistence.entity.AbstractBaseEntity;
 
 import javax.ejb.Local;
+import javax.validation.ValidationException;
 import java.util.List;
 
 /**
@@ -81,5 +82,11 @@ public interface GenericManagerLocal<T extends AbstractBaseEntity, K> {
      * @param size max size
      * @return List<T> list of entities
      */
-    List<T> findSegment(int start, int size);
+    List<T> findRange(int start, int size);
+
+    /**
+     * Count objects in database
+     *
+     */
+    int countEntity();
 }

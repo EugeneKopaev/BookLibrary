@@ -1,6 +1,5 @@
 package org.booklibrary.app.persistence.session.common;
 
-import org.apache.commons.codec.DecoderException;
 import org.booklibrary.app.persistence.entity.AbstractBaseEntity;
 
 import javax.ejb.Local;
@@ -46,6 +45,12 @@ public interface GenericFacadeLocal<T extends AbstractBaseEntity, K> {
      * @param size max size
      * @return List<T> list of entities
      */
-    List<T> findSegment(int start, int size);
+    List<T> findRange(int start, int size);
+
+    /**
+     * Count objects in database
+     * 
+     */
+    int countEntity();
 
 }

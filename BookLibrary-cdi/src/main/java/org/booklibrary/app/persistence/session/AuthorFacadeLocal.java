@@ -14,5 +14,5 @@ import javax.ejb.Local;
 @Local
 public interface AuthorFacadeLocal extends GenericFacadeLocal<Author, EntityIdentifier> {
 
-    Author findByFirstName(String firstName);
+    Author findByFirstAndLastName(String firstName, String lastName);
 }

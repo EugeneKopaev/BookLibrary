@@ -13,4 +13,6 @@ import javax.ejb.Local;
  */
 @Local
 public interface BookFacadeLocal extends GenericFacadeLocal<Book, EntityIdentifier> {
+
+    Book findByIsbn(long isbn);
 }

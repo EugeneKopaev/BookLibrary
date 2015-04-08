@@ -5,10 +5,14 @@
 <body>
     <ui:composition template="/templates/template.xhtml">
 
-        <ui:define name="title">RichFaces Sample</ui:define>
+        <ui:define name="title">#{bundle.WelcomePageTitle}</ui:define>
 
         <ui:define name="body">
-            <h:link outcome="/pages/authorDataTable">Authors data</h:link>
+            #{bundle.AppTitle}
+            <br />
+            <h:link outcome="pages/authors/data-list" value="Show Table Authors Items"/>
+            <br />
+            <h:link outcome="pages/books/data-list" value="Show All Books Items"/>
         </ui:define>
     </ui:composition>
 </body>

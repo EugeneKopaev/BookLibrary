@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:a4j="http://richfaces.org/a4j"
+      xmlns:rich="http://richfaces.org/rich"
+      xmlns:composite="http://java.sun.com/jsf/composite">
+
+<!-- INTERFACE -->
+<composite:interface>
+    <composite:attribute name="book"/>
+</composite:interface>
+
+<!-- IMPLEMENTATION -->
+<composite:implementation>
+    <h:panelGrid columns="2" rendered="true">
+        <h:outputLabel value="#{bundle.ListBooksTitle_isbn}"/>
+        <h:outputText value="#{cc.attrs.book.isbn}" />
+        <h:outputLabel value="#{bundle.ListBooksTitle_name}"/>
+        <h:outputText value="#{cc.attrs.book.name}"/>
+        <h:outputLabel value="#{bundle.ListBooksTitle_publishYear}"/>
+        <h:outputText value="#{cc.attrs.book.publishYear}"/>
+        <h:outputLabel value="#{bundle.ListBooksTitle_publisher}"/>
+        <h:outputText value="#{cc.attrs.book.publisher}"/>
+        <h:outputLabel value="#{bundle.View_CreatedDate}"/>
+        <h:outputText value="#{cc.attrs.book.created}" converter="javax.faces.DateTime"
+                      title="Created date"/>
+
+    </h:panelGrid>
+    <h:panelGrid columns="2" rendered="#{!cc.attrs.book.authors.isEmpty()}">
+        <h:outputText value="Authors: "/>
+        <rich:list value="#{cc.attrs.book.authors}" id="list" var="authorEntry" type="unordered">
+            <h:outputText value="#{authorEntry.firstName} #{authorEntry.lastName}" style="font-size: large"/>
+        </rich:list>
+    </h:panelGrid>
+
+</composite:implementation>
+</html>

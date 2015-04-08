@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:rich="http://richfaces.org/rich"
+      xmlns:my="http://java.sun.com/jsf/composite/components/book"
+      xmlns:a4j="http://richfaces.org/a4j">
+
+<ui:composition>
+    <h:form>
+        <rich:popupPanel header="Edit Book Details" id="editPane" domElementAttachment="parent" width="700"
+                         height="400" onmaskclick="#{rich:component('editPane')}.hide()">
+            <rich:messages infoClass="valid" warnClass="warning"
+                           globalOnly="true" showSummary="true"/>
+            <my:form id="editGrid" book="#{getManagedReview}"/>
+            <br/>
+            <h:panelGrid columns="1">
+                <h:outputText value="Authors:"></h:outputText>
+                <rich:dataTable value="#{getManagedReview.authors}" var="author" iterationStatusVar="it" id="table" rows="5">
+                    <rich:column>
+                        <f:facet name="header">#</f:facet>
+                        #{it.index}
+                    </rich:column>
+                    <rich:column>
+                        <f:facet name="header">First name</f:facet>
+                        <h:outputText value="#{author.firstName}"/>
+                    </rich:column>
+                    <rich:column>
+                        <f:facet name="header">Last name</f:facet>
+                        <h:outputText value="#{author.lastName}"/>
+                    </rich:column>
+                    <rich:column>
+                        <a4j:commandLink styleClass="no-decor" execute="@this" render="@none"
+                                         oncomplete="#{rich:component('confirmPane')}.show()">
+                            Delete
+                            <f:setPropertyActionListener value="#{author}" target="#{bookController.reference}"/>
+                        </a4j:commandLink>
+                    </rich:column>
+                </rich:dataTable>
+                <br/>
+                <h:outputText value="#{bundle.AddAuthor}: "/>
+                <br/>
+                <rich:inplaceSelect editEvent="dblclick" id="inplaceSelect" showControls="true" saveOnSelect="false"
+                                    saveOnBlur="false" defaultLabel="Double click to add author"
+                                    valueChangeListener="#{bookController.valueChanged}">
+                    <f:selectItems value="#{getReviews}" var="author" itemValue="#{author.id}"
+                                   itemLabel="#{author.firstName} #{author.lastName}"/>
+                </rich:inplaceSelect>
+
+            </h:panelGrid>
+            <br/>
+            <a4j:commandButton value="Save" action="#{bookController.update}" render="table,inplaceSelect,bookDataPanel"
+                               execute="editPane"
+                               oncomplete="if (#{facesContext.maximumSeverity==null}) {#{rich:component('editPane')}.hide();}"/>
+
+            <a4j:commandButton value="Cancel" onclick="#{rich:component('editPane')}.hide(); return false;"/>
+
+            <rich:popupPanel id="confirmPane" autosized="true" modal="true"
+                             onmaskclick="#{rich:component('confirmPane')}.hide()">
+                Are you sure you want to delete the row?
+                <a4j:commandButton value="Cancel" onclick="#{rich:component('confirmPane')}.hide(); return false;"/>
+                <a4j:commandButton value="Delete" onclick="remove(); return false;"/>
+            </rich:popupPanel>
+
+            <a4j:jsFunction name="remove" action="#{bookController.removeReference}" render="table,bookDataPanel"
+                            execute="@this"
+                            oncomplete="#{rich:component('confirmPane')}.hide();"/>
+
+            <ui:include src="../info-panel.xhtml"/>
+        </rich:popupPanel>
+    </h:form>
+</ui:composition>
+</html>

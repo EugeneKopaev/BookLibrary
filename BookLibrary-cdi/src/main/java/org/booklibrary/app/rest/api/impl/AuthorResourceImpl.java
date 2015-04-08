@@ -8,36 +8,26 @@ import org.booklibrary.app.rest.api.AuthorResource;
 import org.booklibrary.app.rest.dto.AuthorDto;
 import org.booklibrary.app.rest.dto.AuthorDtoCollection;
 import org.booklibrary.app.rest.dto.BookDtoCollection;
-import org.booklibrary.app.rest.dto.adapters.MapAdapter;
-import org.booklibrary.app.rest.exceptions.ResourceNotFoundException;
+import org.booklibrary.app.exceptions.ResourceNotFoundException;
+import org.booklibrary.app.rest.util.ErrorResponseBuilder;
 import org.booklibrary.app.rest.util.LinkProducer;
 
-import javax.ejb.EJBException;
 import javax.inject.Inject;
-import javax.validation.ConstraintViolation;
-import javax.validation.ConstraintViolationException;
-import javax.validation.Validator;
-import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Link;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
-import java.util.*;
+import java.util.List;
 
-public class AuthorResourceImpl implements AuthorResource{
-
-    private static final String AUTHOR_NOT_FOUND_MESSAGE = "Can't find author with uuid: ";
+public class AuthorResourceImpl implements AuthorResource {
 
     @Inject
     private AuthorManagerLocal authorManager;
-
-    @Inject
-    private Validator validator;
 
     @Override
     public Response getAuthor(String uuid) {
         Author author = authorManager.findByUuid(uuid);
         if (author == null) {
-            throw new ResourceNotFoundException(AUTHOR_NOT_FOUND_MESSAGE + uuid);
+            throw new ResourceNotFoundException();
         }
 
         AuthorDto dto = new AuthorDto(author);
@@ -47,10 +37,10 @@ public class AuthorResourceImpl implements AuthorResource{
     @Override
     public Response getAuthors(int start, int size, UriInfo uriInfo) {
 
-        List<Author> authors = authorManager.findSegment(start, size);
+        List<Author> authors = authorManager.findRange(start, size);
 
         if (authors == null) {
-            throw new ResourceNotFoundException("Can't find any author");
+            throw new ResourceNotFoundException();
         }
 
         AuthorDtoCollection authorDtoCollection = new AuthorDtoCollection(authors);
@@ -66,11 +56,11 @@ public class AuthorResourceImpl implements AuthorResource{
                                      UriInfo uriInfo) {
         Author author = authorManager.findByUuid(uuid);
         if (author == null) {
-            throw new ResourceNotFoundException(AUTHOR_NOT_FOUND_MESSAGE + uuid);
+           throw new ResourceNotFoundException();
         }
         List<Book> books = author.getBooks();
         if (books == null) {
-            throw new ResourceNotFoundException("Can't find any books for author with uuid: " + uuid);
+            throw new ResourceNotFoundException();
         }
 
         BookDtoCollection bookDtoCollection = new BookDtoCollection(books);
@@ -80,20 +70,16 @@ public class AuthorResourceImpl implements AuthorResource{
     }
 
     @Override
-    public Response save(AuthorDto dto){
+    public Response save(AuthorDto dto) {
         Author author = dto.toEntity();
 
         Response.ResponseBuilder builder;
         try {
-            validateAuthor(author);
-            authorManager.save(author);
+            authorManager.saveUnique(author);
             builder = Response.status(Response.Status.CREATED).entity(new AuthorDto(author));
-        } catch (ConstraintViolationException e) {
-            // Handle bean validation issues
-            builder = createViolationResponse(e.getConstraintViolations());
+
         } catch (Exception e) {
-            // Handle generic exceptions
-            builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            builder = ErrorResponseBuilder.buildErrorResponse(e);
         }
         return builder.build();
     }
@@ -102,20 +88,16 @@ public class AuthorResourceImpl implements AuthorResource{
     public Response update(String id, AuthorDto dto) {
         Author author = authorManager.findByUuid(id);
         if (author == null) {
-            throw new ResourceNotFoundException(AUTHOR_NOT_FOUND_MESSAGE + id);
+            throw new ResourceNotFoundException();
         }
         Response.ResponseBuilder builder;
         author.setFirstName(dto.getFirstName());
         author.setLastName(dto.getLastName());
         try {
-            validateAuthor(author);
             Author updated = authorManager.update(author);
             builder = Response.ok(new AuthorDto(updated));
-        } catch (ConstraintViolationException e) {
-            // Handle bean validation issues
-            builder = createViolationResponse(e.getConstraintViolations());
         } catch (Exception e) {
-            builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            builder = ErrorResponseBuilder.buildErrorResponse(e);
         }
         return builder.build();
     }
@@ -124,8 +106,8 @@ public class AuthorResourceImpl implements AuthorResource{
     public Response delete(String uuid) {
         try {
             authorManager.removeByUuid(uuid);
-        } catch (EJBException e) {
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+        } catch (Exception e) {
+            return ErrorResponseBuilder.buildErrorResponse(e).build();
         }
         return Response.ok().build();
     }
@@ -133,32 +115,9 @@ public class AuthorResourceImpl implements AuthorResource{
     public Response deleteAll() {
         try {
             authorManager.removeAll();
-        } catch (EJBException e) {
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+        } catch (Exception e) {
+            return ErrorResponseBuilder.buildErrorResponse(e).build();
         }
         return Response.ok().build();
-    }
-
-    //TODO: // create util class for violation response
-    private Response.ResponseBuilder createViolationResponse(Set<ConstraintViolation<?>> violations){
-
-        Map<String, String> responseObj = new HashMap<>();
-        MapAdapter adapter = new MapAdapter();
-
-        for (ConstraintViolation<?> violation : violations) {
-            responseObj.put(violation.getPropertyPath().toString(), violation.getMessage());
-        }
-
-        return Response.status(Response.Status.BAD_REQUEST)
-                .entity(adapter.marshal(responseObj));
-    }
-
-    private void validateAuthor(Author author) throws ConstraintViolationException {
-        // Create a bean validator and check for issues.
-        Set<ConstraintViolation<Author>> violations = validator.validate(author);
-
-        if (!violations.isEmpty()) {
-            throw new ConstraintViolationException(new HashSet<ConstraintViolation<?>>(violations));
-        }
     }
 }

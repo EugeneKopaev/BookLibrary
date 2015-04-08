@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:a4j="http://richfaces.org/a4j"
+      xmlns:rich="http://richfaces.org/rich"
+      xmlns:composite="http://java.sun.com/jsf/composite">
+
+<!-- INTERFACE -->
+<composite:interface>
+    <composite:attribute name="author"/>
+</composite:interface>
+
+<!-- IMPLEMENTATION -->
+<composite:implementation>
+    <h:panelGrid columns="2" rendered="true">
+        <h:outputLabel value="#{bundle.ViewAuthorsLabel_firstName}"/>
+        <h:outputText value="#{cc.attrs.author.firstName}" title="#{bundle.ViewAuthorsTitle_firstName}"/>
+        <h:outputLabel value="#{bundle.ViewAuthorsLabel_lastName}"/>
+        <h:outputText value="#{cc.attrs.author.lastName}"/>
+        <h:outputLabel value="#{bundle.View_CreatedDate}"/>
+        <h:outputText value="#{cc.attrs.author.created}" converter="javax.faces.DateTime"
+                      title="Created date"/>
+
+    </h:panelGrid>
+    <h:panelGrid columns="2" rendered="#{!cc.attrs.author.books.isEmpty()}">
+        <h:outputText value="Books: "/>
+        <rich:list value="#{cc.attrs.author.books}" id="list" var="authorEntry" type="unordered">
+            <h:link value="#{authorEntry.name}"
+                    outcome="/pages/books/details?faces-redirect=true;includeViewParams=true;">
+                <f:param name="Id" value="#{authorEntry.id}"/>
+            </h:link>
+        </rich:list>
+    </h:panelGrid>
+
+</composite:implementation>
+</html>

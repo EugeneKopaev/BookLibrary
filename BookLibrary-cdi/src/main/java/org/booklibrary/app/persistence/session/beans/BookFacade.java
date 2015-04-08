@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 
 /**
  * Book Facade bean
@@ -36,5 +37,17 @@ public class BookFacade extends AbstractGenericEntityPersistence<Book, EntityIde
     @Override
     public Logger getLogger() {
         return this.logger;
+    }
+
+    @Override
+    public Book findByIsbn(long isbn) {
+        Book book = null;
+        try {
+            book = entityManager.createNamedQuery("Book.findByIsbn", Book.class)
+                    .setParameter("isbn", isbn).getSingleResult();
+        } catch (NoResultException e) {
+            //ignore
+        }
+        return book;
     }
 }

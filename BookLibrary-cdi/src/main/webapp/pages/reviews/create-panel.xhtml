@@ -1,0 +1,23 @@
+<ui:composition
+        xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:ui="http://java.sun.com/jsf/facelets"
+        xmlns:rich="http://richfaces.org/rich" xmlns:a4j="http://richfaces.org/a4j"
+        xmlns:my="http://java.sun.com/jsf/composite/components/review" xmlns:h="http://java.sun.com/jsf/html"
+        xmlns:f="http://java.sun.com/jsf/core"
+        >
+    <rich:popupPanel header="#{bundle.ViewAuthorsCreateLink}" id="reviewCreatePane" domElementAttachment="parent" width="500"
+                     height="300" onmaskclick="#{rich:component('reviewCreatePane')}.hide()">
+        <h:form>
+            <my:form review="#{createdReview}"/>
+            <rich:messages infoClass="valid" warnClass="warning"
+                           globalOnly="true" showSummary="true"/>
+            <a4j:commandButton value="Save" action="#{reviewController.save}" render="table" execute="reviewCreatePane"
+                               oncomplete="if (#{facesContext.maximumSeverity==null}) {#{rich:component('reviewCreatePane')}.hide();}">
+
+                <f:setPropertyActionListener value="#{managedBook}" target="#{createdReview.book}" />
+            </a4j:commandButton>
+
+            <a4j:commandButton value="Cancel" onclick="#{rich:component('reviewCreatePane')}.hide(); return false;"/>
+        </h:form>
+    </rich:popupPanel>
+</ui:composition>

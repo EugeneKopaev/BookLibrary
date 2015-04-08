@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:rich="http://richfaces.org/rich"
+      xmlns:my="http://java.sun.com/jsf/composite/components/author"
+      xmlns:a4j="http://richfaces.org/a4j">
+
+<ui:composition>
+    <rich:popupPanel header="Edit Author Details" id="editPane" domElementAttachment="parent" width="500"
+                     height="300" onmaskclick="#{rich:component('editPane')}.hide()">
+        <rich:messages infoClass="valid" warnClass="warning"
+                       globalOnly="true" showSummary="true"/>
+        <my:form id="editGrid" author="#{getManagedBook}"/>
+        <a4j:commandButton value="Save" action="#{authorController.update}" render="authorDataPanel" execute="editPane"
+                           oncomplete="if (#{facesContext.maximumSeverity==null}) {#{rich:component('editPane')}.hide();}"/>
+        <a4j:commandButton value="Cancel" onclick="#{rich:component('editPane')}.hide(); return false;"/>
+    </rich:popupPanel>
+</ui:composition>
+</html>

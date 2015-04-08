@@ -1,0 +1,18 @@
+<ui:composition
+        xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:ui="http://java.sun.com/jsf/facelets"
+        xmlns:rich="http://richfaces.org/rich" xmlns:a4j="http://richfaces.org/a4j"
+        xmlns:my="http://java.sun.com/jsf/composite/components/author" xmlns:h="http://java.sun.com/jsf/html"
+        >
+    <rich:popupPanel header="#{bundle.ViewAuthorsCreateLink}" id="createPane" domElementAttachment="parent" width="500"
+                     height="300" onmaskclick="#{rich:component('createPane')}.hide()">
+        <h:form>
+            <my:form author="#{createdAuthor}"/>
+            <rich:messages infoClass="valid" warnClass="warning"
+                           globalOnly="true" showSummary="true"/>
+            <a4j:commandButton value="Save" action="#{authorController.save}" render="table" execute="createPane"
+                               oncomplete="if (#{facesContext.maximumSeverity==null}) {#{rich:component('createPane')}.hide();}"/>
+            <a4j:commandButton value="Cancel" onclick="#{rich:component('createPane')}.hide(); return false;"/>
+        </h:form>
+    </rich:popupPanel>
+</ui:composition>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:a4j="http://richfaces.org/a4j"
+      xmlns:rich="http://richfaces.org/rich"
+      xmlns:composite="http://java.sun.com/jsf/composite">
+
+<!-- INTERFACE -->
+<composite:interface>
+    <composite:attribute name="review"/>
+</composite:interface>
+
+<!-- IMPLEMENTATION -->
+<composite:implementation>
+    <h:panelGrid columns="3" cellspacing="10px">
+        <h:outputText value="#{bundle.ViewReviewsLabel_commenterName}"/>
+        <h:inputText value="#{cc.attrs.review.commenterName}" id="comenterName">
+            <rich:validator/>
+        </h:inputText>
+        <rich:message for="comenterName"/>
+        <h:outputText value="#{bundle.ViewReviewsLabel_comment}"/>
+        <h:inputTextarea value="#{cc.attrs.review.comment}" id="comment" cols="20" rows="7">
+            <rich:validator/>
+        </h:inputTextarea>
+        <rich:message for="comment"/>
+    </h:panelGrid>
+</composite:implementation>
+</html>

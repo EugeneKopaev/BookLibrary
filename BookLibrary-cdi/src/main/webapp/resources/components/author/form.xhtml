@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:a4j="http://richfaces.org/a4j"
+      xmlns:rich="http://richfaces.org/rich"
+      xmlns:composite="http://java.sun.com/jsf/composite">
+
+<!-- INTERFACE -->
+<composite:interface>
+    <composite:attribute name="author"/>
+</composite:interface>
+
+<!-- IMPLEMENTATION -->
+<composite:implementation>
+    <h:panelGrid columns="3" cellspacing="10px">
+        <h:outputText value="First name"/>
+        <h:inputText value="#{cc.attrs.author.firstName}" id="firstName">
+            <rich:validator/>
+        </h:inputText>
+        <rich:message for="firstName"/>
+        <h:outputText value="Last name"/>
+        <h:inputText value="#{cc.attrs.author.lastName}" id="lastName">
+            <rich:validator/>
+        </h:inputText>
+        <rich:message for="lastName"/>
+    </h:panelGrid>
+</composite:implementation>
+</html>

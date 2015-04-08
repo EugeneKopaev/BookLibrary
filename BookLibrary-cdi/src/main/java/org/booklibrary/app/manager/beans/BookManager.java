@@ -1,6 +1,8 @@
 package org.booklibrary.app.manager.beans;
 
+import org.booklibrary.app.exceptions.DuplicateResourceException;
 import org.booklibrary.app.manager.BookManagerLocal;
+import org.booklibrary.app.persistence.entity.Author;
 import org.booklibrary.app.persistence.entity.Book;
 import org.booklibrary.app.persistence.id.EntityIdentifier;
 import org.booklibrary.app.persistence.session.BookFacadeLocal;
@@ -15,11 +17,11 @@ import javax.inject.Inject;
 import java.util.List;
 
 /**
- * Book Manager implementation.
- * This bean encapsulate business logic.
- *
- * @see org.booklibrary.app.manager.BookManagerLocal
- */
+* Book Manager implementation.
+* This bean encapsulate business logic.
+*
+* @see org.booklibrary.app.manager.BookManagerLocal
+*/
 @Stateless
 public class BookManager implements BookManagerLocal {
 
@@ -32,9 +34,14 @@ public class BookManager implements BookManagerLocal {
     @EJB
     private BookHomeLocal bookHome;
 
-    @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
     public Book save(Book obj) {
+        throw new UnsupportedOperationException("use saveUnique method instead");
+    }
+
+    @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
+    public Book saveUnique(Book obj) throws DuplicateResourceException {
         logger.debug("save invoked for object: {}", obj);
+        validateBook(obj);
         Book entity = bookHome.save(obj);
         return entity;
     }
@@ -83,9 +90,27 @@ public class BookManager implements BookManagerLocal {
     }
 
     @Override
-    public List<Book> findSegment(int start, int size) {
+    public List<Book> findRange(int start, int size) {
         logger.debug("Find segment called");
-        List<Book> books = bookFacade.findSegment(start, size);
+        List<Book> books = bookFacade.findRange(start, size);
         return books;
+    }
+
+    @Override
+    public int countEntity() {
+        logger.debug("Count all books");
+        int count = bookFacade.countEntity();
+        logger.debug("result: " + count);
+        return count;
+    }
+
+    private void validateBook(Book book) throws DuplicateResourceException {
+        if (checkBookAlreadyExists(book.getIsbn())) {
+            throw new DuplicateResourceException("Book already exist");
+        }
+    }
+    private boolean checkBookAlreadyExists(long isbn) {
+        Book book = bookFacade.findByIsbn(isbn);
+        return book != null;
     }
 }
