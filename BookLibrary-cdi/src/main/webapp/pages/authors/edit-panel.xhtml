@@ -12,7 +12,7 @@
                      height="300" onmaskclick="#{rich:component('editPane')}.hide()">
         <rich:messages infoClass="valid" warnClass="warning"
                        globalOnly="true" showSummary="true"/>
-        <my:form id="editGrid" author="#{getManagedBook}"/>
+        <my:form id="editGrid" author="#{managedAuthor}"/>
         <a4j:commandButton value="Save" action="#{authorController.update}" render="authorDataPanel" execute="editPane"
                            oncomplete="if (#{facesContext.maximumSeverity==null}) {#{rich:component('editPane')}.hide();}"/>
         <a4j:commandButton value="Cancel" onclick="#{rich:component('editPane')}.hide(); return false;"/>

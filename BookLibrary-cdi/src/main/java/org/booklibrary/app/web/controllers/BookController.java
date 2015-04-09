@@ -95,6 +95,7 @@ public class BookController implements Serializable{
             for (String entry: listToDelete) {
                 try {
                     bookManager.removeByPk(entry);
+                    checkedItems.clear();
                     FacesMessageUtils.addInfoMessage("Removed book with id: " + entry);
                 } catch (EJBException e) {
                     FacesMessageUtils.addErrorMessage(e, "Remove unsuccessful for book with id: " + entry);

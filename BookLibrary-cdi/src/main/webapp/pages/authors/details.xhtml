@@ -19,11 +19,11 @@
             <h:messages errorStyle="color: red" infoStyle="color: green" layout="table"/>
         </h:panelGroup>
         <h:form id="viewForm">
-            <h:panelGroup id="authorDataPanel">
+            <rich:panel id="authorDataPanel">
 
-                <my:details id="detailsView" author="#{getManagedBook}" />
+                <my:details id="detailsView" author="#{managedAuthor}" />
                 <br/>
-                <h:panelGrid columns="2" rendered="#{getManagedBook != null}">
+                <h:panelGrid columns="2" rendered="#{managedAuthor != null}">
                     <a4j:commandLink styleClass="no-decor" render="editGrid" execute="@this"
                                      oncomplete="#{rich:component('editPane')}.show()">
                         Edit
@@ -40,7 +40,7 @@
                 <br/>
                 <br/>
                 <h:link outcome="/index" value="#{bundle.ViewIndexLink}"/>
-            </h:panelGroup>
+            </rich:panel>
 
             <rich:popupPanel id="confirmPane" autosized="true" modal="true" onmaskclick="#{rich:component('confirmPane')}.hide()">
                 Are you sure you want to delete the row?

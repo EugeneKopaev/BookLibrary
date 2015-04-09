@@ -27,11 +27,12 @@
         <h:outputText value="#{cc.attrs.book.created}" converter="javax.faces.DateTime"
                       title="Created date"/>
 
-    </h:panelGrid>
-    <h:panelGrid columns="2" rendered="#{!cc.attrs.book.authors.isEmpty()}">
         <h:outputText value="Authors: "/>
         <rich:list value="#{cc.attrs.book.authors}" id="list" var="authorEntry" type="unordered">
-            <h:outputText value="#{authorEntry.firstName} #{authorEntry.lastName}" style="font-size: large"/>
+            <h:link value="#{authorEntry.firstName} #{authorEntry.lastName}"
+                    outcome="/pages/authors/details?faces-redirect=true;includeViewParams=true;">
+                <f:param name="Id" value="#{authorEntry.id}"/>
+            </h:link>
         </rich:list>
     </h:panelGrid>
 

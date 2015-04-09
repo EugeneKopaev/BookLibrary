@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:a4j="http://richfaces.org/a4j"
+      xmlns:rich="http://richfaces.org/rich"
+      xmlns:composite="http://java.sun.com/jsf/composite">
+
+<!-- INTERFACE -->
+<composite:interface>
+    <composite:attribute name="review"/>
+</composite:interface>
+
+<!-- IMPLEMENTATION -->
+<composite:implementation>
+    <h:panelGrid columns="2" rendered="true">
+        <h:outputLabel value="Review by #{cc.attrs.review.commenterName} created "/>
+        <h:outputLabel value="#{cc.attrs.review.created}">
+            <f:convertDateTime pattern="dd.MM.yyyy HH:mm" />
+        </h:outputLabel>
+        <h:outputText value="#{cc.attrs.review.comment}" />
+    </h:panelGrid>
+</composite:implementation>
+</html>

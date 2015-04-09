@@ -82,6 +82,7 @@ public class AuthorController implements Serializable {
             for (String entry: listToDelete) {
                 try {
                     authorManager.removeByPk(entry);
+                    checkedItems.clear();
                     FacesMessageUtils.addInfoMessage("Removed author with id: " + entry);
                 } catch (EJBException e) {
                     FacesMessageUtils.addErrorMessage(e, "Remove unsuccessful for author with id: " + entry);
