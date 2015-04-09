@@ -1,7 +1,6 @@
 package org.booklibrary.app.persistence.session;
 
 import org.booklibrary.app.persistence.entity.Book;
-import org.booklibrary.app.persistence.id.EntityIdentifier;
 import org.booklibrary.app.persistence.session.common.GenericFacadeLocal;
 
 import javax.ejb.Local;
@@ -12,7 +11,7 @@ import javax.ejb.Local;
  * @see org.booklibrary.app.persistence.session.common.GenericFacadeLocal
  */
 @Local
-public interface BookFacadeLocal extends GenericFacadeLocal<Book, EntityIdentifier> {
+public interface BookFacadeLocal extends GenericFacadeLocal<Book, String> {
 
     Book findByIsbn(long isbn);
 }

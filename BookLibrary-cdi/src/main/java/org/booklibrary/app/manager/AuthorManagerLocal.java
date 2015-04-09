@@ -2,7 +2,6 @@ package org.booklibrary.app.manager;
 
 import org.booklibrary.app.exceptions.DuplicateResourceException;
 import org.booklibrary.app.persistence.entity.Author;
-import org.booklibrary.app.persistence.id.EntityIdentifier;
 
 import javax.ejb.Local;
 
@@ -12,7 +11,7 @@ import javax.ejb.Local;
  * @see org.booklibrary.app.manager.GenericManagerLocal
  */
 @Local
-public interface AuthorManagerLocal extends GenericManagerLocal<Author, EntityIdentifier> {
+public interface AuthorManagerLocal extends GenericManagerLocal<Author, String> {
 
     Author saveUnique(Author author) throws DuplicateResourceException;
 }

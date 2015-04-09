@@ -1,7 +1,6 @@
 package org.booklibrary.app.persistence.session.beans;
 
 import org.booklibrary.app.persistence.entity.Review;
-import org.booklibrary.app.persistence.id.EntityIdentifier;
 import org.booklibrary.app.persistence.session.ReviewHomeLocal;
 import org.booklibrary.app.persistence.session.common.AbstractGenericEntityPersistence;
 import org.slf4j.Logger;
@@ -16,7 +15,7 @@ import javax.persistence.EntityManager;
  * @see org.booklibrary.app.persistence.session.ReviewHomeLocal
  */
 @Stateless
-public class ReviewHome extends AbstractGenericEntityPersistence<Review, EntityIdentifier>
+public class ReviewHome extends AbstractGenericEntityPersistence<Review, String>
         implements ReviewHomeLocal {
 
         @Inject

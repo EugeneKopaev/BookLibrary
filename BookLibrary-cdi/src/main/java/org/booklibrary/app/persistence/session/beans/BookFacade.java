@@ -1,7 +1,6 @@
 package org.booklibrary.app.persistence.session.beans;
 
 import org.booklibrary.app.persistence.entity.Book;
-import org.booklibrary.app.persistence.id.EntityIdentifier;
 import org.booklibrary.app.persistence.session.BookFacadeLocal;
 import org.booklibrary.app.persistence.session.common.AbstractGenericEntityPersistence;
 import org.slf4j.Logger;
@@ -17,7 +16,7 @@ import javax.persistence.NoResultException;
  * @see org.booklibrary.app.persistence.session.BookFacadeLocal
  */
 @Stateless
-public class BookFacade extends AbstractGenericEntityPersistence<Book, EntityIdentifier>
+public class BookFacade extends AbstractGenericEntityPersistence<Book, String>
         implements BookFacadeLocal{
 
     @Inject

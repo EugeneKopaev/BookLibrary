@@ -2,7 +2,6 @@ package org.booklibrary.app.manager.beans;
 
 import org.booklibrary.app.manager.ReviewManagerLocal;
 import org.booklibrary.app.persistence.entity.Review;
-import org.booklibrary.app.persistence.id.EntityIdentifier;
 import org.booklibrary.app.persistence.session.ReviewFacadeLocal;
 import org.booklibrary.app.persistence.session.ReviewHomeLocal;
 import org.slf4j.Logger;
@@ -47,14 +46,14 @@ public class ReviewManager implements ReviewManagerLocal {
     }
 
     @Override
-    public void removeByPk(EntityIdentifier key) {
+    public void removeByPk(String key) {
         logger.debug("Remove called for entity with key: {}", key);
         reviewHome.removeByPk(key);
     }
 
     @Override
     public void removeByUuid(String uuid) {
-        removeByPk(new EntityIdentifier(uuid));
+        removeByPk(uuid);
     }
 
     @Override
@@ -64,7 +63,7 @@ public class ReviewManager implements ReviewManagerLocal {
     }
 
     @Override
-    public Review findByPk(EntityIdentifier key) {
+    public Review findByPk(String key) {
         logger.debug("Find invoked for object with key: {}", key);
         return reviewFacade.findByPk(key);
     }

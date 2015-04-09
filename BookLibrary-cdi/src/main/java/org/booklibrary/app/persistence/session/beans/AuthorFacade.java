@@ -1,7 +1,6 @@
 package org.booklibrary.app.persistence.session.beans;
 
 import org.booklibrary.app.persistence.entity.Author;
-import org.booklibrary.app.persistence.id.EntityIdentifier;
 import org.booklibrary.app.persistence.session.AuthorFacadeLocal;
 import org.booklibrary.app.persistence.session.common.AbstractGenericEntityPersistence;
 import org.slf4j.Logger;
@@ -20,7 +19,7 @@ import java.util.List;
  */
 @Stateless
 @TransactionAttribute(value = TransactionAttributeType.SUPPORTS)
-public class AuthorFacade extends AbstractGenericEntityPersistence<Author, EntityIdentifier>
+public class AuthorFacade extends AbstractGenericEntityPersistence<Author, String>
         implements AuthorFacadeLocal {
 
     @Inject

@@ -1,9 +1,11 @@
 package org.booklibrary.app.persistence.session;
 
 
+import org.booklibrary.app.common.Resources;
 import org.booklibrary.app.persistence.entity.Author;
-import org.booklibrary.app.persistence.id.EntityIdentifier;
+import org.booklibrary.app.persistence.id.IdGenerator;
 import org.jboss.arquillian.container.test.api.Deployment;
+import org.jboss.arquillian.persistence.PersistenceTest;
 import org.jboss.arquillian.persistence.ShouldMatchDataSet;
 import org.jboss.arquillian.persistence.UsingDataSet;
 import org.jboss.arquillian.testng.Arquillian;
@@ -58,7 +60,8 @@ public class AuthorHomeTest extends Arquillian {
 
         war.addPackages(true, Author.class.getPackage());
         war.addPackages(true, AuthorHomeLocal.class.getPackage());
-        war.addPackages(true, EntityIdentifier.class.getPackage());
+        war.addPackages(true, Resources.class.getPackage());
+        war.addPackages(true, IdGenerator.class.getPackage());
         war.addAsResource("test-persistence.xml", "META-INF/persistence.xml");
         war.addAsWebInfResource("test-ds.xml");
         //Enable CDI

@@ -5,7 +5,6 @@ import org.booklibrary.app.manager.AuthorManagerLocal;
 import org.booklibrary.app.manager.BookManagerLocal;
 import org.booklibrary.app.persistence.entity.Author;
 import org.booklibrary.app.persistence.entity.Book;
-import org.booklibrary.app.persistence.id.EntityIdentifier;
 import org.booklibrary.app.web.util.FacesMessageUtils;
 import org.slf4j.Logger;
 
@@ -66,7 +65,7 @@ public class BookController implements Serializable{
     public void remove() {
         try {
             bookManager.removeByPk(managedBook.getId());
-            FacesMessageUtils.addSuccessMessage("Removed book successful");
+            FacesMessageUtils.addInfoMessage("Removed book successful");
         } catch (EJBException e) {
             FacesMessageUtils.addErrorMessage(e, "Remove unsuccessful");
         }
@@ -81,25 +80,30 @@ public class BookController implements Serializable{
         }
         managedBook.getAuthors().remove(reference);
         bookManager.update(managedBook);
-        FacesMessageUtils.addSuccessMessage("remove successful");
+        FacesMessageUtils.addInfoMessage("remove successful");
     }
 
     public void removeSelected() {
-        List<EntityIdentifier> listToDelete = new ArrayList<>();
-        for (Object key : checkedItems.keySet()) {
-            if ((Boolean) checkedItems.get(key)) {
-                listToDelete.add((EntityIdentifier) key);
-                checkedItems.put(key, false);
+        if (!checkedItems.isEmpty()) {
+            List<String> listToDelete = new ArrayList<>();
+            for (Object key : checkedItems.keySet()) {
+                if ((Boolean) checkedItems.get(key)) {
+                    listToDelete.add((String) key);
+                    checkedItems.put(key, false);
+                }
             }
-        }
-        for (EntityIdentifier entry: listToDelete) {
-            try {
-                bookManager.removeByPk(entry);
-                FacesMessageUtils.addSuccessMessage("Removed book with id: " + entry);
-            } catch (EJBException e) {
-                FacesMessageUtils.addErrorMessage(e, "Remove unsuccessful for book with id: " + entry);
+            for (String entry: listToDelete) {
+                try {
+                    bookManager.removeByPk(entry);
+                    FacesMessageUtils.addInfoMessage("Removed book with id: " + entry);
+                } catch (EJBException e) {
+                    FacesMessageUtils.addErrorMessage(e, "Remove unsuccessful for book with id: " + entry);
+                }
             }
+        } else {
+            FacesMessageUtils.addInfoMessage("There is nothing to delete");
         }
+
     }
 
     public void update() {

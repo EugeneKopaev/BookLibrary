@@ -1,7 +1,6 @@
 package org.booklibrary.app.persistence.session;
 
 import org.booklibrary.app.persistence.entity.Review;
-import org.booklibrary.app.persistence.id.EntityIdentifier;
 import org.booklibrary.app.persistence.session.common.GenericHomeLocal;
 
 import javax.ejb.Local;
@@ -12,5 +11,5 @@ import javax.ejb.Local;
  * @see org.booklibrary.app.persistence.session.common.GenericHomeLocal
  */
 @Local
-public interface ReviewHomeLocal extends GenericHomeLocal<Review, EntityIdentifier>{
+public interface ReviewHomeLocal extends GenericHomeLocal<Review, String>{
 }

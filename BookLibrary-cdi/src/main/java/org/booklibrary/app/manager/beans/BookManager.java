@@ -4,7 +4,6 @@ import org.booklibrary.app.exceptions.DuplicateResourceException;
 import org.booklibrary.app.manager.BookManagerLocal;
 import org.booklibrary.app.persistence.entity.Author;
 import org.booklibrary.app.persistence.entity.Book;
-import org.booklibrary.app.persistence.id.EntityIdentifier;
 import org.booklibrary.app.persistence.session.BookFacadeLocal;
 import org.booklibrary.app.persistence.session.BookHomeLocal;
 import org.slf4j.Logger;
@@ -54,14 +53,14 @@ public class BookManager implements BookManagerLocal {
     }
 
     @Override
-    public void removeByPk(EntityIdentifier key) {
+    public void removeByPk(String key) {
         logger.debug("Remove called for entity with key: {}", key);
         bookHome.removeByPk(key);
     }
 
     @Override
     public void removeByUuid(String uuid) {
-        removeByPk(new EntityIdentifier(uuid));
+        removeByPk(uuid);
     }
 
     @Override
@@ -71,7 +70,7 @@ public class BookManager implements BookManagerLocal {
     }
 
     @Override
-    public Book findByPk(EntityIdentifier key) {
+    public Book findByPk(String key) {
         logger.debug("Find invoked for object with key: {}", key);
         return bookFacade.findByPk(key);
     }

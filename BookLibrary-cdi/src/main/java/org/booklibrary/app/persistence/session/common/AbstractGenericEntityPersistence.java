@@ -1,7 +1,6 @@
 package org.booklibrary.app.persistence.session.common;
 
 import org.booklibrary.app.persistence.entity.AbstractBaseEntity;
-import org.booklibrary.app.persistence.id.EntityIdentifier;
 import org.slf4j.Logger;
 
 import javax.persistence.EntityManager;
@@ -56,7 +55,7 @@ public abstract class AbstractGenericEntityPersistence<T extends AbstractBaseEnt
             getLogger().error(errorMsg);
             throw new IllegalArgumentException(errorMsg);
         }
-        K key = (K) new EntityIdentifier(uuid);
+        K key = (K) uuid;
         return findByPk(key);
     }
 
@@ -127,7 +126,7 @@ public abstract class AbstractGenericEntityPersistence<T extends AbstractBaseEnt
             getLogger().error(errorMsg);
             throw new IllegalArgumentException(errorMsg);
         }
-        K key = (K) new EntityIdentifier(uuid);
+        K key = (K) uuid;
         removeByPk(key);
 
     }

@@ -1,7 +1,6 @@
 package org.booklibrary.app.manager;
 
 import org.booklibrary.app.persistence.entity.Review;
-import org.booklibrary.app.persistence.id.EntityIdentifier;
 
 import javax.ejb.Local;
 
@@ -12,5 +11,5 @@ import javax.ejb.Local;
  * @see org.booklibrary.app.manager.GenericManagerLocal
  */
 @Local
-public interface ReviewManagerLocal extends GenericManagerLocal<Review, EntityIdentifier>{
+public interface ReviewManagerLocal extends GenericManagerLocal<Review, String>{
 }

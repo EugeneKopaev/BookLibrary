@@ -1,7 +1,6 @@
 package org.booklibrary.app.persistence.session.beans;
 
 import org.booklibrary.app.persistence.entity.Author;
-import org.booklibrary.app.persistence.id.EntityIdentifier;
 import org.booklibrary.app.persistence.session.AuthorHomeLocal;
 import org.booklibrary.app.persistence.session.common.AbstractGenericEntityPersistence;
 import org.slf4j.Logger;
@@ -18,7 +17,7 @@ import javax.persistence.EntityManager;
  */
 @Stateless
 @Named
-public class AuthorHome extends AbstractGenericEntityPersistence<Author, EntityIdentifier>
+public class AuthorHome extends AbstractGenericEntityPersistence<Author, String>
         implements AuthorHomeLocal {
 
     @Inject

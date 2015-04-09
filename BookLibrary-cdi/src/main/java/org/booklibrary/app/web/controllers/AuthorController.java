@@ -3,7 +3,6 @@ package org.booklibrary.app.web.controllers;
 import org.booklibrary.app.exceptions.DuplicateResourceException;
 import org.booklibrary.app.manager.AuthorManagerLocal;
 import org.booklibrary.app.persistence.entity.Author;
-import org.booklibrary.app.persistence.id.EntityIdentifier;
 import org.booklibrary.app.web.util.FacesMessageUtils;
 import org.slf4j.Logger;
 
@@ -65,27 +64,31 @@ public class AuthorController implements Serializable {
     public void remove() {
         try {
             authorManager.removeByPk(managedAuthor.getId());
-            FacesMessageUtils.addSuccessMessage("Removed author successful");
+            FacesMessageUtils.addInfoMessage("Removed author successful");
         } catch (EJBException e) {
             FacesMessageUtils.addErrorMessage(e, "Remove unsuccessful");
         }
     }
 
     public void removeSelected() {
-        List<EntityIdentifier> listToDelete = new ArrayList<>();
-        for (Object key : checkedItems.keySet()) {
-            if ((Boolean) checkedItems.get(key)) {
-                listToDelete.add((EntityIdentifier) key);
-                checkedItems.put(key, false);
+        if (!checkedItems.isEmpty()) {
+            List<String> listToDelete = new ArrayList<>();
+            for (Object key : checkedItems.keySet()) {
+                if ((Boolean) checkedItems.get(key)) {
+                    listToDelete.add((String) key);
+                    checkedItems.put(key, false);
+                }
             }
-        }
-        for (EntityIdentifier entry: listToDelete) {
-            try {
-                authorManager.removeByPk(entry);
-                FacesMessageUtils.addSuccessMessage("Removed author with id: " + entry);
-            } catch (EJBException e) {
-                FacesMessageUtils.addErrorMessage(e, "Remove unsuccessful for author with id: " + entry);
+            for (String entry: listToDelete) {
+                try {
+                    authorManager.removeByPk(entry);
+                    FacesMessageUtils.addInfoMessage("Removed author with id: " + entry);
+                } catch (EJBException e) {
+                    FacesMessageUtils.addErrorMessage(e, "Remove unsuccessful for author with id: " + entry);
+                }
             }
+        } else {
+            FacesMessageUtils.addInfoMessage("There is nothing to delete");
         }
     }
 
