@@ -1,8 +1,6 @@
 package org.booklibrary.app.persistence.entity;
 
-
-import com.google.common.base.Objects;
-import org.booklibrary.app.persistence.id.EntityIdentifier;
+import org.booklibrary.app.persistence.id.IdGenerator;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -11,12 +9,15 @@ import java.util.Date;
 /**
  * Parent for all entities encapsulated primary key, created and changed date
  *
+ * @see org.booklibrary.app.persistence.id.EntityIdentifier
  */
 @MappedSuperclass
 public abstract class AbstractBaseEntity implements Serializable {
 
-    @EmbeddedId
-    private EntityIdentifier id = new EntityIdentifier();
+    @Id
+    @Column(name = "ID",
+            columnDefinition = "CHAR(32)")
+    private String id = IdGenerator.generateUUID();
 
     @Column(name = "CREATED",
             insertable = false,
@@ -34,11 +35,11 @@ public abstract class AbstractBaseEntity implements Serializable {
     public AbstractBaseEntity() {
     }
 
-    public EntityIdentifier getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(EntityIdentifier id) {
+    public void setId(String id) {
         this.id = id;
     }
 

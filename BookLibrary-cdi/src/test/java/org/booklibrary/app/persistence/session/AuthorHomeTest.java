@@ -1,12 +1,16 @@
 package org.booklibrary.app.persistence.session;
 
 
+import org.booklibrary.app.common.Resources;
 import org.booklibrary.app.persistence.entity.Author;
-import org.booklibrary.app.persistence.id.EntityIdentifier;
+import org.booklibrary.app.persistence.id.IdGenerator;
 import org.jboss.arquillian.container.test.api.Deployment;
+import org.jboss.arquillian.persistence.PersistenceTest;
 import org.jboss.arquillian.persistence.ShouldMatchDataSet;
 import org.jboss.arquillian.persistence.UsingDataSet;
 import org.jboss.arquillian.testng.Arquillian;
+import org.jboss.arquillian.transaction.api.annotation.TransactionMode;
+import org.jboss.arquillian.transaction.api.annotation.Transactional;
 import org.jboss.shrinkwrap.api.Archive;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.asset.EmptyAsset;
@@ -19,7 +23,7 @@ import javax.ejb.EJB;
 import javax.ejb.EJBTransactionRolledbackException;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
+import javax.persistence.PersistenceException;
 import java.io.File;
 
 /**
@@ -56,7 +60,8 @@ public class AuthorHomeTest extends Arquillian {
 
         war.addPackages(true, Author.class.getPackage());
         war.addPackages(true, AuthorHomeLocal.class.getPackage());
-        war.addPackages(true, EntityIdentifier.class.getPackage());
+        war.addPackages(true, Resources.class.getPackage());
+        war.addPackages(true, IdGenerator.class.getPackage());
         war.addAsResource("test-persistence.xml", "META-INF/persistence.xml");
         war.addAsWebInfResource("test-ds.xml");
         //Enable CDI
@@ -66,7 +71,7 @@ public class AuthorHomeTest extends Arquillian {
     }
 
     @Test(expectedExceptions = EJBTransactionRolledbackException.class)
-    public void saveAuthorThrowExceptionTest() throws Exception {
+    public void saveDuplicateAuthorThrowExceptionTest() throws Exception {
         Author author1 = new Author();
         author1.setFirstName("Test first name");
         author1.setLastName("Test last name");
@@ -85,42 +90,77 @@ public class AuthorHomeTest extends Arquillian {
             // Entity have a UUID as primary key so the rows
             // ordering is not predictable and sometimes assertEquals will fail.
             // So we need to specify orderBy property.
-            orderBy = {"FIRST_NAME"})
+            orderBy = {"BOOKS.CREATED", "AUTHORS.FIRST_NAME"})
     public void saveAuthorTest() throws Exception {
-        Author author = new Author();
-        author.setFirstName("Test first name");
-        author.setLastName("Test last name");
-        authorHomeLocal.save(author);
-        Assert.assertNotNull(author.getId());
+        Author testAuthor1 = new Author();
+        testAuthor1.setFirstName("Test first name");
+        testAuthor1.setLastName("Test last name");
+        //check auto generated id
+        Assert.assertNotNull(testAuthor1.getId());
+        authorHomeLocal.save(testAuthor1);
+
+        testAuthor1.setFirstName("Change first name");
+        testAuthor1.setLastName("Change last name");
+
+        //fire changes to db
+        entityManager.flush();
+
+        Author testAuthor2 = new Author();
+        testAuthor2.setFirstName("Test new name");
+        testAuthor2.setLastName("Test new name");
+
+        Author testAuthor3 = new Author();
+        testAuthor3.setFirstName("Test another name");
+        testAuthor3.setLastName("Test another name");
+
+        Assert.assertNotNull(testAuthor2.getId());
+        Assert.assertNotNull(testAuthor3.getId());
+
+        authorHomeLocal.save(testAuthor2);
+        entityManager.flush();
+        authorHomeLocal.save(testAuthor3);
     }
 
     @Test
     @UsingDataSet("dataset/author/initial-dataset.xml")
     @ShouldMatchDataSet(value = "dataset/author/update_dataset.xml",
             excludeColumns = {"ID", "CREATED", "CHANGED"},
-            orderBy = {"FIRST_NAME"})
+            orderBy = {"BOOKS.CREATED", "AUTHORS.CREATED"})
     public void updateAuthorTest() throws Exception {
         Author author = entityManager.createQuery(
                 "select a from Author a where a.firstName like :name", Author.class)
                 .setParameter("name", "Mike")
                 .getSingleResult();
+        Assert.assertNotNull(author);
         entityManager.clear();
         author.setFirstName("Update first name");
         author.setLastName("Update last name");
         authorHomeLocal.update(author);
     }
 
+    @Test(expectedExceptions = RuntimeException.class)
+    @UsingDataSet("dataset/author/initial-dataset.xml")
+    public void removeAuthorWithReferencesThrowExceptionTest() throws Exception {
+        Author author = entityManager.createQuery(
+                "select a from Author a where a.firstName like :name", Author.class)
+                .setParameter("name", "Adam")
+                .getSingleResult();
+        Assert.assertNotNull(author);
+        authorHomeLocal.removeByPk(author.getId());
+    }
+
     @Test
     @UsingDataSet("dataset/author/initial-dataset.xml")
     @ShouldMatchDataSet(value = "dataset/author/remove-dataset.xml",
             excludeColumns = {"ID", "CREATED", "CHANGED"},
-            orderBy = {"FIRST_NAME"})
+            orderBy = {"BOOKS.CREATED", "AUTHORS.FIRST_NAME"})
     public void removeAuthorTest() throws Exception {
         Author author = entityManager.createQuery(
                 "select a from Author a where a.firstName like :name", Author.class)
                 .setParameter("name", "Mike")
                 .getSingleResult();
-        authorHomeLocal.remove(author.getId());
+        Assert.assertNotNull(author);
+        authorHomeLocal.removeByPk(author.getId());
     }
 
     @Test

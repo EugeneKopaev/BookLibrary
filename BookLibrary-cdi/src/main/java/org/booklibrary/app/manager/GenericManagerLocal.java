@@ -1,62 +1,71 @@
 package org.booklibrary.app.manager;
 
-import org.booklibrary.app.manager.exceptions.EntityPersistenceException;
 import org.booklibrary.app.persistence.entity.AbstractBaseEntity;
 
 import javax.ejb.Local;
+import javax.validation.ValidationException;
 import java.util.List;
 
+/**
+ * Generic interface for all managers interfaces.
+ * Manager interface provide business logic operations
+ *
+ * @param <T> entity class
+ * @param <K> primary key
+ */
 @Local
-public interface GenericManagerLocal<T extends AbstractBaseEntity, PK> {
+public interface GenericManagerLocal<T extends AbstractBaseEntity, K> {
 
     /**
      * Persist object in the database.
      *
-     * @param obj
-     * @return Created Entity
-     * @throws org.booklibrary.app.manager.exceptions.EntityPersistenceException
+     * @param obj object to save
+     * @return T created entity
      */
-    T save(T obj) throws EntityPersistenceException;
+    T save(T obj);
 
     /**
      * Update entity in the database.
      *
-     * @param obj
-     * @return Updated Entity
-     *@throws org.booklibrary.app.manager.exceptions.EntityPersistenceException
+     * @param obj object to update
+     * @return T updated entity
      */
-    T update(T obj) throws EntityPersistenceException;
+    T update(T obj);
 
     /**
      * Delete the entity from the database by primary key.
      *
-     * @param key
-     * @throws org.booklibrary.app.manager.exceptions.EntityPersistenceException
+     * @param key primary key
      */
-    void remove(PK key) throws EntityPersistenceException;
+    void removeByPk(K key);
 
     /**
      * Delete the entity from the database by string uuid.
      *
      * @param uuid
-     * @throws org.booklibrary.app.manager.exceptions.EntityPersistenceException
      */
-    void remove(String uuid) throws EntityPersistenceException;
+    void removeByUuid(String uuid);
+
+    /**
+     * Removes list of entities from database.
+     *
+     * @param List of uuid
+     */
+    void removeList(List<K> keys);
 
     /**
      * Removes all entities from database.
      *
-     * @throws org.booklibrary.app.manager.exceptions.EntityPersistenceException
      */
-    void removeAll() throws EntityPersistenceException;
+    void removeAll();
 
     /**
      * Find object in the database by primary key.
      *
-     * @param key
+     * @param key primary key
      * @return T entity
      */
-    T findByPk(PK key);
+    T findByPk(K key);
 
     /**
      * Find object in the database by UUID.
@@ -69,8 +78,22 @@ public interface GenericManagerLocal<T extends AbstractBaseEntity, PK> {
     /**
      * Find all objects in the database.
      *
-     * @param key
-     * @return List<T> list of entities
+     * @return List
      */
     List<T> findAll();
+
+    /**
+     * Find segment of objects in the database.
+     *
+     * @param start first result
+     * @param size max size
+     * @return List<T> list of entities
+     */
+    List<T> findRange(int start, int size);
+
+    /**
+     * Count objects in database
+     *
+     */
+    int countEntity();
 }

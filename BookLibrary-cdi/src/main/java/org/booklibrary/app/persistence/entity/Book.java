@@ -3,26 +3,56 @@ package org.booklibrary.app.persistence.entity;
 import com.google.common.base.Objects;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 @Entity
-@Table(name = "BOOKS")
-public class Book extends AbstractBaseEntity {
+@Table(name = "BOOKS", uniqueConstraints = {
+        @UniqueConstraint(columnNames = {"ISBN"})
+})
+@NamedQueries({
+        @NamedQuery(name = "Book.findByIsbn",
+                query = "SELECT b FROM Book b WHERE b.isbn = :isbn"),
+        @NamedQuery(name = "Book.countRating",
+                query = "SELECT avg(r.rating) as book_rating FROM Review r where r.book.id = :bookID"),
+        @NamedQuery(name = "Book.updateRating",
+                query = "UPDATE Book b SET b.avgRating = :rating WHERE b.id = :bookID"),
+        @NamedQuery(name = "Book.removeList",
+                query = "DELETE FROM Book b WHERE b.id IN (:bookIdList)"),
+        @NamedQuery(name = "Book.findAllByAuthor",
+                query = "SELECT b FROM Book b JOIN b.authors a WHERE a.id = :authorID"),
+        @NamedQuery(name = "Book.findReviewRating",
+                query = "SELECT b FROM Book b JOIN b.reviews r WHERE r.rating = :rating")
+})
+public class Book extends AbstractBaseEntity implements Serializable {
 
+    private static final int MIN_NAME_SIZE = 3;
+    private static final int MAX_NAME_SIZE = 20;
+
+    @Size(min = MIN_NAME_SIZE, max = MAX_NAME_SIZE)
     @Column(name = "NAME", nullable = false)
     private String name;
 
+    @NotNull
     @Column(name = "ISBN", nullable = false)
     private long isbn;
 
+    @NotNull
     @Column(name = "PUBLISH_YEAR", nullable = false)
     private int publishYear;
 
+    @Size(min = MIN_NAME_SIZE, max = MAX_NAME_SIZE)
     @Column(name = "PUBLISHER", nullable = false)
     private String publisher;
 
+    @Column(name = "AVG_RATING")
+    private Double avgRating;
+
+    @NotNull
     @ManyToMany
     @JoinTable(name = "BOOKS_TO_AUTHORS",
             joinColumns = @JoinColumn(name = "BOOK_ID"),
@@ -67,8 +97,16 @@ public class Book extends AbstractBaseEntity {
         this.publisher = publisher;
     }
 
+    public Double getAvgRating() {
+        return avgRating;
+    }
+
+    public void setAvgRating(Double avgRating) {
+        this.avgRating = avgRating;
+    }
+
     public List<Author> getAuthors() {
-        return Collections.unmodifiableList(this.authors);
+        return this.authors;
     }
 
     public void addAuthor(Author author) {

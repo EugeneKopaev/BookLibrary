@@ -1,22 +1,46 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dataset>
-    <AUTHORS ID="b5STRXyYR8iObWoRO18IYQ=="
+    <AUTHORS ID="4271bcfadaf64fea92e463c2300c432a"
              FIRST_NAME="Mike"
              LAST_NAME="Cory"
              CREATED="2015-03-06 16:05:29"
              CHANGED="2015-03-06 16:05:29"
             />
-    <AUTHORS ID="mzYVlWPTQu22SzrIxQmIeA=="
+    <AUTHORS ID="54c8cc0786dc46c9bfe71dc878280bf2"
              FIRST_NAME="Adam"
              LAST_NAME="Smith"
              CREATED="2015-03-07 16:05:29"
              CHANGED="2015-03-07 16:05:29"
             />
-    <AUTHORS ID="0y8MMMJ9QI6C3XMVA2CM1w=="
-             FIRST_NAME="Test first name"
-             LAST_NAME="Test last name"
+    <AUTHORS ID="84aa8b017722460da0544d6bc994f8ec"
+             FIRST_NAME="Change first name"
+             LAST_NAME="Change last name"
              CREATED="2015-03-08 17:05:30"
              CHANGED="2015-03-08 17:05:30"
+            />
+    <AUTHORS ID="68933272d02c40b5b0adb68f09be4753"
+             FIRST_NAME="Test new name"
+             LAST_NAME="Test new name"
+             CREATED="2015-03-09 17:05:30"
+             CHANGED="2015-03-09 17:05:30"
+            />
+    <AUTHORS ID="58a2d651a4b445cdb37f0a3c48827750"
+             FIRST_NAME="Test another name"
+             LAST_NAME="Test another name"
+             CREATED="2015-03-10 17:05:30"
+             CHANGED="2015-03-10 17:05:30"
+            />
+    <BOOKS ID="587b89f539b140009b7aa04080120759"
+           NAME="Test book"
+           ISBN="197656567"
+           PUBLISH_YEAR="2015"
+           PUBLISHER="Publish house"
+           CREATED="2015-03-07 16:05:29"
+           CHANGED="2015-03-07 16:05:29"
+            />
+
+    <BOOKS_TO_AUTHORS BOOK_ID="587b89f539b140009b7aa04080120759"
+                      AUTHOR_ID="54c8cc0786dc46c9bfe71dc878280bf2"
             />
 </dataset>
 

@@ -1,0 +1,54 @@
+<ui:composition
+        xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:ui="http://java.sun.com/jsf/facelets"
+        xmlns:rich="http://richfaces.org/rich" xmlns:a4j="http://richfaces.org/a4j"
+        xmlns:my="http://java.sun.com/jsf/composite/components/book" xmlns:h="http://xmlns.jcp.org/jsf/html"
+        xmlns:f="http://java.sun.com/jsf/core"
+        >
+    <rich:popupPanel header="#{bundle.CreateBooksTitle}" id="createPane" domElementAttachment="parent" width="500"
+                     height="300" onmaskclick="#{rich:component('createPane')}.hide()">
+        <h:form>
+            <my:form book="#{createdBook}"/>
+            <h:panelGrid columns="1">
+                <h:outputText value="Authors:"></h:outputText>
+                <rich:dataTable value="#{createdBook.authors}" var="author" iterationStatusVar="it"
+                                id="authorTable" rows="5" rendered="#{not empty createdBook.authors}">
+                    <rich:column>
+                        <f:facet name="header">#</f:facet>
+                        #{it.index}
+                    </rich:column>
+                    <rich:column>
+                        <f:facet name="header">First name</f:facet>
+                        <h:outputText value="#{author.firstName}"/>
+                    </rich:column>
+                    <rich:column>
+                        <f:facet name="header">Last name</f:facet>
+                        <h:outputText value="#{author.lastName}"/>
+                    </rich:column>
+                    <rich:column>
+                        <a4j:commandLink styleClass="no-decor" execute="@this" render="@none"
+                                         oncomplete="#{rich:component('confirmPane')}.show()">
+                            Delete
+                            <f:setPropertyActionListener value="#{author}" target="#{bookController.reference}"/>
+                        </a4j:commandLink>
+                    </rich:column>
+                </rich:dataTable>
+                <br/>
+                <h:outputText value="#{bundle.AddAuthor}"/>
+                <rich:inplaceSelect editEvent="dblclick" id="inplaceSelect" showControls="true" saveOnSelect="false"
+                                    saveOnBlur="false" defaultLabel="Double click to add author"
+                                    valueChangeListener="#{bookController.valueChanged}">
+                    <f:selectItems value="#{authors}" var="author" itemValue="#{author.id}"
+                                   itemLabel="#{author.firstName} #{author.lastName}"/>
+                </rich:inplaceSelect>
+
+            </h:panelGrid>
+            <rich:messages infoClass="valid" warnClass="warning"
+                           globalOnly="true" showSummary="true"/>
+            <a4j:commandButton value="Save" action="#{bookController.save}" render="bookDataPanel" execute="createPane"
+                               oncomplete="if (#{facesContext.maximumSeverity==null}) {#{rich:component('createPane')}.hide();}"/>
+
+            <a4j:commandButton value="Cancel" onclick="#{rich:component('createPane')}.hide(); return false;"/>
+        </h:form>
+    </rich:popupPanel>
+</ui:composition>

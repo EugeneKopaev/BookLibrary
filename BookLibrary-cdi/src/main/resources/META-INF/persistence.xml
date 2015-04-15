@@ -4,6 +4,10 @@
     <persistence-unit name="bookstore">
         <!--<provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>-->
         <jta-data-source>java:/jdbc/bookstore-ds</jta-data-source>
+        <class>org.booklibrary.app.persistence.entity.AbstractBaseEntity</class>
+        <class>org.booklibrary.app.persistence.entity.Author</class>
+        <class>org.booklibrary.app.persistence.entity.Book</class>
+        <class>org.booklibrary.app.persistence.entity.Review</class>
         <properties>
             <property name="hibernate.dialect"
                       value="org.hibernate.dialect.MySQL5Dialect"/>
@@ -11,8 +15,8 @@
             <property name="hibernate.show_sql" value="true" />
             <property name="hibernate.format_sql" value="true" />
             <property name="hibernate.use_sql_comments" value="true" />
+            <property name="hibernate.enable_lazy_load_no_trans" value="true" />
         </properties>
-
     </persistence-unit>
 
 </persistence>

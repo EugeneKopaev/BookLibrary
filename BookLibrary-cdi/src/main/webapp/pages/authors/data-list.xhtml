@@ -1,0 +1,98 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:a4j="http://richfaces.org/a4j"
+      xmlns:rich="http://richfaces.org/rich"
+        >
+
+<ui:composition template="/templates/template.xhtml">
+    <ui:define name="title">#{bundle.Authors}</ui:define>
+    <ui:define name="body">
+        <h:form id="form">
+            <h:outputText escape="false" value="#{bundle.ListAuthorsEmpty}" rendered="#{authors == null}"/>
+            <rich:panel id="authorDataPanel">
+                <br/>
+                <h:panelGrid columns="2">
+                    <a4j:commandLink styleClass="no-decor" execute="@this"
+                                     oncomplete="#{rich:component('createPane')}.show()">
+                        Add
+                    </a4j:commandLink>
+                    &nbsp;&nbsp;
+                    <a4j:commandLink styleClass="no-decor" execute="@this" render="@none"
+                                     oncomplete="#{rich:component('confirmPane')}.show()">
+                        Delete
+                    </a4j:commandLink>
+                </h:panelGrid>
+                <br/>
+                <rich:dataTable value="#{authors}" var="authorEntry" iterationStatusVar="it" id="table" rows="7"
+                                style="width: 60%;height: 70%" rendered="#{not empty authors}">
+                    <rich:column>
+                        <f:facet name="header">
+                            <h:selectBooleanCheckbox id="globalSelector" onclick="
+                            formEl = document.getElementById('form');
+                            for(i = 0; i != formEl.elements.length; ++i) {
+                                if(formEl.elements[i].id.indexOf(':selectItemCheck') &gt;= 0) {
+                                    formEl.elements[i].checked = this.checked;
+                                    RichFaces.ajax(
+                                        formEl.elements[i],
+                                        event,{ 'parameters':{'javax.faces.behavior.event':'change'} ,
+                                        'sourceId':formEl.elements[i].id});
+                                }
+                            } "/>
+                        </f:facet>
+                        <h:selectBooleanCheckbox id="selectItemCheck"
+                                                 value="#{authorController.checkedItems[authorEntry.id]}"
+                                                 onclick="if(this.checked == false) #{rich:element('globalSelector')}.checked = false;">
+                            <a4j:ajax event="change"/>
+                        </h:selectBooleanCheckbox>
+                    </rich:column>
+                    <rich:column>
+                        <f:facet name="header">First name</f:facet>
+                        <h:outputText value="#{authorEntry.firstName}"/>
+                    </rich:column>
+                    <rich:column>
+                        <f:facet name="header">Last Name</f:facet>
+                        <h:outputText value="#{authorEntry.lastName}"/>
+                    </rich:column>
+                    <rich:column>
+                        <f:facet name="header">Created</f:facet>
+                        <h:outputText value="#{authorEntry.created}" converter="javax.faces.DateTime"/>
+                    </rich:column>
+                    <rich:column>
+                        <h:link value="Details"
+                                outcome="/pages/authors/details?faces-redirect=true;includeViewParams=true;">
+                            <f:param name="Id" value="#{authorEntry.id}"/>
+                        </h:link>
+
+                        <a4j:commandLink styleClass="no-decor" render="editPane" execute="@this"
+                                         oncomplete="#{rich:component('editPane')}.show()">
+                            Edit
+                            <f:setPropertyActionListener target="#{authorController.managedAuthor}"
+                                                         value="#{authorEntry}"/>
+                        </a4j:commandLink>
+                    </rich:column>
+                    <f:facet name="footer">
+                        <rich:dataScroller page="#{authorController.page}" fastControls="auto"
+                                           oncomplete="#{rich:element('globalSelector')}.checked = false;"/>
+                    </f:facet>
+                </rich:dataTable>
+            </rich:panel>
+
+            <rich:popupPanel id="confirmPane" autosized="true" modal="true"
+                             onmaskclick="#{rich:component('confirmPane')}.hide()">
+                Are you sure you want to delete the row?
+                <a4j:commandButton value="Cancel" onclick="#{rich:component('confirmPane')}.hide(); return false;"/>
+                <a4j:commandButton value="Delete" onclick="removeAuthor(); return false;"/>
+            </rich:popupPanel>
+
+            <a4j:jsFunction name="removeAuthor" action="#{authorController.removeSelected}" render="authorDataPanel"
+                            execute="@this"
+                            oncomplete="#{rich:component('infoPane')}.show();#{rich:component('confirmPane')}.hide();"/>
+
+            <ui:include src="edit-panel.xhtml"/>
+            <ui:include src="../info-panel.xhtml"/>
+            <ui:include src="create-panel.xhtml"/>
+        </h:form>
+    </ui:define>
+</ui:composition>
+</html>

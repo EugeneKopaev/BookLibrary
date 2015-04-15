@@ -3,8 +3,9 @@ package org.booklibrary.app.persistence.entity;
 import com.google.common.base.Objects;
 
 import javax.persistence.*;
+import javax.validation.constraints.Size;
+import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 @Entity
@@ -12,13 +13,24 @@ import java.util.List;
         @UniqueConstraint(columnNames = {"FIRST_NAME", "LAST_NAME"})
 })
 @NamedQueries({
-        @NamedQuery(name = "Author.findByFirstName", query = "SELECT a FROM Author a WHERE a.firstName = :firstName")
+        @NamedQuery(name = "Author.findByFirstName",
+                query = "SELECT a FROM Author a WHERE a.firstName = :firstName"),
+        @NamedQuery(name = "Author.findByFirstAndLastName",
+                query = "SELECT a FROM Author a WHERE a.firstName = :firstName AND a.lastName = :lastName"),
+        @NamedQuery(name = "Author.findByBookAvgRating",
+                query = "SELECT a FROM Author a JOIN a.books b WHERE b.avgRating = :avgRating")
 })
-public class Author extends AbstractBaseEntity {
+public class Author extends AbstractBaseEntity
+        implements Serializable {
 
+    private static final int MIN_NAME_SIZE = 3;
+    private static final int MAX_NAME_SIZE = 20;
+
+    @Size(min = MIN_NAME_SIZE, max = MAX_NAME_SIZE)
     @Column(name = "FIRST_NAME", nullable = false)
     private String firstName;
 
+    @Size(min = MIN_NAME_SIZE, max = MAX_NAME_SIZE)
     @Column(name = "LAST_NAME", nullable = false)
     private String lastName;
 
@@ -45,7 +57,7 @@ public class Author extends AbstractBaseEntity {
     }
 
     public List<Book> getBooks() {
-        return Collections.unmodifiableList(this.books);
+        return this.books;
     }
 
     public void addBooks(Book book) {

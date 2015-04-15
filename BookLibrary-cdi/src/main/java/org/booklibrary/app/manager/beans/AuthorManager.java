@@ -1,24 +1,30 @@
 package org.booklibrary.app.manager.beans;
 
+import org.booklibrary.app.exceptions.DuplicateResourceException;
 import org.booklibrary.app.manager.AuthorManagerLocal;
-import org.booklibrary.app.manager.exceptions.EntityPersistenceException;
 import org.booklibrary.app.persistence.entity.Author;
-import org.booklibrary.app.persistence.id.EntityIdentifier;
 import org.booklibrary.app.persistence.session.AuthorFacadeLocal;
 import org.booklibrary.app.persistence.session.AuthorHomeLocal;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
+import javax.inject.Inject;
 import java.util.List;
 
+/**
+ * Author Manager implementation.
+ * This bean encapsulate business logic.
+ *
+ * @see org.booklibrary.app.manager.AuthorManagerLocal
+ */
 @Stateless
-public class AuthorManager implements AuthorManagerLocal{
+public class AuthorManager implements AuthorManagerLocal {
 
-    private final transient Logger LOG = LoggerFactory.getLogger(getClass());
+    @Inject
+    private Logger logger;
 
     @EJB
     private AuthorFacadeLocal authorFacade;
@@ -26,72 +32,81 @@ public class AuthorManager implements AuthorManagerLocal{
     @EJB
     private AuthorHomeLocal authorHome;
 
-    @Override
+    public Author save(Author obj) {
+        throw new UnsupportedOperationException("use saveUnique method instead");
+    }
+
     @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
-    public Author save(Author obj) throws EntityPersistenceException{
-
-        Author entity;
-        try {
-            entity = authorHome.save(obj);
-        } catch (Exception e) {
-            String errorMsg = "Failed to persist object: {}";
-            LOG.error(errorMsg, obj);
-            throw new EntityPersistenceException(errorMsg, e);
-        }
-        LOG.debug("Persist entity: {}", entity);
-        return entity;
+    public Author saveUnique(Author obj) throws DuplicateResourceException {
+        logger.debug("save invoked for object: {}", obj);
+        validateAuthor(obj);
+        return authorHome.save(obj);
     }
 
     @Override
-    public Author update(Author obj) throws EntityPersistenceException {
-        Author updated;
-        try {
-            updated = authorHome.update(obj);
-        } catch (Exception e) {
-            String errorMsg = "Failed to update object: {}";
-            LOG.error(errorMsg, obj);
-            throw new EntityPersistenceException(errorMsg, e);
-        }
-        LOG.debug("Update entity: {}", updated);
-        return updated;
+    public List<Author> findAllByBookAvgRating(Double rate) {
+        logger.debug("find by book avg rating invoked");
+        return authorFacade.findByBookAvgRating(rate);
     }
 
-    @Override
-    public void remove(EntityIdentifier key) throws EntityPersistenceException {
-        try {
-            authorHome.remove(key);
-        } catch (Exception e) {
-            String errorMsg = "Failed to remove object with pk: {}";
-            LOG.error(errorMsg, key);
-            throw new EntityPersistenceException(errorMsg, e);
-        }
-        LOG.debug("Remove entity with pk: {}", key);
+    public Author update(Author obj) {
+        logger.debug("update invoked for obj: {}", obj);
+        return authorHome.update(obj);
     }
 
-    @Override
-    public void remove(String uuid) throws EntityPersistenceException{
-
+    public void removeByPk(String key) {
+        logger.debug("Remove called for entity with key: {}", key);
+        authorHome.removeByPk(key);
     }
 
-    @Override
-    public void removeAll() throws EntityPersistenceException{
-
+    public void removeByUuid(String uuid) {
+        removeByPk(uuid);
     }
 
-    @Override
-    public Author findByPk(EntityIdentifier key) {
-        return null;
+    public void removeList(List<String> keys) {
+        logger.debug("remove list invoked");
+        authorHome.removeList(keys);
     }
 
-    @Override
+    public void removeAll() {
+        logger.debug("Remove all invoked");
+        authorHome.removeAll();
+    }
+
+    public Author findByPk(String key) {
+        logger.debug("Find invoked for object with key: {}", key);
+        return authorFacade.findByPk(key);
+    }
+
     public Author findByUuid(String uuid) {
-
+        logger.debug("Find invoked for object with key: {}", uuid);
         return authorFacade.findByUuid(uuid);
     }
 
-    @Override
     public List<Author> findAll() {
-
+        logger.debug("Find all called");
         return authorFacade.findAll();
+    }
+
+    public List<Author> findRange(int start, int size) {
+        logger.debug("Find segment called");
+        return authorFacade.findRange(start, size);
+    }
+
+    public int countEntity() {
+        logger.debug("Count all authors");
+        int count = authorFacade.countEntity();
+        logger.debug("result: " + count);
+        return count;
+    }
+
+    private void validateAuthor(Author author) throws DuplicateResourceException {
+        if (checkAuthorAlreadyExists(author.getFirstName(), author.getLastName())) {
+            throw new DuplicateResourceException("Author already exist");
+        }
+    }
+    private boolean checkAuthorAlreadyExists(String firstName, String lastName) {
+        Author author = authorFacade.findByFirstAndLastName(firstName, lastName);
+        return author != null;
     }
 }
