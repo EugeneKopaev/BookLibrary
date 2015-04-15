@@ -45,7 +45,7 @@
             </h:panelGrid>
             <rich:messages infoClass="valid" warnClass="warning"
                            globalOnly="true" showSummary="true"/>
-            <a4j:commandButton value="Save" action="#{bookController.save}" render="table" execute="createPane"
+            <a4j:commandButton value="Save" action="#{bookController.save}" render="bookDataPanel" execute="createPane"
                                oncomplete="if (#{facesContext.maximumSeverity==null}) {#{rich:component('createPane')}.hide();}"/>
 
             <a4j:commandButton value="Cancel" onclick="#{rich:component('createPane')}.hide(); return false;"/>

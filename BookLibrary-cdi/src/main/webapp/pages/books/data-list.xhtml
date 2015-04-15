@@ -9,20 +9,6 @@
     <ui:define name="extraHeaderContent">
         <h:outputScript name="js/jquery-1.11.2.min.js"/>
         <h:outputScript name="js/jRate.js"/>
-        <h:outputScript>
-            $(document).ready(function () {
-                var that = this;
-                $(".jRate").each(function (k, v) {
-                    $(v).jRate({
-                        rating: $(v).data("rating"),
-                        readOnly: true,
-                        startColor: "cyan",
-                        endColor: "blue",
-                    });
-                });
-            });
-        </h:outputScript>
-
     </ui:define>
     <ui:define name="title">#{bundle.Books}</ui:define>
     <ui:define name="body">
@@ -38,6 +24,7 @@
             </a4j:region>
             <h:outputText escape="false" value="#{bundle.ListBooksEmpty}" rendered="#{books == null}"/>
             <rich:panel id="bookDataPanel">
+                <h:outputScript name="js/showRating.js" />
                 <br/>
                 <h:panelGrid columns="2">
                     <a4j:commandLink styleClass="no-decor" execute="@this"
@@ -97,7 +84,6 @@
                     </rich:column>
                     <rich:column>
                         <f:facet name="header">#{bundle.ViewReviewsLabel_rating}</f:facet>
-
                         <div class="jRate" data-rating="#{bookEntry.avgRating}"></div>
                     </rich:column>
                     <rich:column>

@@ -51,7 +51,7 @@
                 </rich:inplaceSelect>
             </h:panelGrid>
             <br/>
-            <a4j:commandButton value="Save" action="#{bookController.update}" render="table,inplaceSelect,bookDataPanel"
+            <a4j:commandButton value="Save" action="#{bookController.update}" render="bookDataPanel"
                                execute="editPane"
                                oncomplete="if (#{facesContext.maximumSeverity==null}) {#{rich:component('editPane')}.hide();}"/>
 

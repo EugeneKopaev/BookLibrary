@@ -29,7 +29,7 @@
             <my:form review="#{createdReview}" id="reviewDetails"/>
             <rich:messages infoClass="valid" warnClass="warning"
                            globalOnly="true" showSummary="true"/>
-            <a4j:commandButton value="Save" action="#{reviewController.save}" render="comments reviewDetails"
+            <a4j:commandButton value="Save" action="#{reviewController.save}" render="bookDataPanel"
                                execute="reviewCreatePane"
                                oncomplete="if (#{facesContext.maximumSeverity==null}) {#{rich:component('reviewCreatePane')}.hide();}">
 
