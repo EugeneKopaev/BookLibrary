@@ -20,7 +20,7 @@ public interface AuthorResource {
     /**
      * Find author by uuid in param request
      *
-     * @param uuid
+     * @param uuid Author id
      * @return Author dto
      */
     @AddLinks
@@ -32,10 +32,10 @@ public interface AuthorResource {
     /**
      * Find authors with paging query params
      *
-     * @param start  start position
-     * @param size   result list size
-     * @param uriInfo
-     * @return       List of authors dto with paging links
+     * @param start   start position
+     * @param size    result list size
+     * @param uriInfo uri info for adding links
+     * @return List of authors dto with paging links
      */
     @AddLinks
     @LinkResource(value = AuthorDto.class, rel = "list")
@@ -48,20 +48,20 @@ public interface AuthorResource {
     /**
      * Find books by author with paging query param
      *
-     * @param uuid   author id
-     * @param start  start position
-     * @param size   result list size
-     * @param uriInfo
-     * @return       List of books dto with paging links
+     * @param uuid    author id
+     * @param start   start position
+     * @param size    result list size
+     * @param uriInfo uri info for adding links
+     * @return List of books dto with paging links
      */
     @AddLinks
     @LinkResource(value = AuthorDto.class, rel = "books")
     @GET
     @Path("/{id}/books")
     public Response getBooksByAuthor(@PathParam("id") String uuid,
-                                              @QueryParam("start") @DefaultValue("0") int start,
-                                              @QueryParam("size") @DefaultValue("3") int size,
-                                              @Context UriInfo uriInfo);
+                                     @QueryParam("start") @DefaultValue("0") int start,
+                                     @QueryParam("size") @DefaultValue("3") int size,
+                                     @Context UriInfo uriInfo);
 
     /**
      * Save new Author in database
@@ -80,7 +80,7 @@ public interface AuthorResource {
     /**
      * Update existing Author in database
      *
-     * @param id Author id
+     * @param id  Author id
      * @param dto Author dto
      * @return updated resource
      */

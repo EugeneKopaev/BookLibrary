@@ -3,7 +3,6 @@ package org.booklibrary.app.persistence.session.beans;
 import org.booklibrary.app.persistence.entity.Author;
 import org.booklibrary.app.persistence.session.AuthorHomeLocal;
 import org.booklibrary.app.persistence.session.common.AbstractGenericEntityPersistence;
-import org.slf4j.Logger;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;

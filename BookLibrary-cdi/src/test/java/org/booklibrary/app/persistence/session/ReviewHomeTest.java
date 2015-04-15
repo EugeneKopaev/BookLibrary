@@ -1,7 +1,6 @@
 package org.booklibrary.app.persistence.session;
 
 import org.booklibrary.app.common.Resources;
-import org.booklibrary.app.persistence.entity.Author;
 import org.booklibrary.app.persistence.entity.Review;
 import org.booklibrary.app.persistence.id.IdGenerator;
 import org.jboss.arquillian.container.test.api.Deployment;
@@ -11,11 +10,8 @@ import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.asset.EmptyAsset;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
 import org.jboss.shrinkwrap.resolver.api.maven.Maven;
-import org.testng.Assert;
-import org.testng.annotations.Test;
 
 import javax.ejb.EJB;
-import javax.ejb.EJBTransactionRolledbackException;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import java.io.File;

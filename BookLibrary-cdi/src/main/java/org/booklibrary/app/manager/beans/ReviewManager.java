@@ -5,12 +5,13 @@ import org.booklibrary.app.persistence.entity.Review;
 import org.booklibrary.app.persistence.session.ReviewFacadeLocal;
 import org.booklibrary.app.persistence.session.ReviewHomeLocal;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
-import javax.inject.Inject;
+import javax.inject.Named;
 import java.util.List;
 
 /**
@@ -19,11 +20,11 @@ import java.util.List;
  *
  * @see org.booklibrary.app.manager.BookManagerLocal
  */
+@Named
 @Stateless
 public class ReviewManager implements ReviewManagerLocal {
 
-    @Inject
-    private Logger logger;
+    private static final Logger LOG = LoggerFactory.getLogger(ReviewManager.class);
 
     @EJB
     private ReviewFacadeLocal reviewFacade;
@@ -33,17 +34,17 @@ public class ReviewManager implements ReviewManagerLocal {
 
     @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
     public Review save(Review obj) {
-        logger.debug("save invoked for object: {}", obj);
+        LOG.debug("save invoked for object: {}", obj);
         return reviewHome.save(obj);
     }
 
     public Review update(Review obj) {
-        logger.debug("update invoked for obj: {}", obj);
+        LOG.debug("update invoked for obj: {}", obj);
         return reviewHome.update(obj);
     }
 
     public void removeByPk(String key) {
-        logger.debug("Remove called for entity with key: {}", key);
+        LOG.debug("Remove called for entity with key: {}", key);
         reviewHome.removeByPk(key);
     }
 
@@ -52,45 +53,45 @@ public class ReviewManager implements ReviewManagerLocal {
     }
 
     public void removeList(List<String> keys) {
-        logger.debug("Remove list invoked");
+        LOG.debug("Remove list invoked");
         reviewHome.removeList(keys);
     }
 
     @Override
     public void removeAll() {
-        logger.debug("Remove all invoked");
+        LOG.debug("Remove all invoked");
         reviewHome.removeAll();
     }
 
     @Override
     public Review findByPk(String key) {
-        logger.debug("Find invoked for object with key: {}", key);
+        LOG.debug("Find invoked for object with key: {}", key);
         return reviewFacade.findByPk(key);
     }
 
     @Override
     public Review findByUuid(String uuid) {
-        logger.debug("Find invoked for object with key: {}", uuid);
+        LOG.debug("Find invoked for object with key: {}", uuid);
         return reviewFacade.findByUuid(uuid);
     }
 
     @Override
     public List<Review> findAll() {
-        logger.debug("Find all called");
+        LOG.debug("Find all called");
         return reviewFacade.findAll();
     }
 
     @Override
     public List<Review> findRange(int start, int size) {
-        logger.debug("Find segment called");
+        LOG.debug("Find segment called");
         return reviewFacade.findRange(start, size);
     }
 
     @Override
     public int countEntity() {
-        logger.debug("Count all reviews");
+        LOG.debug("Count all reviews");
         int count = reviewFacade.countEntity();
-        logger.debug("result: " + count);
+        LOG.debug("result: " + count);
         return count;
     }
 }

@@ -18,15 +18,19 @@ import java.util.Set;
  */
 public class ErrorResponseBuilder {
 
+    private ErrorResponseBuilder() {
+
+    }
+
     public static Response.ResponseBuilder buildErrorResponse(Exception e) {
         Throwable t = Throwables.getRootCause(e);
         if (t instanceof DuplicateResourceException) {
             return createErrorMessageResponse(
-                    (t.getMessage()), Response.Status.CONFLICT);
+                    t.getMessage(), Response.Status.CONFLICT);
         }
         if (t instanceof ConstraintViolationException) {
-            ConstraintViolationException violationException = (ConstraintViolationException) t;
-            return createViolationResponse(violationException.getConstraintViolations());
+            return createViolationResponse(
+                    ((ConstraintViolationException) t).getConstraintViolations());
         }
         return Response.status(Response.Status.INTERNAL_SERVER_ERROR);
     }

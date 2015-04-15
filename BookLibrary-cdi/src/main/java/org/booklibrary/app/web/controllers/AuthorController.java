@@ -8,9 +8,7 @@ import org.booklibrary.app.web.util.FacesMessageUtils;
 import javax.ejb.EJB;
 import javax.ejb.EJBException;
 import javax.enterprise.inject.Produces;
-import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
-import javax.inject.Inject;
 import javax.inject.Named;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -25,9 +23,6 @@ public class AuthorController implements Serializable {
     @EJB
     private AuthorManagerLocal authorManager;
 
-    @Inject
-    private FacesContext facesContext;
-
     private String currentAuthorId;
     private Author managedAuthor = null;
     private Author createdAuthor = new Author();
@@ -35,6 +30,9 @@ public class AuthorController implements Serializable {
     private Map<Object, Object> checkedItems = new HashMap();
     private int page = 1;
 
+    /**
+     * Save new author
+     */
     public void save() {
         if (createdAuthor == null) {
             return;
@@ -49,6 +47,9 @@ public class AuthorController implements Serializable {
         }
     }
 
+    /**
+     * Update managed author
+     */
     public void update() {
         if (managedAuthor == null) {
             return;
@@ -60,6 +61,9 @@ public class AuthorController implements Serializable {
         }
     }
 
+    /**
+     * Remove managed author
+     */
     public void remove() {
         try {
             authorManager.removeByPk(managedAuthor.getId());
@@ -69,6 +73,9 @@ public class AuthorController implements Serializable {
         }
     }
 
+    /**
+     * Remove selected authors
+     */
     public void removeSelected() {
         if (!checkedItems.isEmpty()) {
             List<String> listToDelete = new ArrayList<>();
@@ -92,6 +99,7 @@ public class AuthorController implements Serializable {
         }
     }
 
+
     @Produces
     @Named
     public Author getManagedAuthor() {
@@ -105,7 +113,8 @@ public class AuthorController implements Serializable {
     @Produces
     @Named
     public List<Author> getAuthors() {
-        return this.authors = authorManager.findAll();
+        this.authors = authorManager.findAll();
+        return this.authors;
     }
 
     @Produces

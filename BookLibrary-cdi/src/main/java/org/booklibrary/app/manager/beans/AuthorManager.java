@@ -6,12 +6,13 @@ import org.booklibrary.app.persistence.entity.Author;
 import org.booklibrary.app.persistence.session.AuthorFacadeLocal;
 import org.booklibrary.app.persistence.session.AuthorHomeLocal;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
-import javax.inject.Inject;
+import javax.inject.Named;
 import java.util.List;
 
 /**
@@ -20,11 +21,11 @@ import java.util.List;
  *
  * @see org.booklibrary.app.manager.AuthorManagerLocal
  */
+@Named
 @Stateless
 public class AuthorManager implements AuthorManagerLocal {
 
-    @Inject
-    private Logger logger;
+    private static final Logger LOG = LoggerFactory.getLogger(AuthorManager.class);
 
     @EJB
     private AuthorFacadeLocal authorFacade;
@@ -33,29 +34,29 @@ public class AuthorManager implements AuthorManagerLocal {
     private AuthorHomeLocal authorHome;
 
     public Author save(Author obj) {
-        throw new UnsupportedOperationException("use saveUnique method instead");
+        throw new UnsupportedOperationException("Use saveUnique method instead");
     }
 
     @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
     public Author saveUnique(Author obj) throws DuplicateResourceException {
-        logger.debug("save invoked for object: {}", obj);
+        LOG.debug("save invoked for object: {}", obj);
         validateAuthor(obj);
         return authorHome.save(obj);
     }
 
     @Override
     public List<Author> findAllByBookAvgRating(Double rate) {
-        logger.debug("find by book avg rating invoked");
+        LOG.debug("find by book avg rating invoked");
         return authorFacade.findByBookAvgRating(rate);
     }
 
     public Author update(Author obj) {
-        logger.debug("update invoked for obj: {}", obj);
+        LOG.debug("update invoked for obj: {}", obj);
         return authorHome.update(obj);
     }
 
     public void removeByPk(String key) {
-        logger.debug("Remove called for entity with key: {}", key);
+        LOG.debug("Remove called for entity with key: {}", key);
         authorHome.removeByPk(key);
     }
 
@@ -64,39 +65,39 @@ public class AuthorManager implements AuthorManagerLocal {
     }
 
     public void removeList(List<String> keys) {
-        logger.debug("remove list invoked");
+        LOG.debug("remove list invoked");
         authorHome.removeList(keys);
     }
 
     public void removeAll() {
-        logger.debug("Remove all invoked");
+        LOG.debug("Remove all invoked");
         authorHome.removeAll();
     }
 
     public Author findByPk(String key) {
-        logger.debug("Find invoked for object with key: {}", key);
+        LOG.debug("Find invoked for object with key: {}", key);
         return authorFacade.findByPk(key);
     }
 
     public Author findByUuid(String uuid) {
-        logger.debug("Find invoked for object with key: {}", uuid);
+        LOG.debug("Find invoked for object with key: {}", uuid);
         return authorFacade.findByUuid(uuid);
     }
 
     public List<Author> findAll() {
-        logger.debug("Find all called");
+        LOG.debug("Find all called");
         return authorFacade.findAll();
     }
 
     public List<Author> findRange(int start, int size) {
-        logger.debug("Find segment called");
+        LOG.debug("Find segment called");
         return authorFacade.findRange(start, size);
     }
 
     public int countEntity() {
-        logger.debug("Count all authors");
+        LOG.debug("Count all authors");
         int count = authorFacade.countEntity();
-        logger.debug("result: " + count);
+        LOG.debug("result: " + count);
         return count;
     }
 
@@ -105,6 +106,7 @@ public class AuthorManager implements AuthorManagerLocal {
             throw new DuplicateResourceException("Author already exist");
         }
     }
+
     private boolean checkAuthorAlreadyExists(String firstName, String lastName) {
         Author author = authorFacade.findByFirstAndLastName(firstName, lastName);
         return author != null;

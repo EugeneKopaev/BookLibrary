@@ -3,7 +3,6 @@ package org.booklibrary.app.rest.dto.adapters;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
-
 @XmlRootElement(name = "constraint")
 public class MapEntry {
 
@@ -22,6 +21,7 @@ public class MapEntry {
     public String getKey() {
         return key;
     }
+
     @XmlElement(name = "violation")
     public String getValue() {
         return value;

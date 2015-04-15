@@ -17,16 +17,16 @@ public interface AuthorFacadeLocal extends GenericFacadeLocal<Author, String> {
     /**
      * Find Author in the database by first and last name.
      *
-     * @param firstName
-     * @param lastName
-     * @return Author entity
+     * @param firstName Author first name
+     * @param lastName  Author last name
+     * @return Author   Author entity
      */
     Author findByFirstAndLastName(String firstName, String lastName);
 
     /**
      * Find objects in the database by book rating.
      *
-     * @param rate
+     * @param rate rating
      * @return List of Authors
      */
     List<Author> findByBookAvgRating(Double rate);
