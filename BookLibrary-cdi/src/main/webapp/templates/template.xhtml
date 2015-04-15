@@ -5,6 +5,12 @@
 <h:head>
     <title><ui:insert name="title">RichFaces Application</ui:insert></title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <h:outputStylesheet>
+        body {
+            text-align: center !important;
+            margin: auto !important;
+        }
+    </h:outputStylesheet>
 </h:head>
 
 <h:body>
@@ -14,5 +20,6 @@
     <p>
         <ui:insert name="body">Default content</ui:insert>
     </p>
+    <ui:insert name="extraHeaderContent" />
 </h:body>
 </html>

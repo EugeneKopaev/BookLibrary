@@ -34,14 +34,4 @@ public final class IdGenerator {
 		bb.putLong(uuid.getLeastSignificantBits());
 		return bb.array();
 	}
-
-//	public static void main(String[] args) {
-//		UUID uuid = UUID.randomUUID();
-//		String arr = Hex.encodeHexString(toByteArray(uuid));
-//		String a = Base64.encodeBase64String(toByteArray(uuid));
-//		System.out.println(a);
-//		EntityIdentifier identifier = new EntityIdentifier();
-//		String key = identifier.toString();
-//		System.out.println(key);
-//	}
 }

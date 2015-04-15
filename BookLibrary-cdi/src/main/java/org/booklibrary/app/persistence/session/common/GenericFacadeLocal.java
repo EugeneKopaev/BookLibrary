@@ -39,7 +39,7 @@ public interface GenericFacadeLocal<T extends AbstractBaseEntity, K> {
     List<T> findAll();
 
     /**
-     * Find limited segment of objects.
+     * Find range of objects.
      *
      * @param start first result
      * @param size max size
@@ -49,7 +49,6 @@ public interface GenericFacadeLocal<T extends AbstractBaseEntity, K> {
 
     /**
      * Count objects in database
-     * 
      */
     int countEntity();
 

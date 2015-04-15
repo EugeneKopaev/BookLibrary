@@ -16,7 +16,9 @@ import java.util.List;
         @NamedQuery(name = "Author.findByFirstName",
                 query = "SELECT a FROM Author a WHERE a.firstName = :firstName"),
         @NamedQuery(name = "Author.findByFirstAndLastName",
-                query = "SELECT a FROM Author a WHERE a.firstName = :firstName AND a.lastName = :lastName")
+                query = "SELECT a FROM Author a WHERE a.firstName = :firstName AND a.lastName = :lastName"),
+        @NamedQuery(name = "Author.findByBookAvgRating",
+                query = "SELECT a FROM Author a JOIN a.books b WHERE b.avgRating = :avgRating")
 })
 public class Author extends AbstractBaseEntity
         implements Serializable {

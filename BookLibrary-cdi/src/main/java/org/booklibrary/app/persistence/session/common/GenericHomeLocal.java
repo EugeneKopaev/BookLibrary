@@ -4,6 +4,7 @@ import org.booklibrary.app.persistence.entity.AbstractBaseEntity;
 
 import javax.ejb.Local;
 import javax.persistence.PersistenceException;
+import java.util.List;
 
 /**
  * Generic interface for all entity home interfaces.
@@ -48,6 +49,13 @@ public interface GenericHomeLocal<T extends AbstractBaseEntity, K> {
      * @param uuid
      */
     void removeByUuid(String uuid);
+
+    /**
+     * Removes entities from database
+     *
+     * @param List of uuid
+     */
+    int removeList(List<K> keys);
 
     /**
      * Removes all entities from database.

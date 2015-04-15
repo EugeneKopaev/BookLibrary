@@ -34,26 +34,26 @@ public class ReviewManager implements ReviewManagerLocal {
     @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
     public Review save(Review obj) {
         logger.debug("save invoked for object: {}", obj);
-        Review entity = reviewHome.save(obj);
-        return entity;
+        return reviewHome.save(obj);
     }
 
-    @Override
     public Review update(Review obj) {
         logger.debug("update invoked for obj: {}", obj);
-        Review updated = reviewHome.update(obj);
-        return updated;
+        return reviewHome.update(obj);
     }
 
-    @Override
     public void removeByPk(String key) {
         logger.debug("Remove called for entity with key: {}", key);
         reviewHome.removeByPk(key);
     }
 
-    @Override
     public void removeByUuid(String uuid) {
         removeByPk(uuid);
+    }
+
+    public void removeList(List<String> keys) {
+        logger.debug("Remove list invoked");
+        reviewHome.removeList(keys);
     }
 
     @Override
@@ -77,15 +77,13 @@ public class ReviewManager implements ReviewManagerLocal {
     @Override
     public List<Review> findAll() {
         logger.debug("Find all called");
-        List<Review> reviews = reviewFacade.findAll();
-        return reviews;
+        return reviewFacade.findAll();
     }
 
     @Override
     public List<Review> findRange(int start, int size) {
         logger.debug("Find segment called");
-        List<Review> reviews = reviewFacade.findRange(start, size);
-        return reviews;
+        return reviewFacade.findRange(start, size);
     }
 
     @Override

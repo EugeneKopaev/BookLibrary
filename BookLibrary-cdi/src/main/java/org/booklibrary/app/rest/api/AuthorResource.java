@@ -17,12 +17,26 @@ import javax.ws.rs.core.UriInfo;
 @Produces({"application/xml", "application/json"})
 public interface AuthorResource {
 
+    /**
+     * Find author by uuid in param request
+     *
+     * @param uuid
+     * @return Author dto
+     */
     @AddLinks
     @LinkResource(AuthorDto.class)
     @GET
     @Path("/{id}")
     public Response getAuthor(@PathParam("id") String uuid);
 
+    /**
+     * Find authors with paging query params
+     *
+     * @param start  start position
+     * @param size   result list size
+     * @param uriInfo
+     * @return       List of authors dto with paging links
+     */
     @AddLinks
     @LinkResource(value = AuthorDto.class, rel = "list")
     @GET
@@ -31,6 +45,15 @@ public interface AuthorResource {
                                @QueryParam("size") @DefaultValue("3") int size,
                                @Context UriInfo uriInfo);
 
+    /**
+     * Find books by author with paging query param
+     *
+     * @param uuid   author id
+     * @param start  start position
+     * @param size   result list size
+     * @param uriInfo
+     * @return       List of books dto with paging links
+     */
     @AddLinks
     @LinkResource(value = AuthorDto.class, rel = "books")
     @GET
@@ -39,6 +62,13 @@ public interface AuthorResource {
                                               @QueryParam("start") @DefaultValue("0") int start,
                                               @QueryParam("size") @DefaultValue("3") int size,
                                               @Context UriInfo uriInfo);
+
+    /**
+     * Save new Author in database
+     *
+     * @param dto Author dto
+     * @return created resource
+     */
     @AddLinks
     @LinkResources({
             @LinkResource(AuthorDto.class),
@@ -47,17 +77,35 @@ public interface AuthorResource {
     @POST
     public Response save(AuthorDto dto);
 
+    /**
+     * Update existing Author in database
+     *
+     * @param id Author id
+     * @param dto Author dto
+     * @return updated resource
+     */
     @AddLinks
     @LinkResource(AuthorDto.class)
     @PUT
     @Path("/{id}")
     public Response update(@PathParam("id") String id, AuthorDto dto);
 
+    /**
+     * Remove Author from database
+     *
+     * @param uuid Author id
+     * @return status response
+     */
     @LinkResource(AuthorDto.class)
     @DELETE
     @Path("/{id}")
     public Response delete(@PathParam("id") String uuid);
 
+    /**
+     * Remove all Author from database
+     *
+     * @return status response
+     */
     @LinkResource(AuthorDtoCollection.class)
     @DELETE
     public Response deleteAll();

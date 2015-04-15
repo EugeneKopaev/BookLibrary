@@ -15,6 +15,10 @@
 <!-- IMPLEMENTATION -->
 <composite:implementation>
     <h:panelGrid columns="3" cellspacing="10px">
+
+        <h:outputText value="#{bundle.ViewReviewsLabel_rate}" />
+        <div id="ratingRate" data-rating="#{cc.attrs.review.rating}"></div>
+        <h:inputHidden value="#{cc.attrs.review.rating}" id="rating" />
         <h:outputText value="#{bundle.ViewReviewsLabel_commenterName}"/>
         <h:inputText value="#{cc.attrs.review.commenterName}" id="comenterName">
             <rich:validator/>

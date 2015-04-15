@@ -40,14 +40,18 @@ public class AuthorManager implements AuthorManagerLocal {
     public Author saveUnique(Author obj) throws DuplicateResourceException {
         logger.debug("save invoked for object: {}", obj);
         validateAuthor(obj);
-        Author entity = authorHome.save(obj);
-        return entity;
+        return authorHome.save(obj);
+    }
+
+    @Override
+    public List<Author> findAllByBookAvgRating(Double rate) {
+        logger.debug("find by book avg rating invoked");
+        return authorFacade.findByBookAvgRating(rate);
     }
 
     public Author update(Author obj) {
         logger.debug("update invoked for obj: {}", obj);
-        Author updated = authorHome.update(obj);
-        return updated;
+        return authorHome.update(obj);
     }
 
     public void removeByPk(String key) {
@@ -57,6 +61,11 @@ public class AuthorManager implements AuthorManagerLocal {
 
     public void removeByUuid(String uuid) {
         removeByPk(uuid);
+    }
+
+    public void removeList(List<String> keys) {
+        logger.debug("remove list invoked");
+        authorHome.removeList(keys);
     }
 
     public void removeAll() {
@@ -76,14 +85,12 @@ public class AuthorManager implements AuthorManagerLocal {
 
     public List<Author> findAll() {
         logger.debug("Find all called");
-        List<Author> authors = authorFacade.findAll();
-        return authors;
+        return authorFacade.findAll();
     }
 
     public List<Author> findRange(int start, int size) {
         logger.debug("Find segment called");
-        List<Author> authors = authorFacade.findRange(start, size);
-        return authors;
+        return authorFacade.findRange(start, size);
     }
 
     public int countEntity() {

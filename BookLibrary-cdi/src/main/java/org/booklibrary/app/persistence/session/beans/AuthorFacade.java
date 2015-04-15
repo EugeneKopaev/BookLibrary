@@ -25,9 +25,6 @@ public class AuthorFacade extends AbstractGenericEntityPersistence<Author, Strin
     @Inject
     private EntityManager entityManager;
 
-    @Inject
-    private Logger logger;
-
     public AuthorFacade() {
     }
 
@@ -45,12 +42,15 @@ public class AuthorFacade extends AbstractGenericEntityPersistence<Author, Strin
     }
 
     @Override
+    public List<Author> findByBookAvgRating(Double rate) {
+        return entityManager.createNamedQuery("Author.findByBookAvgRating", Author.class)
+                .setParameter("avgRating", rate)
+                .getResultList();
+    }
+
+    @Override
     public EntityManager getEntityManager() {
         return this.entityManager;
     }
 
-    @Override
-    public Logger getLogger() {
-        return this.logger;
-    }
 }

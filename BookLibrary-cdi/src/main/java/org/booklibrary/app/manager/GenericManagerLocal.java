@@ -47,6 +47,13 @@ public interface GenericManagerLocal<T extends AbstractBaseEntity, K> {
     void removeByUuid(String uuid);
 
     /**
+     * Removes list of entities from database.
+     *
+     * @param List of uuid
+     */
+    void removeList(List<K> keys);
+
+    /**
      * Removes all entities from database.
      *
      */

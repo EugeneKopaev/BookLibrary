@@ -15,10 +15,27 @@
         <f:viewParam name="Id" value="#{bookController.currentBookId}"/>
         <f:event type="preRenderView" listener="#{bookController.loadData}"/>
     </f:metadata>
+    <ui:define name="extraHeaderContent">
+        <h:outputScript name="js/jquery-1.11.2.min.js"/>
+        <h:outputScript name="js/jRate.js"/>
+        <h:outputScript>
+            $(document).ready(function () {
+                var that = this;
+                console.log("i am here");
+                $("#rate").jRate({
+                    rating: $("#rate").data("rating"),
+                    readOnly: true,
+                    startColor: "cyan",
+                    endColor: "blue"
+                });
+            });
+        </h:outputScript>
+    </ui:define>
     <ui:define name="body">
         <h:panelGroup id="messagePanel" layout="block">
             <h:messages errorStyle="color: red" infoStyle="color: green" layout="table"/>
         </h:panelGroup>
+
         <h:form id="viewForm">
             <rich:panel id="bookDataPanel">
                 <book:details id="detailsView" book="#{managedBook}"/>
@@ -44,7 +61,7 @@
                     <h:outputLabel value="Comments for this book: "
                                    style="font-family: courier"/>
                     <h:outputLabel value="There are no comments yet"
-                                   rendered="#{empty managedBook.reviews}" />
+                                   rendered="#{empty managedBook.reviews}"/>
                     <br/>
                     <a4j:repeat value="#{managedBook.reviews}" var="review">
                         <review:view review="#{review}"/>

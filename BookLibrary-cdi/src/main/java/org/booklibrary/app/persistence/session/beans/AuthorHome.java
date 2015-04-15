@@ -15,16 +15,14 @@ import javax.persistence.EntityManager;
  *
  * @see org.booklibrary.app.persistence.session.AuthorHomeLocal
  */
-@Stateless
+
 @Named
+@Stateless
 public class AuthorHome extends AbstractGenericEntityPersistence<Author, String>
         implements AuthorHomeLocal {
 
     @Inject
     private EntityManager entityManager;
-
-    @Inject
-    private Logger logger;
 
     public AuthorHome() {
     }
@@ -34,8 +32,4 @@ public class AuthorHome extends AbstractGenericEntityPersistence<Author, String>
         return this.entityManager;
     }
 
-    @Override
-    public Logger getLogger() {
-        return this.logger;
-    }
 }

@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
+import javax.inject.Named;
 import javax.persistence.EntityManager;
 
 /**
@@ -14,15 +15,13 @@ import javax.persistence.EntityManager;
  *
  * @see org.booklibrary.app.persistence.session.BookHomeLocal
  */
+@Named
 @Stateless
 public class BookHome extends AbstractGenericEntityPersistence<Book, String>
         implements BookHomeLocal{
 
     @Inject
     private EntityManager entityManager;
-
-    @Inject
-    private Logger logger;
 
     public BookHome() {
     }
@@ -32,8 +31,4 @@ public class BookHome extends AbstractGenericEntityPersistence<Book, String>
         return this.entityManager;
     }
 
-    @Override
-    public Logger getLogger() {
-        return this.logger;
-    }
 }

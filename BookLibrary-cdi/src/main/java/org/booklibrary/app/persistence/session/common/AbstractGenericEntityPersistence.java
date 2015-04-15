@@ -2,9 +2,11 @@ package org.booklibrary.app.persistence.session.common;
 
 import org.booklibrary.app.persistence.entity.AbstractBaseEntity;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
+import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import java.lang.reflect.ParameterizedType;
@@ -21,10 +23,10 @@ public abstract class AbstractGenericEntityPersistence<T extends AbstractBaseEnt
 
     private Class<T> entityClass;
 
+    private final transient Logger LOG = LoggerFactory.getLogger(getClass());
+
     // will be injected in implementations
     public abstract EntityManager getEntityManager();
-
-    public abstract Logger getLogger();
 
     public AbstractGenericEntityPersistence() {
         this.entityClass = (Class<T>) ((ParameterizedType)
@@ -36,15 +38,15 @@ public abstract class AbstractGenericEntityPersistence<T extends AbstractBaseEnt
 
         if (key == null) {
             String errorMsg = "null argument passed to find";
-            getLogger().error(errorMsg);
+            LOG.error(errorMsg);
             throw new IllegalArgumentException(errorMsg);
         }
 
-        getLogger().debug("find invoked for entity of type [" + entityClass.getCanonicalName() +
+        LOG.debug("find invoked for entity of type [" + entityClass.getCanonicalName() +
                 "] with pk [" + key + "]");
 
         T entity = getEntityManager().find(entityClass, key);
-        getLogger().debug("result entity: {}", entity);
+        LOG.debug("result entity: {}", entity);
         return entity;
     }
 
@@ -52,7 +54,7 @@ public abstract class AbstractGenericEntityPersistence<T extends AbstractBaseEnt
     public T findByUuid(String uuid) {
         if (uuid == null) {
             String errorMsg = "null argument passed to find";
-            getLogger().error(errorMsg);
+            LOG.error(errorMsg);
             throw new IllegalArgumentException(errorMsg);
         }
         K key = (K) uuid;
@@ -61,20 +63,21 @@ public abstract class AbstractGenericEntityPersistence<T extends AbstractBaseEnt
 
     @Override
     public List<T> findAll() {
-        getLogger().debug("findAll invoked for entities of type: {}", entityClass.getCanonicalName());
+        LOG.debug("findAll invoked for entities of type: {}", entityClass.getCanonicalName());
         List<T> resultList = getEntityManager().createQuery("FROM "
                 + entityClass.getName()).getResultList();
-        getLogger().debug("result list size: {}", resultList.size());
+        LOG.debug("result list size: {}", resultList.size());
         return resultList;
     }
 
     public List<T> findRange(int start, int size) {
-        getLogger().debug("findRange invoked for entities of type: {}", entityClass.getCanonicalName());
+        LOG.debug("findRange invoked for entities of type: {}", entityClass.getCanonicalName());
         List<T> resultList = getEntityManager()
                 .createQuery("SELECT a FROM " + entityClass.getName() + " a")
                 .setFirstResult(start)
                 .setMaxResults(size)
                 .getResultList();
+        LOG.debug("result list size: {}", resultList.size());
         return resultList;
     }
 
@@ -88,20 +91,20 @@ public abstract class AbstractGenericEntityPersistence<T extends AbstractBaseEnt
 
     @Override
     public T save(T obj) {
-        getLogger().debug("persist invoked for object: {}", obj);
+        LOG.debug("persist invoked for object: {}", obj);
         getEntityManager().persist(obj);
         return obj;
     }
 
     @Override
     public T update(T obj) {
-        getLogger().debug("update invoked for object {}", obj);
+        LOG.debug("update invoked for object {}", obj);
         return getEntityManager().merge(obj);
     }
 
     @Override
     public void clear() {
-        getLogger().debug("clear invoked");
+        LOG.debug("clear invoked");
         getEntityManager().clear();
     }
 
@@ -109,10 +112,10 @@ public abstract class AbstractGenericEntityPersistence<T extends AbstractBaseEnt
     public void removeByPk(K key) {
         if (key == null) {
             String errorMsg = "null argument passed to removeSelected";
-            getLogger().error(errorMsg);
+            LOG.error(errorMsg);
             throw new IllegalArgumentException(errorMsg);
         }
-        getLogger().debug("removeSelected invoked for entity of type: [" +
+        LOG.debug("removeSelected invoked for entity of type: [" +
                 entityClass.getCanonicalName() + "] with key: [" + key + "]");
         Object existEntity = getEntityManager().getReference(entityClass, key);
         getEntityManager().remove(existEntity);
@@ -123,7 +126,7 @@ public abstract class AbstractGenericEntityPersistence<T extends AbstractBaseEnt
     public void removeByUuid(String uuid) {
         if (uuid == null) {
             String errorMsg = "null argument passed to removeSelected";
-            getLogger().error(errorMsg);
+            LOG.error(errorMsg);
             throw new IllegalArgumentException(errorMsg);
         }
         K key = (K) uuid;
@@ -131,16 +134,30 @@ public abstract class AbstractGenericEntityPersistence<T extends AbstractBaseEnt
 
     }
 
+    public int removeList(List<K> keys) {
+        if (keys == null) {
+            String errorMsg = "null argument passed to removeList";
+            LOG.error(errorMsg);
+            throw new IllegalArgumentException(errorMsg);
+        }
+
+        String entityName = entityClass.getSimpleName();
+        return getEntityManager()
+                .createQuery("DELETE FROM " + entityName + " e WHERE e.id IN (:keys)")
+                .setParameter("keys", keys)
+                .executeUpdate();
+    }
+
     @Override
     public int removeAll() {
-        getLogger().debug("removeAll invoked for entities of type: {}",
+        LOG.debug("removeAll invoked for entities of type: {}",
                 entityClass.getCanonicalName());
         String entityName = entityClass.getSimpleName();
         String deleteQuery = "DELETE FROM " + entityName;
         int resultSize = getEntityManager().createQuery(deleteQuery)
                 .executeUpdate();
         getEntityManager().flush();
-        getLogger().debug("removed row size: {}", resultSize);
+        LOG.debug("removed row size: {}", resultSize);
         return resultSize;
     }
 }

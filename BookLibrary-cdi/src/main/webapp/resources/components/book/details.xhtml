@@ -26,8 +26,9 @@
         <h:outputLabel value="#{bundle.View_CreatedDate}"/>
         <h:outputText value="#{cc.attrs.book.created}" converter="javax.faces.DateTime"
                       title="Created date"/>
-
-        <h:outputText value="Authors: "/>
+        <h:outputLabel value="#{bundle.ViewReviewsLabel_rating}" />
+        <div id="rate" data-rating="#{cc.attrs.book.avgRating}"></div>
+        <h:outputText value="#{bundle.Authors}"/>
         <rich:list value="#{cc.attrs.book.authors}" id="list" var="authorEntry" type="unordered">
             <h:link value="#{authorEntry.firstName} #{authorEntry.lastName}"
                     outcome="/pages/authors/details?faces-redirect=true;includeViewParams=true;">

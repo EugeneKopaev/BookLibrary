@@ -25,10 +25,7 @@ import java.util.Map;
 
 @Named
 @ViewScoped
-public class BookController implements Serializable{
-
-    @Inject
-    private Logger logger;
+public class BookController implements Serializable {
 
     @EJB
     private BookManagerLocal bookManager;
@@ -43,6 +40,7 @@ public class BookController implements Serializable{
     private Author reference = null;
     private Book createdBook = new Book();
     private List<Book> books = new ArrayList<>();
+    private List<Book> filteredBooks = null;
     private List<SelectItem> authorOptions = new ArrayList<>();
     private Map<Object, Object> checkedItems = new HashMap<>();
     private int page = 1;
@@ -92,7 +90,7 @@ public class BookController implements Serializable{
                     checkedItems.put(key, false);
                 }
             }
-            for (String entry: listToDelete) {
+            for (String entry : listToDelete) {
                 try {
                     bookManager.removeByPk(entry);
                     checkedItems.clear();
@@ -119,6 +117,7 @@ public class BookController implements Serializable{
             FacesMessageUtils.addErrorMessage(e, "Update unsuccessful");
         }
     }
+
     public void loadData() {
         managedBook = bookManager.findByUuid(getCurrentBookId());
     }
@@ -127,28 +126,34 @@ public class BookController implements Serializable{
         if (!authorOptions.isEmpty()) {
             authorOptions.clear();
         }
-        if (event.getNewValue()!= null) {
+        if (event.getNewValue() != null) {
             String pk = (String) event.getNewValue();
             authorOptions.add(new SelectItem(pk));
         }
     }
 
-    private void addSelectedAuthors(Book book) {
-        if (authorOptions.isEmpty()) {
-            return;
-        }
-        for (SelectItem item: authorOptions) {
-            Author author = authorManager.findByUuid((String) item.getValue());
-            if (!book.getAuthors().contains(author)) {
-                book.addAuthor(author);
+    public void filterBooksByAuthor(String filterValue) {
+        List<Author> authorList = authorManager.findAll();
+        if (authorList != null) {
+            this.filteredBooks = new ArrayList<>();
+            for (Author author: authorList) {
+                if (author.getLastName().toLowerCase().startsWith(filterValue.toLowerCase())) {
+                    this.filteredBooks.addAll(author.getBooks());
+                }
             }
         }
+
     }
+
 
     @Produces
     @Named
     public Book getManagedBook() {
         return managedBook;
+    }
+
+    public void setManagedBook(Book managedBook) {
+        this.managedBook = managedBook;
     }
 
     @Produces
@@ -161,6 +166,26 @@ public class BookController implements Serializable{
     @Named
     public Book getCreatedBook() {
         return createdBook;
+    }
+
+    public List<Book> getFilteredBooks() {
+        if (this.filteredBooks == null) {
+            return getBooks();
+        }
+        return this.filteredBooks;
+    }
+
+    public void setFilteredBooks(List<Book> filteredBooks) {
+        this.filteredBooks = filteredBooks;
+    }
+
+    public Double getBookRating(String bookId) {
+        return bookManager.countAvgBookRating(bookId);
+
+    }
+
+    public void setCreatedBook(Book createdBook) {
+        this.createdBook = createdBook;
     }
 
     public List<SelectItem> getAuthorOptions() {
@@ -178,15 +203,6 @@ public class BookController implements Serializable{
     public void setCurrentBookId(String currentBookId) {
         this.currentBookId = currentBookId;
     }
-
-    public void setCreatedBook(Book createdBook) {
-        this.createdBook = createdBook;
-    }
-
-    public void setManagedBook(Book managedBook) {
-        this.managedBook = managedBook;
-    }
-
 
     public Author getReference() {
         return reference;
@@ -210,5 +226,17 @@ public class BookController implements Serializable{
 
     public void setPage(int page) {
         this.page = page;
+    }
+
+    private void addSelectedAuthors(Book book) {
+        if (authorOptions.isEmpty()) {
+            return;
+        }
+        for (SelectItem item : authorOptions) {
+            Author author = authorManager.findByUuid((String) item.getValue());
+            if (!book.getAuthors().contains(author)) {
+                book.addAuthor(author);
+            }
+        }
     }
 }

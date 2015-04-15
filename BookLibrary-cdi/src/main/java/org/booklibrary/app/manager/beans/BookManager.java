@@ -2,7 +2,6 @@ package org.booklibrary.app.manager.beans;
 
 import org.booklibrary.app.exceptions.DuplicateResourceException;
 import org.booklibrary.app.manager.BookManagerLocal;
-import org.booklibrary.app.persistence.entity.Author;
 import org.booklibrary.app.persistence.entity.Book;
 import org.booklibrary.app.persistence.session.BookFacadeLocal;
 import org.booklibrary.app.persistence.session.BookHomeLocal;
@@ -41,15 +40,14 @@ public class BookManager implements BookManagerLocal {
     public Book saveUnique(Book obj) throws DuplicateResourceException {
         logger.debug("save invoked for object: {}", obj);
         validateBook(obj);
-        Book entity = bookHome.save(obj);
-        return entity;
+        return bookHome.save(obj);
     }
+
 
     @Override
     public Book update(Book obj) {
         logger.debug("update invoked for obj: {}", obj);
-        Book updated = bookHome.update(obj);
-        return updated;
+        return bookHome.update(obj);
     }
 
     @Override
@@ -61,6 +59,11 @@ public class BookManager implements BookManagerLocal {
     @Override
     public void removeByUuid(String uuid) {
         removeByPk(uuid);
+    }
+
+    public void removeList(List<String> keys) {
+        logger.debug("Remove list invoked");
+        bookHome.removeList(keys);
     }
 
     @Override
@@ -84,15 +87,13 @@ public class BookManager implements BookManagerLocal {
     @Override
     public List<Book> findAll() {
         logger.debug("Find all called");
-        List<Book> books = bookFacade.findAll();
-        return books;
+        return bookFacade.findAll();
     }
 
     @Override
     public List<Book> findRange(int start, int size) {
         logger.debug("Find segment called");
-        List<Book> books = bookFacade.findRange(start, size);
-        return books;
+        return bookFacade.findRange(start, size);
     }
 
     @Override
@@ -101,6 +102,26 @@ public class BookManager implements BookManagerLocal {
         int count = bookFacade.countEntity();
         logger.debug("result: " + count);
         return count;
+    }
+
+    @Override
+    public Double countAvgBookRating(String id) {
+        logger.debug("Count boor rating");
+        double rating = bookFacade.countBookRating(id);
+        logger.debug("result: " + rating);
+        return rating;
+    }
+
+    @Override
+    public List<Book> findAllByAuthor(String id) {
+        logger.debug("Find by author called");
+        return bookFacade.findAllByAuthor(id);
+    }
+
+    @Override
+    public List<Book> findAllByReviewRating(int rate) {
+        logger.debug("Find by rating called");
+        return bookFacade.findByReviewRating(rate);
     }
 
     private void validateBook(Book book) throws DuplicateResourceException {

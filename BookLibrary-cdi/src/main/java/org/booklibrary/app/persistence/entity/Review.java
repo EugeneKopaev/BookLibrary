@@ -1,6 +1,7 @@
 package org.booklibrary.app.persistence.entity;
 
 import com.google.common.base.Objects;
+import org.booklibrary.app.persistence.listeners.BookRatingListener;
 
 import javax.persistence.*;
 import javax.validation.constraints.Max;
@@ -11,12 +12,13 @@ import java.io.Serializable;
 
 @Entity
 @Table(name = "REVIEWS")
+@EntityListeners({BookRatingListener.class})
 public class Review extends AbstractBaseEntity implements Serializable {
 
     private static final int MIN_NAME_SIZE = 3;
     private static final int MAX_NAME_SIZE = 20;
-    private static final int MIN_RATING_SIZE = 0;
-    private static final int MAX_RATING_SIZE = 4;
+    private static final int MIN_RATING_SIZE = 1;
+    private static final int MAX_RATING_SIZE = 5;
 
     @Size(min = MIN_NAME_SIZE, max = MAX_NAME_SIZE)
     @Column(name = "COMMENTER_NAME", nullable = false)

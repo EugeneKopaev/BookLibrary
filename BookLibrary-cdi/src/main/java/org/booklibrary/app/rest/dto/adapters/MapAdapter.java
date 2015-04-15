@@ -4,6 +4,9 @@ import javax.xml.bind.annotation.adapters.XmlAdapter;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * JAXB class adapter for java.util.Map class
+ */
 public class MapAdapter extends XmlAdapter<MapEntry[], Map<String, String>> {
 
     public MapEntry[] marshal(Map<String, String> map){

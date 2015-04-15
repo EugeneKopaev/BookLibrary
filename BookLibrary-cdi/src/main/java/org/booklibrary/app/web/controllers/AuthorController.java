@@ -4,7 +4,6 @@ import org.booklibrary.app.exceptions.DuplicateResourceException;
 import org.booklibrary.app.manager.AuthorManagerLocal;
 import org.booklibrary.app.persistence.entity.Author;
 import org.booklibrary.app.web.util.FacesMessageUtils;
-import org.slf4j.Logger;
 
 import javax.ejb.EJB;
 import javax.ejb.EJBException;
@@ -14,14 +13,14 @@ import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.io.Serializable;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Named
 @ViewScoped
 public class AuthorController implements Serializable {
-
-    @Inject
-    private Logger logger;
 
     @EJB
     private AuthorManagerLocal authorManager;
@@ -79,7 +78,7 @@ public class AuthorController implements Serializable {
                     checkedItems.put(key, false);
                 }
             }
-            for (String entry: listToDelete) {
+            for (String entry : listToDelete) {
                 try {
                     authorManager.removeByPk(entry);
                     checkedItems.clear();
@@ -99,6 +98,10 @@ public class AuthorController implements Serializable {
         return managedAuthor;
     }
 
+    public void setManagedAuthor(Author managedAuthor) {
+        this.managedAuthor = managedAuthor;
+    }
+
     @Produces
     @Named
     public List<Author> getAuthors() {
@@ -111,6 +114,10 @@ public class AuthorController implements Serializable {
         return createdAuthor;
     }
 
+    public void setCreatedAuthor(Author createdAuthor) {
+        this.createdAuthor = createdAuthor;
+    }
+
     public void loadData() {
         managedAuthor = authorManager.findByUuid(getCurrentAuthorId());
     }
@@ -121,14 +128,6 @@ public class AuthorController implements Serializable {
 
     public void setCurrentAuthorId(String currentAuthorId) {
         this.currentAuthorId = currentAuthorId;
-    }
-
-    public void setCreatedAuthor(Author createdAuthor) {
-        this.createdAuthor = createdAuthor;
-    }
-
-    public void setManagedAuthor(Author managedAuthor) {
-        this.managedAuthor = managedAuthor;
     }
 
     public Map<Object, Object> getCheckedItems() {

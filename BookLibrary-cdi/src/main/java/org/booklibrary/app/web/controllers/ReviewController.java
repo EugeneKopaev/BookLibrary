@@ -22,9 +22,6 @@ import java.util.Map;
 @ViewScoped
 public class ReviewController implements Serializable{
 
-    @Inject
-    private Logger logger;
-
     @EJB
     private ReviewManagerLocal reviewManager;
 

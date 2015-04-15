@@ -5,16 +5,35 @@
         xmlns:my="http://java.sun.com/jsf/composite/components/review" xmlns:h="http://java.sun.com/jsf/html"
         xmlns:f="http://java.sun.com/jsf/core"
         >
-    <rich:popupPanel header="#{bundle.ViewAuthorsCreateLink}" id="reviewCreatePane" domElementAttachment="parent" width="500"
+    <rich:popupPanel header="#{bundle.ViewAuthorsCreateLink}" id="reviewCreatePane" domElementAttachment="parent"
+                     width="500"
                      height="300" onmaskclick="#{rich:component('reviewCreatePane')}.hide()">
-        <h:form>
-            <my:form review="#{createdReview}"/>
+        <h:outputScript name="js/jquery-1.11.2.min.js"/>
+        <h:outputScript name="js/jRate.js"/>
+        <h:outputScript>
+            $(document).ready(function () {
+                var that = this;
+                $("#ratingRate").jRate({
+                    startColor: "cyan",
+                    endColor: "blue",
+                    onSet: function (rating) {
+                        console.log(rating);
+                        $('#viewForm\\:reviewForm\\:reviewDetails\\:rating').val(rating);
+                    }
+                });
+            });
+        </h:outputScript>
+
+        <h:form id="reviewForm">
+
+            <my:form review="#{createdReview}" id="reviewDetails"/>
             <rich:messages infoClass="valid" warnClass="warning"
                            globalOnly="true" showSummary="true"/>
-            <a4j:commandButton value="Save" action="#{reviewController.save}" render="comments" execute="reviewCreatePane"
+            <a4j:commandButton value="Save" action="#{reviewController.save}" render="comments reviewDetails"
+                               execute="reviewCreatePane"
                                oncomplete="if (#{facesContext.maximumSeverity==null}) {#{rich:component('reviewCreatePane')}.hide();}">
 
-                <f:setPropertyActionListener value="#{managedBook}" target="#{createdReview.book}" />
+                <f:setPropertyActionListener value="#{managedBook}" target="#{createdReview.book}"/>
             </a4j:commandButton>
 
             <a4j:commandButton value="Cancel" onclick="#{rich:component('reviewCreatePane')}.hide(); return false;"/>
