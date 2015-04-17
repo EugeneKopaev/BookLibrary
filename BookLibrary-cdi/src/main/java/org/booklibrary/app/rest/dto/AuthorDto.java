@@ -12,7 +12,7 @@ import java.io.Serializable;
 @Mapped(namespaceMap = @XmlNsMap(jsonName = "atom", namespace = "http://www.w3.org/2005/Atom"))
 @XmlRootElement(name = "author")
 @XmlAccessorType(XmlAccessType.NONE)
-public class AuthorDto implements Serializable{
+public class AuthorDto implements Serializable {
 
     @XmlID
     @XmlAttribute(name = "id")
@@ -31,7 +31,7 @@ public class AuthorDto implements Serializable{
     }
 
     public AuthorDto(Author author) {
-        this.authorId = author.getId().toString();
+        this.authorId = author.getId();
         this.firstName = author.getFirstName();
         this.lastName = author.getLastName();
     }

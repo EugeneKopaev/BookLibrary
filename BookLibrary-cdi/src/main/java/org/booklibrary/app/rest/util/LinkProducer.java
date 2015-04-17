@@ -12,7 +12,11 @@ import java.util.List;
  */
 public class LinkProducer {
 
-    public  static Link[] producePagingLinks(UriInfo uriInfo, int start, int pageSize, int resultSize) {
+    private LinkProducer() {
+
+    }
+
+    public static Link[] producePagingLinks(UriInfo uriInfo, int start, int pageSize, int resultSize) {
 
         UriBuilder builder = uriInfo.getAbsolutePathBuilder();
         builder.queryParam("start", "{start}");

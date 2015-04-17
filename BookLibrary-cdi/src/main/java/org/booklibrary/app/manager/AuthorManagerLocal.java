@@ -14,7 +14,20 @@ import java.util.List;
 @Local
 public interface AuthorManagerLocal extends GenericManagerLocal<Author, String> {
 
+    /**
+     * Save unique author in database
+     *
+     * @param author Object to safe
+     * @return Saved author
+     * @throws DuplicateResourceException
+     */
     Author saveUnique(Author author) throws DuplicateResourceException;
 
+    /**
+     * Find authors by book rating
+     *
+     * @param rate Book avg rating
+     * @return List of authors
+     */
     List<Author> findAllByBookAvgRating(Double rate);
 }

@@ -3,14 +3,11 @@ package org.booklibrary.app.web.controllers;
 import org.booklibrary.app.manager.ReviewManagerLocal;
 import org.booklibrary.app.persistence.entity.Review;
 import org.booklibrary.app.web.util.FacesMessageUtils;
-import org.slf4j.Logger;
 
 import javax.ejb.EJB;
 import javax.ejb.EJBException;
 import javax.enterprise.inject.Produces;
-import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
-import javax.inject.Inject;
 import javax.inject.Named;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -20,13 +17,10 @@ import java.util.Map;
 
 @Named
 @ViewScoped
-public class ReviewController implements Serializable{
+public class ReviewController implements Serializable {
 
     @EJB
     private ReviewManagerLocal reviewManager;
-
-    @Inject
-    private FacesContext facesContext;
 
     private String currentReviewId;
     private Review managedReview = null;
@@ -35,6 +29,9 @@ public class ReviewController implements Serializable{
     private Map<Object, Object> checkedItems = new HashMap();
     private int page = 1;
 
+    /**
+     * Save new review
+     */
     public void save() {
         if (createdReview == null) {
             return;
@@ -53,16 +50,25 @@ public class ReviewController implements Serializable{
         return managedReview;
     }
 
+    public void setManagedReview(Review managedReview) {
+        this.managedReview = managedReview;
+    }
+
     @Produces
     @Named
     public List<Review> getReviews() {
-        return this.reviews = reviewManager.findAll();
+        this.reviews = reviewManager.findAll();
+        return this.reviews;
     }
 
     @Produces
     @Named
     public Review getCreatedReview() {
         return createdReview;
+    }
+
+    public void setCreatedReview(Review createdReview) {
+        this.createdReview = createdReview;
     }
 
     public void loadData() {
@@ -75,14 +81,6 @@ public class ReviewController implements Serializable{
 
     public void setCurrentReviewId(String currentReviewId) {
         this.currentReviewId = currentReviewId;
-    }
-
-    public void setCreatedReview(Review createdReview) {
-        this.createdReview = createdReview;
-    }
-
-    public void setManagedReview(Review managedReview) {
-        this.managedReview = managedReview;
     }
 
     public Map<Object, Object> getCheckedItems() {

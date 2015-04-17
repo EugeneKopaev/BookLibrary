@@ -1,26 +1,19 @@
 package org.booklibrary.app.persistence.listeners;
 
 import org.booklibrary.app.persistence.entity.Review;
-import org.booklibrary.app.persistence.session.BookFacadeLocal;
-import org.booklibrary.app.persistence.session.BookHomeLocal;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.ejb.EJB;
-import javax.persistence.*;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.PrePersist;
 
 /**
-* Listener for calculating avg book rating from review
-*/
+ * Listener for recalculating avg book rating at every review creation
+ */
 public class BookRatingListener {
 
     private static final Logger LOG = LoggerFactory.getLogger(BookRatingListener.class);
-
-    @EJB
-    private BookFacadeLocal bookFacade;
-
-    @EJB
-    private BookHomeLocal bookHome;
 
     @PersistenceContext
     private EntityManager entityManager;

@@ -23,8 +23,8 @@
                 </h:panelGroup>
             </a4j:region>
             <h:outputText escape="false" value="#{bundle.ListBooksEmpty}" rendered="#{books == null}"/>
-            <rich:panel id="bookDataPanel">
-                <h:outputScript name="js/showRating.js" />
+            <rich:panel id="bookDataPanel" style="width: 70%;margin: auto">
+                <h:outputScript name="js/showRating.js"/>
                 <br/>
                 <h:panelGrid columns="2">
                     <a4j:commandLink styleClass="no-decor" execute="@this"
@@ -39,14 +39,15 @@
                     </a4j:commandLink>
                 </h:panelGrid>
                 <br/>
+
                 <rich:dataTable value="#{bookController.filteredBooks}" var="bookEntry" iterationStatusVar="it"
-                                id="table" rows="15"
-                                style="width: 80%;height: 70%" rendered="#{not empty books}">
+                                id="table" rows="15" sortPriority="#{bookSortingBean.sortPriorities}"
+                                style="width: 100%;height: 70%;" rendered="#{not empty books}">
                     <rich:column>
                         <f:facet name="header">
                             <h:selectBooleanCheckbox id="globalSelector" onclick="
                             formEl = document.getElementById('form');
-                            for(i = 0; i != formEl.elements.length; ++i) {
+                            for(var i = 0; i != formEl.elements.length; ++i) {
                                 if(formEl.elements[i].id.indexOf(':selectItemCheck') &gt;= 0) {
                                     formEl.elements[i].checked = this.checked;
                                     RichFaces.ajax(
@@ -66,24 +67,74 @@
                         <f:facet name="header">#{bundle.ViewBooksLabel_isbn}</f:facet>
                         <h:outputText value="#{bookEntry.isbn}"/>
                     </rich:column>
-                    <rich:column>
-                        <f:facet name="header">#{bundle.ViewBooksLabel_name}</f:facet>
+                    <rich:column sortBy="#{bookEntry.name}"
+                                 sortOrder="#{bookSortingBean.sortsOrders['name']}"
+                                 sortType="custom">
+                        <f:facet name="header">
+                            <h:panelGrid columns="2">
+                                <a4j:commandLink execute="@this" value="#{bundle.ViewBooksLabel_name}"
+                                                 render="bookDataPanel"
+                                                 action="#{bookSortingBean.sort}">
+                                    <f:param name="sortProperty" value="name"/>
+                                </a4j:commandLink>
+                            </h:panelGrid>
+                        </f:facet>
                         <h:outputText value="#{bookEntry.name}"/>
                     </rich:column>
-                    <rich:column>
-                        <f:facet name="header">#{bundle.ListBooksTitle_publishYear}</f:facet>
+                    <rich:column sortBy="#{bookEntry.publishYear}"
+                                 sortOrder="#{bookSortingBean.sortsOrders['publishYear']}"
+                                 sortType="custom">
+                        <f:facet name="header">
+                            <h:panelGrid columns="2">
+                                <a4j:commandLink execute="@this" value="#{bundle.ListBooksTitle_publishYear}"
+                                                 render="bookDataPanel"
+                                                 action="#{bookSortingBean.sort}">
+                                    <f:param name="sortProperty" value="publishYear"/>
+                                </a4j:commandLink>
+                            </h:panelGrid>
+                        </f:facet>
                         <h:outputText value="#{bookEntry.publishYear}"/>
                     </rich:column>
-                    <rich:column sortBy="#{bookEntry.publisher}">
-                        <f:facet name="header">#{bundle.ListBooksTitle_publisher}</f:facet>
+                    <rich:column sortBy="#{bookEntry.publisher}"
+                                 sortOrder="#{bookSortingBean.sortsOrders['publisher']}"
+                                 sortType="custom">
+                        <f:facet name="header">
+                            <h:panelGrid columns="2">
+                                <a4j:commandLink execute="@this" value="#{bundle.ListBooksTitle_publisher}"
+                                                 render="bookDataPanel"
+                                                 action="#{bookSortingBean.sort}">
+                                    <f:param name="sortProperty" value="publisher"/>
+                                </a4j:commandLink>
+                            </h:panelGrid>
+                        </f:facet>
                         <h:outputText value="#{bookEntry.publisher}"/>
                     </rich:column>
-                    <rich:column>
-                        <f:facet name="header">#{bundle.View_CreatedDate}</f:facet>
+                    <rich:column sortBy="#{bookEntry.created}"
+                                 sortOrder="#{bookSortingBean.sortsOrders['created']}"
+                                 sortType="custom">
+                        <f:facet name="header">
+                            <h:panelGrid columns="2">
+                                <a4j:commandLink execute="@this" value="#{bundle.View_CreatedDate}"
+                                                 render="bookDataPanel"
+                                                 action="#{bookSortingBean.sort}">
+                                    <f:param name="sortProperty" value="created"/>
+                                </a4j:commandLink>
+                            </h:panelGrid>
+                        </f:facet>
                         <h:outputText value="#{bookEntry.created}" converter="javax.faces.DateTime"/>
                     </rich:column>
-                    <rich:column>
-                        <f:facet name="header">#{bundle.ViewReviewsLabel_rating}</f:facet>
+                    <rich:column sortBy="#{bookEntry.avgRating}"
+                                 sortOrder="#{bookSortingBean.sortsOrders['rating']}"
+                                 sortType="custom">
+                        <f:facet name="header">
+                            <h:panelGrid columns="2">
+                                <a4j:commandLink value="#{bundle.ViewReviewsLabel_rating}" render="bookDataPanel"
+                                                 execute="@this" action="#{bookSortingBean.sort}">
+                                    <f:param name="sortProperty" value="rating"/>
+                                </a4j:commandLink>
+                            </h:panelGrid>
+                        </f:facet>
+
                         <div class="jRate" data-rating="#{bookEntry.avgRating}"></div>
                     </rich:column>
                     <rich:column>

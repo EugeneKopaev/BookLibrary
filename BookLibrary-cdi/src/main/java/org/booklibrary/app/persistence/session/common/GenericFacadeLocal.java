@@ -9,7 +9,7 @@ import java.util.List;
  * Generic interface for all entity facades interfaces.
  * Facade interface provide read operations for entity.
  *
- * @param <T>  - entity
+ * @param <T> - entity
  * @param <K> - primary key
  */
 @Local
@@ -18,16 +18,16 @@ public interface GenericFacadeLocal<T extends AbstractBaseEntity, K> {
     /**
      * Find object in the database by primary key.
      *
-     * @param key
-     * @return T entity
+     * @param key entity id
+     * @return T
      */
     T findByPk(K key);
 
     /**
      * Find object in the database by UUID.
      *
-     * @param uuid
-     * @return T entity
+     * @param uuid entity id
+     * @return T
      */
     T findByUuid(String uuid);
 
@@ -42,7 +42,7 @@ public interface GenericFacadeLocal<T extends AbstractBaseEntity, K> {
      * Find range of objects.
      *
      * @param start first result
-     * @param size max size
+     * @param size  max size
      * @return List<T> list of entities
      */
     List<T> findRange(int start, int size);

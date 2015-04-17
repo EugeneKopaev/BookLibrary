@@ -16,7 +16,7 @@ public interface GenericHomeLocal<T extends AbstractBaseEntity, K> {
     /**
      * Persist object in the database.
      *
-     * @param obj
+     * @param obj Object to save
      * @return Created Entity
      * @throws PersistenceException
      */
@@ -25,7 +25,7 @@ public interface GenericHomeLocal<T extends AbstractBaseEntity, K> {
     /**
      * Update entity in the database.
      *
-     * @param obj
+     * @param obj Object to save
      * @return Updated Entity
      * @throws PersistenceException
      */
@@ -39,27 +39,26 @@ public interface GenericHomeLocal<T extends AbstractBaseEntity, K> {
     /**
      * Delete the entity from the database by primary key.
      *
-     * @param key
+     * @param key Entity id
      */
     void removeByPk(K key);
 
     /**
      * Delete the entity from the database by string uuid.
      *
-     * @param uuid
+     * @param uuid Entity id
      */
     void removeByUuid(String uuid);
 
     /**
      * Removes entities from database
      *
-     * @param List of uuid
+     * @param keys uuid list
      */
     int removeList(List<K> keys);
 
     /**
      * Removes all entities from database.
-     *
      */
     int removeAll();
 

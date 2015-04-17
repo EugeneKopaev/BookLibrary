@@ -37,7 +37,7 @@
                 <h:outputText value="#{bundle.AddAuthor}"/>
                 <rich:inplaceSelect editEvent="dblclick" id="inplaceSelect" showControls="true" saveOnSelect="false"
                                     saveOnBlur="false" defaultLabel="Double click to add author"
-                                    valueChangeListener="#{bookController.valueChanged}">
+                                    valueChangeListener="#{bookController.authorValueChanged}">
                     <f:selectItems value="#{authors}" var="author" itemValue="#{author.id}"
                                    itemLabel="#{author.firstName} #{author.lastName}"/>
                 </rich:inplaceSelect>

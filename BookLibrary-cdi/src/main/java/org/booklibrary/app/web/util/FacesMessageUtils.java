@@ -3,7 +3,14 @@ package org.booklibrary.app.web.util;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 
+/**
+ * Util class for building faces messages
+ */
 public class FacesMessageUtils {
+
+    private FacesMessageUtils() {
+
+    }
 
     public static void addInfoMessage(String msg) {
         FacesMessage facesMsg = new FacesMessage(FacesMessage.SEVERITY_INFO, msg, msg);

@@ -17,16 +17,16 @@ public interface BookFacadeLocal extends GenericFacadeLocal<Book, String> {
     /**
      * Find book by isbn number
      *
-     * @param isbn
-     * @return book
+     * @param isbn Book ISBN
+     * @return Book entity
      */
     Book findByIsbn(long isbn);
 
     /**
      * Find book by rating
      *
-     * @param isbn
-     * @return book
+     * @param rate rating
+     * @return List<Book> list of entities
      */
     List<Book> findByReviewRating(int rate);
 
@@ -40,7 +40,7 @@ public interface BookFacadeLocal extends GenericFacadeLocal<Book, String> {
     /**
      * Count book rating based on avg reviews rating
      *
-     * @param id
+     * @param id Book uuid
      * @return rating for book with given id
      */
     Double countBookRating(String id);

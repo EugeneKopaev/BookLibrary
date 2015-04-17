@@ -6,7 +6,6 @@ import org.slf4j.LoggerFactory;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
-import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import java.lang.reflect.ParameterizedType;
@@ -21,17 +20,18 @@ import java.util.List;
 public abstract class AbstractGenericEntityPersistence<T extends AbstractBaseEntity, K>
         implements GenericHomeLocal<T, K>, GenericFacadeLocal<T, K> {
 
-    private Class<T> entityClass;
+    private static final Logger LOG = LoggerFactory.getLogger(
+            AbstractGenericEntityPersistence.class);
 
-    private final transient Logger LOG = LoggerFactory.getLogger(getClass());
-
-    // will be injected in implementations
-    public abstract EntityManager getEntityManager();
+    private final Class<T> entityClass;
 
     public AbstractGenericEntityPersistence() {
         this.entityClass = (Class<T>) ((ParameterizedType)
                 getClass().getGenericSuperclass()).getActualTypeArguments()[0];
     }
+
+    // will be injected in implementations
+    public abstract EntityManager getEntityManager();
 
     @Override
     public T findByPk(K key) {

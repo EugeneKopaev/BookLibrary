@@ -3,7 +3,6 @@ package org.booklibrary.app.manager;
 import org.booklibrary.app.persistence.entity.AbstractBaseEntity;
 
 import javax.ejb.Local;
-import javax.validation.ValidationException;
 import java.util.List;
 
 /**
@@ -42,20 +41,19 @@ public interface GenericManagerLocal<T extends AbstractBaseEntity, K> {
     /**
      * Delete the entity from the database by string uuid.
      *
-     * @param uuid
+     * @param uuid Entity id
      */
     void removeByUuid(String uuid);
 
     /**
      * Removes list of entities from database.
      *
-     * @param List of uuid
+     * @param keys uuid list
      */
     void removeList(List<K> keys);
 
     /**
      * Removes all entities from database.
-     *
      */
     void removeAll();
 
@@ -70,7 +68,7 @@ public interface GenericManagerLocal<T extends AbstractBaseEntity, K> {
     /**
      * Find object in the database by UUID.
      *
-     * @param uuid
+     * @param uuid Entity id
      * @return T entity
      */
     T findByUuid(String uuid);
@@ -86,14 +84,13 @@ public interface GenericManagerLocal<T extends AbstractBaseEntity, K> {
      * Find segment of objects in the database.
      *
      * @param start first result
-     * @param size max size
+     * @param size  max size
      * @return List<T> list of entities
      */
     List<T> findRange(int start, int size);
 
     /**
      * Count objects in database
-     *
      */
     int countEntity();
 }

@@ -6,25 +6,26 @@ import org.booklibrary.app.persistence.entity.Book;
 import org.booklibrary.app.persistence.session.BookFacadeLocal;
 import org.booklibrary.app.persistence.session.BookHomeLocal;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
-import javax.inject.Inject;
+import javax.inject.Named;
 import java.util.List;
 
 /**
-* Book Manager implementation.
-* This bean encapsulate business logic.
-*
-* @see org.booklibrary.app.manager.BookManagerLocal
-*/
+ * Book Manager implementation.
+ * This bean encapsulate business logic.
+ *
+ * @see org.booklibrary.app.manager.BookManagerLocal
+ */
+@Named
 @Stateless
 public class BookManager implements BookManagerLocal {
 
-    @Inject
-    private Logger logger;
+    private static final Logger LOG = LoggerFactory.getLogger(BookManager.class);
 
     @EJB
     private BookFacadeLocal bookFacade;
@@ -38,7 +39,7 @@ public class BookManager implements BookManagerLocal {
 
     @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
     public Book saveUnique(Book obj) throws DuplicateResourceException {
-        logger.debug("save invoked for object: {}", obj);
+        LOG.debug("save invoked for object: {}", obj);
         validateBook(obj);
         return bookHome.save(obj);
     }
@@ -46,13 +47,13 @@ public class BookManager implements BookManagerLocal {
 
     @Override
     public Book update(Book obj) {
-        logger.debug("update invoked for obj: {}", obj);
+        LOG.debug("update invoked for obj: {}", obj);
         return bookHome.update(obj);
     }
 
     @Override
     public void removeByPk(String key) {
-        logger.debug("Remove called for entity with key: {}", key);
+        LOG.debug("Remove called for entity with key: {}", key);
         bookHome.removeByPk(key);
     }
 
@@ -62,65 +63,65 @@ public class BookManager implements BookManagerLocal {
     }
 
     public void removeList(List<String> keys) {
-        logger.debug("Remove list invoked");
+        LOG.debug("Remove list invoked");
         bookHome.removeList(keys);
     }
 
     @Override
     public void removeAll() {
-        logger.debug("Remove all invoked");
+        LOG.debug("Remove all invoked");
         bookHome.removeAll();
     }
 
     @Override
     public Book findByPk(String key) {
-        logger.debug("Find invoked for object with key: {}", key);
+        LOG.debug("Find invoked for object with key: {}", key);
         return bookFacade.findByPk(key);
     }
 
     @Override
     public Book findByUuid(String uuid) {
-        logger.debug("Find invoked for object with key: {}", uuid);
+        LOG.debug("Find invoked for object with key: {}", uuid);
         return bookFacade.findByUuid(uuid);
     }
 
     @Override
     public List<Book> findAll() {
-        logger.debug("Find all called");
+        LOG.debug("Find all called");
         return bookFacade.findAll();
     }
 
     @Override
     public List<Book> findRange(int start, int size) {
-        logger.debug("Find segment called");
+        LOG.debug("Find segment called");
         return bookFacade.findRange(start, size);
     }
 
     @Override
     public int countEntity() {
-        logger.debug("Count all books");
+        LOG.debug("Count all books");
         int count = bookFacade.countEntity();
-        logger.debug("result: " + count);
+        LOG.debug("result: " + count);
         return count;
     }
 
     @Override
     public Double countAvgBookRating(String id) {
-        logger.debug("Count boor rating");
+        LOG.debug("Count boor rating");
         double rating = bookFacade.countBookRating(id);
-        logger.debug("result: " + rating);
+        LOG.debug("result: " + rating);
         return rating;
     }
 
     @Override
     public List<Book> findAllByAuthor(String id) {
-        logger.debug("Find by author called");
+        LOG.debug("Find by author called");
         return bookFacade.findAllByAuthor(id);
     }
 
     @Override
     public List<Book> findAllByReviewRating(int rate) {
-        logger.debug("Find by rating called");
+        LOG.debug("Find by rating called");
         return bookFacade.findByReviewRating(rate);
     }
 
@@ -129,6 +130,7 @@ public class BookManager implements BookManagerLocal {
             throw new DuplicateResourceException("Book already exist");
         }
     }
+
     private boolean checkBookAlreadyExists(long isbn) {
         Book book = bookFacade.findByIsbn(isbn);
         return book != null;

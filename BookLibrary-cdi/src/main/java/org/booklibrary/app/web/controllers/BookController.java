@@ -6,16 +6,13 @@ import org.booklibrary.app.manager.BookManagerLocal;
 import org.booklibrary.app.persistence.entity.Author;
 import org.booklibrary.app.persistence.entity.Book;
 import org.booklibrary.app.web.util.FacesMessageUtils;
-import org.slf4j.Logger;
 
 import javax.ejb.EJB;
 import javax.ejb.EJBException;
 import javax.enterprise.inject.Produces;
-import javax.faces.context.FacesContext;
 import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.SelectItem;
 import javax.faces.view.ViewScoped;
-import javax.inject.Inject;
 import javax.inject.Named;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -32,9 +29,6 @@ public class BookController implements Serializable {
     @EJB
     private AuthorManagerLocal authorManager;
 
-    @Inject
-    private FacesContext facesContext;
-
     private String currentBookId;
     private Book managedBook = null;
     private Author reference = null;
@@ -45,6 +39,9 @@ public class BookController implements Serializable {
     private Map<Object, Object> checkedItems = new HashMap<>();
     private int page = 1;
 
+    /**
+     * Save new book
+     */
     public void save() {
         if (createdBook == null) {
             return;
@@ -60,6 +57,9 @@ public class BookController implements Serializable {
         }
     }
 
+    /**
+     * Remove managed book
+     */
     public void remove() {
         try {
             bookManager.removeByPk(managedBook.getId());
@@ -69,7 +69,10 @@ public class BookController implements Serializable {
         }
     }
 
-    public void removeReference() {
+    /**
+     * Remove reference to author
+     */
+    public void removeReferenceToAuthor() {
         if (reference == null || managedBook == null) {
             return;
         }
@@ -81,6 +84,9 @@ public class BookController implements Serializable {
         FacesMessageUtils.addInfoMessage("remove successful");
     }
 
+    /**
+     * Remove selected books
+     */
     public void removeSelected() {
         if (!checkedItems.isEmpty()) {
             List<String> listToDelete = new ArrayList<>();
@@ -105,6 +111,9 @@ public class BookController implements Serializable {
 
     }
 
+    /**
+     * Update managed book
+     */
     public void update() {
         if (managedBook == null) {
             return;
@@ -113,16 +122,23 @@ public class BookController implements Serializable {
             addSelectedAuthors(managedBook);
             bookManager.update(managedBook);
         } catch (EJBException e) {
-            e.printStackTrace();
             FacesMessageUtils.addErrorMessage(e, "Update unsuccessful");
         }
     }
 
+    /**
+     * Load managed book by Id
+     */
     public void loadData() {
         managedBook = bookManager.findByUuid(getCurrentBookId());
     }
 
-    public void valueChanged(ValueChangeEvent event) {
+    /**
+     * Event listener for remember selected author
+     *
+     * @param event Object from JSF view
+     */
+    public void authorValueChanged(ValueChangeEvent event) {
         if (!authorOptions.isEmpty()) {
             authorOptions.clear();
         }
@@ -132,11 +148,16 @@ public class BookController implements Serializable {
         }
     }
 
+    /**
+     * Filter books by author last name
+     *
+     * @param filterValue Expression for filter
+     */
     public void filterBooksByAuthor(String filterValue) {
         List<Author> authorList = authorManager.findAll();
         if (authorList != null) {
             this.filteredBooks = new ArrayList<>();
-            for (Author author: authorList) {
+            for (Author author : authorList) {
                 if (author.getLastName().toLowerCase().startsWith(filterValue.toLowerCase())) {
                     this.filteredBooks.addAll(author.getBooks());
                 }
@@ -144,7 +165,6 @@ public class BookController implements Serializable {
         }
 
     }
-
 
     @Produces
     @Named
@@ -159,13 +179,18 @@ public class BookController implements Serializable {
     @Produces
     @Named
     public List<Book> getBooks() {
-        return this.books = bookManager.findAll();
+        this.books = bookManager.findAll();
+        return this.books;
     }
 
     @Produces
     @Named
     public Book getCreatedBook() {
         return createdBook;
+    }
+
+    public void setCreatedBook(Book createdBook) {
+        this.createdBook = createdBook;
     }
 
     public List<Book> getFilteredBooks() {
@@ -182,10 +207,6 @@ public class BookController implements Serializable {
     public Double getBookRating(String bookId) {
         return bookManager.countAvgBookRating(bookId);
 
-    }
-
-    public void setCreatedBook(Book createdBook) {
-        this.createdBook = createdBook;
     }
 
     public List<SelectItem> getAuthorOptions() {
