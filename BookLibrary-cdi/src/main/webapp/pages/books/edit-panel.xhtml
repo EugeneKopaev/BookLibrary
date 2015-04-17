@@ -44,7 +44,7 @@
                 <br/>
                 <rich:inplaceSelect editEvent="dblclick" id="inplaceSelect" showControls="true" saveOnSelect=""
                                     saveOnBlur="false" defaultLabel="Double click to add author"
-                                    valueChangeListener="#{bookController.valueChanged}">
+                                    valueChangeListener="#{bookController.authorValueChanged}">
                     <f:selectItems value="#{authors}" var="author" itemValue="#{author.id}"
                                    itemLabel="#{author.firstName} #{author.lastName}"/>
 
@@ -65,7 +65,7 @@
                 <a4j:commandButton value="Delete" onclick="removeBookAuthor(); return false;"/>
             </rich:popupPanel>
 
-            <a4j:jsFunction name="removeBookAuthor" action="#{bookController.removeReference}"
+            <a4j:jsFunction name="removeBookAuthor" action="#{bookController.removeReferenceToAuthor}"
                             render="table,bookDataPanel"
                             execute="@this"
                             oncomplete="#{rich:component('confirmDeletePane')}.hide();"/>

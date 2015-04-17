@@ -25,12 +25,13 @@
                 </h:panelGrid>
                 <br/>
                 <rich:dataTable value="#{authors}" var="authorEntry" iterationStatusVar="it" id="table" rows="7"
-                                style="width: 60%;height: 70%" rendered="#{not empty authors}">
+                                style="width: 60%;height: 70%" rendered="#{not empty authors}"
+                                sortPriority="#{authorSortingBean.sortPriorities}">
                     <rich:column>
                         <f:facet name="header">
                             <h:selectBooleanCheckbox id="globalSelector" onclick="
                             formEl = document.getElementById('form');
-                            for(i = 0; i != formEl.elements.length; ++i) {
+                            for(var i = 0; i != formEl.elements.length; ++i) {
                                 if(formEl.elements[i].id.indexOf(':selectItemCheck') &gt;= 0) {
                                     formEl.elements[i].checked = this.checked;
                                     RichFaces.ajax(
@@ -46,16 +47,37 @@
                             <a4j:ajax event="change"/>
                         </h:selectBooleanCheckbox>
                     </rich:column>
-                    <rich:column>
-                        <f:facet name="header">First name</f:facet>
+                    <rich:column sortBy="#{authorEntry.firstName}"
+                                 sortOrder="#{authorSortingBean.sortsOrders['firstName']}"
+                                 sortType="custom">
+                        <f:facet name="header">
+                            <a4j:commandLink value="#{bundle.CreateAuthorsTitle_firstName}" render="authorDataPanel"
+                                             execute="@this" action="#{authorSortingBean.sort}">
+                                <f:param name="sortProperty" value="firstName"/>
+                            </a4j:commandLink>
+                        </f:facet>
                         <h:outputText value="#{authorEntry.firstName}"/>
                     </rich:column>
-                    <rich:column>
-                        <f:facet name="header">Last Name</f:facet>
+                    <rich:column sortBy="#{authorEntry.lastName}"
+                                 sortOrder="#{authorSortingBean.sortsOrders['lastName']}"
+                                 sortType="custom">
+                        <f:facet name="header">
+                            <a4j:commandLink value="#{bundle.CreateAuthorsTitle_lastName}" render="authorDataPanel"
+                                             execute="@this" action="#{authorSortingBean.sort}">
+                                <f:param name="sortProperty" value="lastName"/>
+                            </a4j:commandLink>
+                        </f:facet>
                         <h:outputText value="#{authorEntry.lastName}"/>
                     </rich:column>
-                    <rich:column>
-                        <f:facet name="header">Created</f:facet>
+                    <rich:column sortBy="#{authorEntry.created}"
+                                 sortOrder="#{authorSortingBean.sortsOrders['created']}"
+                                 sortType="custom">
+                        <f:facet name="header">
+                            <a4j:commandLink execute="@this" value="#{bundle.View_CreatedDate}" render="authorDataPanel"
+                                             action="#{authorSortingBean.sort}">
+                                <f:param name="sortProperty" value="created"/>
+                            </a4j:commandLink>
+                        </f:facet>
                         <h:outputText value="#{authorEntry.created}" converter="javax.faces.DateTime"/>
                     </rich:column>
                     <rich:column>
